@@ -198,6 +198,13 @@ const R_US=40, R_FIELD=17;
 
 function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
 function hex(v){return v==='US'?cssv('--accent'):HEX[v]}
+function tipColors(){
+  const theme=document.documentElement.dataset.theme||'dark';
+  const light=(theme==='white'||theme==='neutral');
+  return light
+    ? {bg:'rgba(255,255,255,.97)',title:cssv('--accent'),body:'#141413',border:cssv('--accent-line')}
+    : {bg:'rgba(10,10,12,.95)',title:cssv('--accent'),body:cssv('--ink'),border:cssv('--accent-line')};
+}
 
 const legendEl=document.getElementById('legend');
 Object.entries(VENDCOL).forEach(([name,key])=>{
@@ -237,8 +244,8 @@ function makeChart(){
       animations:{r:{from:0,duration:1500,easing:'easeOutQuart'},y:{from:26,duration:1500,easing:'easeOutQuart'}},
       plugins:{
         legend:{display:false},
-        tooltip:{backgroundColor:'rgba(10,10,12,.95)',borderColor:cssv('--accent-line'),borderWidth:1,
-          titleColor:ac,bodyColor:cssv('--ink'),padding:12,
+        tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
+          titleColor:tipColors().title,bodyColor:tipColors().body,padding:12,
           callbacks:{
             title:items=>items[0].raw.label,
             label:ctx=>ctx.raw.vendor==='OROBOROS'
@@ -395,8 +402,8 @@ function makeBar(){
       animations:{x:{from:0,duration:1500,easing:'easeOutQuart'}},
       plugins:{
         legend:{display:false},
-        tooltip:{backgroundColor:'rgba(10,10,12,.95)',borderColor:cssv('--accent-line'),borderWidth:1,
-          titleColor:cssv('--accent'),bodyColor:cssv('--ink'),padding:12,
+        tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
+          titleColor:tipColors().title,bodyColor:tipColors().body,padding:12,
           callbacks:{
             label:ctx=>{
               const src=rows[ctx.dataIndex];
@@ -493,8 +500,8 @@ function makeLine(){
       animations:{y:{from:0,duration:1600,easing:'easeOutQuart'}},
       plugins:{
         legend:{display:false},
-        tooltip:{backgroundColor:'rgba(10,10,12,.95)',borderColor:cssv('--accent-line'),borderWidth:1,
-          titleColor:ac,bodyColor:cssv('--ink'),padding:12,
+        tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
+          titleColor:tipColors().title,bodyColor:tipColors().body,padding:12,
           callbacks:{
             title:items=>items[0].label,
             label:ctx=>{
