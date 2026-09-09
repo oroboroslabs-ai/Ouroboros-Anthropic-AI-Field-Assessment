@@ -458,6 +458,10 @@ const LINEFIELD=[
 function makeLine(){
   if(lineChart)lineChart.destroy();
   const ac=cssv('--accent');
+  const theme=document.documentElement.dataset.theme||'dark';
+  const light=(theme==='white'||theme==='neutral');
+  const pill=light?'rgba(255,255,255,.85)':'rgba(10,12,16,.78)';
+  const txt=light?'#141413':'#ffffff';
   const ours=Object.keys(RECORDS).map(k=>{
     const R=RECORDS[k];
     const cases=R.suites.reduce((s,[,n])=>s+n,0);
@@ -521,9 +525,9 @@ function makeLine(){
       const lbl='OROBOROS / ANTHROPIC';
       const tw=ctx.measureText(lbl).width;
       const lx=cx-tw/2-8, ly=topY-30;
-      ctx.fillStyle='rgba(10,12,16,.78)';
+      ctx.fillStyle=pill;
       ctx.beginPath();ctx.roundRect(lx-4,ly-13,tw+16,20,5);ctx.fill();
-      ctx.fillStyle='#ffffff';
+      ctx.fillStyle=txt;
       ctx.textAlign='left';
       ctx.fillText(lbl,lx+4,ly+2);
       ctx.restore();
@@ -545,9 +549,9 @@ function makeLine(){
         ctx.font='700 10.5px Segoe UI';
         const tw=ctx.measureText(lbl).width;
         const lx=el.x+rad(r[2])+6, ly=el.y+4;
-        ctx.fillStyle='rgba(10,12,16,.72)';
+        ctx.fillStyle=pill;
         ctx.beginPath();ctx.roundRect(lx-4,ly-11,tw+8,15,4);ctx.fill();
-        ctx.fillStyle='#ffffff';
+        ctx.fillStyle=txt;
         ctx.fillText(lbl,lx,ly);
         ctx.restore();
       });
