@@ -557,9 +557,11 @@ function makeLine(){
 
 /* ============ LINE CHART BUTTON — scroll down to it ============ */
 document.getElementById('viewLineBtn').onclick=()=>{
-  if(!lineChart)makeLine();
   document.getElementById('viewLine').scrollIntoView({behavior:'smooth',block:'start'});
 };
+
+/* build the line chart at load so it's visible when scrolled to */
+makeLine();
 
 /* refresh bubble + bar when the model changes */
 function refreshBubble(){
