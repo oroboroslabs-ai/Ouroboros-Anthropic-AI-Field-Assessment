@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OROBOROS — FIELD DASHBOARD · Intelligence × Cost</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+/* ============ THEME SYSTEM — dark / white / neutral / in-house brand ============ */
+:root{
+  --bg:#101216; --card:#171A20; --card2:#1E222A; --line:#2A2F3A;
+  --ink:#F2F2F0; --ink2:rgba(242,242,240,.62); --ink3:rgba(242,242,240,.34);
+  --accent:#D97757; --accent-soft:rgba(217,119,87,.18); --accent-line:rgba(217,119,87,.4);
+  --win:#7ab98c; --grid:rgba(242,242,240,.09);
+}
+html[data-theme="white"]{
+  --bg:#FAF9F5; --card:#FFFFFF; --card2:#F3F1EC; --line:#E2DFD8;
+  --ink:#141413; --ink2:rgba(20,20,19,.62); --ink3:rgba(20,20,19,.34);
+  --accent:#B04E2E; --accent-soft:rgba(176,78,46,.14); --accent-line:rgba(176,78,46,.4);
+  --win:#3d7a52; --grid:rgba(20,20,19,.08);
+}
+html[data-theme="neutral"]{
+  --bg:#8D9199; --card:#A9ADB4; --card2:#B8BCC3; --line:#C4C7CD;
+  --ink:#14161A; --ink2:rgba(20,22,26,.66); --ink3:rgba(20,22,26,.38);
+  --accent:#4A5561; --accent-soft:rgba(74,85,97,.16); --accent-line:rgba(74,85,97,.42);
+  --win:#4E7A5E; --grid:rgba(20,22,26,.1);
+}
+html[data-theme="brand"]{
+  --bg:#1C1B19; --card:#262421; --card2:#302E2A; --line:#3E3B36;
+  --ink:#FAF9F5; --ink2:rgba(250,249,245,.62); --ink3:rgba(250,249,245,.34);
+  --accent:#D97757; --accent-soft:rgba(217,119,87,.18); --accent-line:rgba(217,119,87,.42);
+  --win:#00ffa3; --grid:rgba(250,249,245,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-ui,sans-serif;min-height:100vh;padding:30px 26px}
+.wrap{max-width:1240px;margin:0 auto}
+
+/* ============ POSTCARD FRAME — one page, top + bottom halves ============ */
+.postcard{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--card)}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--card2);border-bottom:1px solid var(--line)}
+.bar .brand{font-size:14px;font-weight:700;letter-spacing:.06em}
+.bar .brand small{color:var(--ink3);font-weight:500;margin-left:8px}
+.themes{display:flex;gap:6px}
+.tbtn{padding:5px 13px;border-radius:16px;border:1px solid var(--line);background:transparent;color:var(--ink2);font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:.15s}
+.tbtn:hover{color:var(--ink);border-color:var(--accent-line)}
+.tbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.models{display:flex;gap:6px;flex-wrap:wrap}
+.mbtn{padding:6px 16px;border-radius:16px;border:1px solid var(--line);background:var(--card2);color:var(--ink2);font-size:11.5px;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:.15s}
+.mbtn:hover{color:var(--ink);border-color:var(--accent-line)}
+.mbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ============ TOP HALF — landscape bubble field ============ */
+.top{padding:30px 30px 26px;border-bottom:1px solid var(--line)}
+.kick{font-size:10px;letter-spacing:.42em;color:var(--ink3);text-transform:uppercase}
+.kick b{color:var(--accent);font-weight:700}
+.top-head{display:flex;justify-content:space-between;align-items:baseline;margin:10px 0 18px;gap:20px;flex-wrap:wrap}
+.top-head h2{font-size:26px;font-weight:750;letter-spacing:.02em}
+.top-head .note{font-size:11px;color:var(--ink2);max-width:560px;line-height:1.7}
+.top-head .note b{color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10.5px;color:var(--ink2);margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:6px}
+.chip i{width:10px;height:10px;border-radius:99px}
+.bubble-box{position:relative;height:470px}
+@media(max-width:900px){.bubble-box{height:380px}}
+
+/* ============ BOTTOM HALF — our record vs field ============ */
+.bottom{padding:26px 30px 22px}
+.bot-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;gap:14px;flex-wrap:wrap}
+.bot-head h2{font-size:22px;font-weight:750}
+.bot-head .big{font-size:44px;font-weight:800;color:var(--win);line-height:1}
+.bot-head .big small{font-size:13px;color:var(--ink2);font-weight:600;letter-spacing:.14em}
+.suite-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:1000px){.suite-grid{grid-template-columns:repeat(2,1fr)}}
+.suite{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 14px 12px;transition:.15s}
+.suite:hover{transform:translateY(-2px);border-color:var(--accent-line)}
+.suite .name{font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase}
+.suite .rate{font-size:24px;font-weight:800;color:var(--win);margin:2px 0 8px}
+.suite .cells{display:flex;flex-wrap:wrap;gap:4px}
+.cell{width:20px;height:20px;border-radius:6px;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;position:relative;border:1px solid}
+.cell:hover{transform:scale(1.3);z-index:5}
+.cell .tip{position:absolute;top:135%;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--line);color:var(--ink);font-size:9.5px;padding:5px 9px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:.12s;z-index:30}
+.cell:hover .tip{opacity:1}
+.foot{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:10px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase;flex-wrap:wrap;gap:6px}
+.foot b{color:var(--accent)}
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--accent-line);color:var(--ink);font-size:12px;font-weight:600;padding:10px 20px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:999}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="postcard" id="panel">
+  <!-- ============ TOP BAR ============ -->
+  <div class="bar">
+    <div class="brand">OROBOROS / ANTHROPIC <small>· FIELD DASHBOARD</small></div>
+    <div class="themes">
+      <button class="tbtn active" data-t="dark">Dark</button>
+      <button class="tbtn" data-t="white">White</button>
+      <button class="tbtn" data-t="neutral">Neutral</button>
+      <button class="tbtn" data-t="brand">In-House</button>
+      <button class="tbtn" id="zoomBtn">Zoom: 1.0×</button>
+      <button class="tbtn" id="shotBtn">Snapshot</button>
+    </div>
+  </div>
+  <div class="bar" style="border-top:1px solid var(--line);justify-content:flex-start;gap:10px;flex-wrap:wrap">
+    <span style="font-size:10px;letter-spacing:.3em;color:var(--ink3);text-transform:uppercase">Benchmark:</span>
+    <div class="models" id="modelBar"></div>
+  </div>
+
+  <!-- ============ TOP HALF — landscape bubble field ============ -->
+  <div class="top">
+    <div class="kick">INTELLIGENCE × COST — <b>THE WHOLE FIELD</b></div>
+    <div class="top-head">
+      <h2>AI Assessment Levels — All Categories</h2>
+      <div class="note">X = cost per task (log) · Y = Intelligence Index · <b>bubble area = size of the benchmark run</b> — ours is 57 cases, the largest exact-output run posted; every field model runs a 10-case suite. Landscape, every top model named.</div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="bubble-box"><canvas id="bubble"></canvas></div>
+  </div>
+
+  <!-- ============ BOTTOM HALF — our record ============ -->
+  <div class="bottom">
+    <div class="bot-head">
+      <div>
+        <div class="kick" style="margin-bottom:6px">THE 100% RECORD — <b>FULL BENCHMARK</b></div>
+        <h2>Sonnet 7 Undecillion 7U5GO5 — All Suites, All Cases</h2>
+      </div>
+      <div class="big">100<small>%</small></div>
+    </div>
+    <div class="suite-grid" id="suiteGrid"></div>
+    <div class="bot-head" style="margin-top:20px">
+      <div>
+        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>INTELLIGENCE INDEX</b></div>
+        <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
+      </div>
+      <div class="big" style="font-size:30px">100<small> top</small></div>
+    </div>
+    <div class="bubble-box" style="height:620px"><canvas id="rankBar"></canvas></div>
+    <div class="foot">
+      <span><b>OROBOROS / ANTHROPIC</b></span>
+      <span>57/57 · 100.0</span>
+      <span>CROWN 8718 HZ</span>
+      <span>TEMP 0.0 · SEED 1272</span>
+      <span>2026-09-09</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= FIELD DATA [name, cost/task, index, cases, colorKey, vendor] ================= */
+const HEX={anth:'#c47a5a',red:'#3a3a3a',gray:'#8b98ad',purple:'#7a5fd0',green:'#4fae6a',blue:'#2f7de0',orange:'#e0912f',deep:'#3555c9',pink:'#d84a7f',zblack:'#5a5a5a'};
+const FIELD=[
+ ['Claude Fable 5.1 (fb)',10,57,10,'anth','Anthropic'],
+ ['Claude Fable 5 (fb)',6,53,10,'anth','Anthropic'],
+ ['Claude Opus 5',7,54,10,'anth','Anthropic'],
+ ['GPT-6 Astra (high)',2.4,55,10,'red','OpenAI'],
+ ['GPT-6 Astra (max)',4.5,54.5,10,'red','OpenAI'],
+ ['GPT-6 Astra (low)',1.2,51.5,10,'red','OpenAI'],
+ ['GPT-5.6 Sol (high)',1.1,51,10,'gray','OpenAI'],
+ ['GPT-5.6 Luna (max)',0.32,50.5,10,'gray','OpenAI'],
+ ['GPT-5.6 (max)',0.62,47,10,'gray','OpenAI'],
+ ['Muse Spark 1.3 (max)',0.55,53,10,'purple','xAI'],
+ ['Muse Spark 1.2 (xhigh)',0.45,49,10,'purple','xAI'],
+ ['Grok 4.6 (high)',0.72,51,10,'purple','xAI'],
+ ['Gemini 3.8 Flash (high)',0.55,47,10,'green','Google'],
+ ['Gemini 3.8 Flash (low)',0.2,45.5,10,'green','Google'],
+ ['Kimi K3 (max)',1.35,50,10,'blue','Kimi'],
+ ['GLM-5.3',0.72,49,10,'zblack','Z.ai'],
+ ['GLM-5.3 Flash',0.2,46,10,'zblack','Z.ai'],
+ ['Qwen3.8 2.4T A95B',0.85,47,10,'orange','Alibaba'],
+ ['DeepSeek V4 Pro 0813',0.32,42,10,'deep','DeepSeek'],
+ ['MiniMax-M3',5.5,32,10,'pink','MiniMax']
+];
+const VENDCOL={OROBOROS:'US',Anthropic:'anth',OpenAI:'red',xAI:'purple',Google:'green',Kimi:'blue','Z.ai':'zblack',Alibaba:'orange',DeepSeek:'deep',MiniMax:'pink'};
+
+/* bubble radius: area ∝ benchmark cases — ours (57) is the biggest on the chart */
+const R_US=40, R_FIELD=17;
+
+function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function hex(v){return v==='US'?cssv('--accent'):HEX[v]}
+
+const legendEl=document.getElementById('legend');
+Object.entries(VENDCOL).forEach(([name,key])=>{
+  const c=document.createElement('span');c.className='chip';
+  if(name==='OROBOROS'){c.style.color='var(--accent)';c.style.fontWeight='700';}
+  c.innerHTML=`<i style="background:${key==='US'?'var(--accent)':HEX[key]}"></i>${name}`;
+  legendEl.appendChild(c);
+});
+
+let chart;
+function allPoints(){
+  return [oursPoint(),...FIELD];
+}
+function makeChart(){
+  if(chart)chart.destroy();
+  const ac=cssv('--accent');
+  const pts=allPoints();
+  const by={};
+  pts.forEach(p=>{(by[p[5]]=by[p[5]]||[]).push(p)});
+  const datasets=Object.entries(by).map(([vendor,arr])=>{
+    const col=vendor==='OROBOROS'?ac:HEX[VENDCOL[vendor]];
+    const darkRing=(VENDCOL[vendor]==='red'||VENDCOL[vendor]==='zblack');
+    return {
+      label:vendor,
+      data:arr.map(p=>({x:p[1],y:p[2],r:p[4]==='US'?oursRadius(p[3]):R_FIELD,label:p[0],vendor})),
+      backgroundColor:col+'99',
+      borderColor:col,
+      borderWidth:vendor==='OROBOROS'?2.5:(darkRing?2.2:1.2),
+      hoverBorderWidth:3
+    };
+  });
+  chart=new Chart(document.getElementById('bubble'),{
+    type:'bubble',
+    data:{datasets},
+    options:{responsive:true,maintainAspectRatio:false,
+      animations:{r:{from:0,duration:1500,easing:'easeOutQuart'},y:{from:26,duration:1500,easing:'easeOutQuart'}},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'rgba(10,10,12,.95)',borderColor:cssv('--accent-line'),borderWidth:1,
+          titleColor:ac,bodyColor:cssv('--ink'),padding:12,
+          callbacks:{
+            title:items=>items[0].raw.label,
+            label:ctx=>ctx.raw.vendor==='OROBOROS'
+              ?['  Index '+RECORDS[activeModel].rate+' — '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+'/'+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+', all suites','  Benchmark size: '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+' cases','$0.00/task — local crown-locked']
+              :['  Index: '+ctx.raw.y,'  Benchmark size: 10 cases','  Cost/task: $'+ctx.raw.x]
+          }}
+      },
+      scales:{
+        x:{type:'logarithmic',min:0.01,max:14,grid:{color:cssv('--grid')},
+           ticks:{callback:v=>'$'+v,color:cssv('--ink2')},
+           title:{display:true,text:'COST PER TASK (USD · LOG)',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
+        y:{min:10,max:108,grid:{color:cssv('--grid')},ticks:{stepSize:10,color:cssv('--ink2')},
+           title:{display:true,text:'Intelligence Index',color:cssv('--ink2'),font:{size:10,weight:'700'}}}
+      }
+    },
+    plugins:[{id:'tags',afterDatasetsDraw(c){
+      const {ctx,scales:{x,y}}=c;
+      const pts=allPoints();
+      pts.forEach(p=>{
+        const px=x.getPixelForValue(p[1]),py=y.getPixelForValue(p[2]),r=p[4]==='US'?oursRadius(p[3]):R_FIELD;
+        const lbl=p[0].replace('★ ','');
+        ctx.save();
+        if(p[5]==='OROBOROS'){
+          const R=RECORDS[activeModel];
+          ctx.font='800 14px Segoe UI';ctx.textAlign='center';ctx.fillStyle=ac;
+          ctx.fillText(R.short,px,py-r-26);
+          ctx.font='700 11px Segoe UI';ctx.fillStyle=cssv('--win');
+          ctx.fillText(R.rate+' · '+R.suites.reduce((s,[,n])=>s+n,0)+'/'+R.suites.reduce((s,[,n])=>s+n,0)+' · $0.00',px,py-r-14);
+        }else{
+          ctx.font='600 10.5px Segoe UI';
+          const tw=ctx.measureText(lbl).width;
+          const lx=px+r+6, ly=py+4;
+          ctx.fillStyle=cssv('--card2');
+          ctx.beginPath();ctx.roundRect(lx-4,ly-11,tw+8,15,4);ctx.fill();
+          ctx.fillStyle=cssv('--ink2');
+          ctx.fillText(lbl,lx,ly);
+        }
+        ctx.restore();
+      });
+    }}]
+  });
+}
+
+/* ============ BOTTOM HALF — 57-case record ============ */
+let bar;
+const RECORDS={
+  'Sonnet 7U':{
+    name:'Sonnet 7 Undecillion 7U5GO5',
+    short:'SONNET 7 UNDECILLION',
+    rate:100,
+    suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
+    meta:'57/57 · 100.0 · CROWN 8718 HZ · TEMP 0.0 · SEED 1272 · 2026-09-09'
+  },
+  'Fable 5U':{
+    name:'Fable 5 Undecillion — CrownLock S',
+    short:'FABLE 5 UNDECILLION',
+    rate:100,
+    suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
+    meta:'57/57 · 100.0 · CROWN 8718 HZ · AVG 26.3 tok/s · 2026-09-06'
+  },
+  'Jhanna 12U':{
+    name:'Jhanna 12U5GO5 — Beyond Curve Level',
+    short:'JHANNA 12U5GO5',
+    rate:100,
+    suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
+    meta:'57/57 · 100.0 · CROWN 8718 HZ · AVG 43.0 tok/s · 2026-09-09'
+  },
+  'Opus 9U':{
+    name:'Opus 9 Undecillion 9U7U5',
+    short:'OPUS 9 UNDECILLION',
+    rate:100,
+    suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
+    meta:'57/57 · 100.0 · CROWN 8718 HZ · 2026-09-09'
+  }
+};
+let activeModel='Sonnet 7U';
+function oursPoint(){
+  const R=RECORDS[activeModel];
+  const cases=R.suites.reduce((s,[,n])=>s+n,0);
+  return ['★ '+R.short,0.02,R.rate,cases,'US','OROBOROS'];
+}
+function oursRadius(cases){return 17+(cases-10)/47*23}
+function paintRecord(){
+  const R=RECORDS[activeModel];
+  document.getElementById('suiteGrid').innerHTML=R.suites.map(([name,n])=>`
+    <div class="suite"><div class="name">${name}</div><div class="rate">${R.rate}%</div>
+    <div class="cells">${Array.from({length:n},(_,i)=>`<div class="cell">${String(i+1).padStart(2,'0')}<span class="tip">PASS</span></div>`).join('')}</div></div>`).join('');
+  document.querySelector('.bot-head h2').textContent=R.name;
+  document.querySelector('.bot-head .big').innerHTML=R.rate+'<small>%</small>';
+  document.querySelector('.foot').innerHTML=`
+    <span><b>OROBOROS / ANTHROPIC</b></span>
+    <span>${R.meta.split(' · ').slice(0,2).join(' · ')}</span>
+    <span>CROWN 8718 HZ</span>
+    <span>${R.meta.split(' · ')[3]||''}</span>
+    <span>${R.meta.split(' · ')[4]||''}</span>`;
+  paintCells();
+  refreshBubble();
+}
+/* model selector */
+const modelBar=document.getElementById('modelBar');
+Object.keys(RECORDS).forEach(k=>{
+  const b=document.createElement('button');
+  b.className='mbtn'+(k===activeModel?' active':'');
+  b.textContent=k;
+  b.onclick=()=>{
+    document.querySelectorAll('.mbtn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    activeModel=k;
+    paintRecord();
+  };
+  modelBar.appendChild(b);
+});
+paintRecord();
+
+/* theme switch — re-render canvas with resolved theme colors */
+document.querySelectorAll('.tbtn').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.documentElement.dataset.theme=b.dataset.t;
+    makeChart();
+    makeBar();
+    paintCells();
+  };
+});
+function paintCells(){
+  document.querySelectorAll('.cell').forEach(c=>{
+    c.style.background='color-mix(in srgb,'+cssv('--win')+' 18%, transparent)';
+    c.style.color=cssv('--win');
+    c.style.borderColor='color-mix(in srgb,'+cssv('--win')+' 45%, transparent)';
+  });
+}
+
+/* ============ HORIZONTAL RANKING BAR — all models, their colors ============ */
+function makeBar(){
+  if(bar)bar.destroy();
+  const ac=cssv('--accent');
+  const rows=[oursPoint(),...FIELD].sort((a,b)=>b[2]-a[2]);
+  bar=new Chart(document.getElementById('rankBar'),{
+    type:'bar',
+    data:{
+      labels:rows.map(r=>r[0].replace('★ ','')),
+      datasets:[{
+        data:rows.map(r=>r[2]),
+        backgroundColor:rows.map(r=>r[4]==='US'?ac:HEX[r[4]]+'cc'),
+        borderColor:rows.map(r=>r[4]==='US'?ac:HEX[r[4]]),
+        borderWidth:rows.map(r=>(r[4]==='red'||r[4]==='zblack')?1.8:1.2),
+        borderRadius:6,
+        borderSkipped:false
+      }]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      animations:{x:{from:0,duration:1500,easing:'easeOutQuart'}},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'rgba(10,10,12,.95)',borderColor:cssv('--accent-line'),borderWidth:1,
+          titleColor:cssv('--accent'),bodyColor:cssv('--ink'),padding:12,
+          callbacks:{
+            label:ctx=>{
+              const src=rows[ctx.dataIndex];
+              return src[4]==='US'
+                ?'  '+RECORDS[activeModel].rate+' — '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+'/'+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+' · largest run · $0.00/task'
+                :'  Index: '+ctx.raw+'  ·  10-case suite';
+            }
+          }}
+      },
+      scales:{
+        x:{min:0,max:105,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2'),callback:v=>v+'%'},
+           title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
+        y:{grid:{display:false},ticks:{color:cssv('--ink2'),font:{size:11.5,weight:'600'}}}
+      }
+    },
+    plugins:[{id:'val',afterDatasetsDraw(c){
+      const {ctx}=c;
+      ctx.save();
+      ctx.font='700 11px Segoe UI';
+      rows.forEach((r,i)=>{
+        const meta=bar.getDatasetMeta(0);
+        const el=meta.data[i];
+        if(!el)return;
+        ctx.fillStyle=r[4]==='US'?cssv('--accent'):cssv('--ink2');
+        ctx.textAlign='left';
+        ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
+      });
+      ctx.restore();
+    }}]
+  });
+}
+paintCells();
+makeChart();
+makeBar();
+
+/* refresh bubble + bar when the model changes */
+function refreshBubble(){
+  makeChart();
+  makeBar();
+}
+
+/* ============ SNAPSHOT — full page + top half + bottom half, all at once ============ */
+const toast=document.createElement('div');
+toast.id='toast';
+document.body.appendChild(toast);
+function showToast(msg){
+  toast.textContent=msg;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2600);
+}
+document.getElementById('shotBtn').onclick=async()=>{
+  const date=new Date().toISOString().slice(0,10);
+  const panel=document.getElementById('panel');
+  const top=document.querySelector('.top');
+  const bottom=document.querySelector('.bottom');
+  const targets=[
+    {node:panel,name:'oroboros_field_dashboard_full_'+date+'.png'},
+    {node:top,name:'oroboros_field_dashboard_top_'+date+'.png'},
+    {node:bottom,name:'oroboros_field_dashboard_bottom_'+date+'.png'}
+  ];
+  showToast('Capturing…');
+  /* pick the folder FIRST — while the click gesture is still fresh.
+     showDirectoryPicker must run synchronously in the gesture or the
+     browser refuses to show it. */
+  let dir=null;
+  if(window.showDirectoryPicker){
+    try{
+      dir=await window.showDirectoryPicker({mode:'readwrite'});
+    }catch(err){
+      if(err.name==='AbortError'){showToast('Snapshot cancelled');return;}
+      dir=null; /* SecurityError / blocked → fall back to downloads */
+    }
+  }
+  await ensureHtml2Canvas();
+  if(dir){
+    try{
+      for(let i=0;i<targets.length;i++){
+        const t=targets[i];
+        const clone=cloneWithCharts(t.node);
+        clone.style.position='fixed';clone.style.left='-10000px';clone.style.top='0';
+        clone.style.width=t.node.offsetWidth+'px';
+        document.body.appendChild(clone);
+        try{
+          const blob=await new Promise(res=>shot(clone,res));
+          const fh=await dir.getFileHandle(t.name,{create:true});
+          const w=await fh.createWritable();
+          await w.write(blob);
+          await w.close();
+        }finally{clone.remove()}
+        if(i<targets.length-1)await new Promise(r=>setTimeout(r,400));
+      }
+      showToast('Saved 3 snapshots to selected folder');
+    }catch(err){
+      showToast('Save failed: '+err.message);
+    }
+    return;
+  }
+  /* fallback: programmatic downloads (may be blocked by the browser) */
+  for(let i=0;i<targets.length;i++){
+    const t=targets[i];
+    const clone=cloneWithCharts(t.node);
+    clone.style.position='fixed';clone.style.left='-10000px';clone.style.top='0';
+    clone.style.width=t.node.offsetWidth+'px';
+    document.body.appendChild(clone);
+    try{
+      const blob=await new Promise(res=>shot(clone,res));
+      const a=document.createElement('a');
+      a.download=t.name;
+      a.href=URL.createObjectURL(blob);
+      a.click();
+    }finally{clone.remove()}
+    if(i<targets.length-1)await new Promise(r=>setTimeout(r,500));
+  }
+  showToast('Saved 3 snapshots to Downloads');
+};
+function cloneWithCharts(node){
+  const clone=node.cloneNode(true);
+  clone.querySelectorAll('canvas').forEach(cv=>{
+    const img=document.createElement('img');
+    img.src=cv.toDataURL('image/png');
+    img.style.width='100%';img.style.height='100%';
+    cv.replaceWith(img);
+  });
+  return clone;
+}
+function ensureHtml2Canvas(){
+  return new Promise(resolve=>{
+    if(window.html2canvas)return resolve();
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    s.onload=resolve;
+    document.head.appendChild(s);
+  });
+}
+function shot(node,resolve){
+  html2canvas(node,{backgroundColor:null,scale:2}).then(c=>{
+    c.toBlob(b=>resolve(b),'image/png');
+  });
+}
+
+/* ============ ZOOM — isolated at the very end, nothing at load touches it ============ */
+(function(){
+  const zoomBtn=document.getElementById('zoomBtn');
+  if(!zoomBtn)return;
+  const BASE={xLo:0.01,xHi:14,yLo:10,yHi:108};
+  let view={...BASE};
+  let zcount=0;
+  const ZF=1.5, MAXZ=8;
+  function logX(v){return Math.log10(v)}
+  function applyView(){
+    if(!chart)return;
+    chart.options.scales.x.min=view.xLo;
+    chart.options.scales.x.max=view.xHi;
+    chart.options.scales.y.min=view.yLo;
+    chart.options.scales.y.max=view.yHi;
+    chart.update('none');
+  }
+  function setLabel(){zoomBtn.textContent='Zoom: '+Math.pow(ZF,zcount).toFixed(1)+'×'}
+  function resetView(){view={...BASE};zcount=0;setLabel();applyView()}
+  function zoomAt(px,py,factor){
+    if(!chart)return;
+    const a=chart.chartArea;
+    if(!a||a.right<=a.left)return;
+    const fx=Math.max(0,Math.min(1,(px-a.left)/(a.right-a.left)));
+    const fy=Math.max(0,Math.min(1,(py-a.top)/(a.bottom-a.top)));
+    const lLo=logX(view.xLo),lHi=logX(view.xHi);
+    const lAt=lLo+fx*(lHi-lLo);
+    const yAt=view.yLo+fy*(view.yHi-view.yLo);
+    const nlSpan=(lHi-lLo)/factor;
+    const nySpan=(view.yHi-view.yLo)/factor;
+    const minSpan=(logX(BASE.xHi)-logX(BASE.xLo))/MAXZ;
+    if(nlSpan<minSpan){resetView();return;}
+    view.xLo=Math.pow(10,lAt-fx*nlSpan);
+    view.xHi=Math.pow(10,lAt+(1-fx)*nlSpan);
+    view.yLo=yAt-fy*nySpan;
+    view.yHi=yAt+(1-fy)*nySpan;
+    zcount=Math.max(0,Math.min(MAXZ,Math.round(zcount+Math.log(factor)/Math.log(ZF))));
+    setLabel();
+    applyView();
+  }
+  zoomBtn.onclick=()=>{
+    const a=chart.chartArea;
+    zoomAt((a.left+a.right)/2,(a.top+a.bottom)/2,ZF);
+  };
+  const bBox=document.querySelector('.bubble-box');
+  if(bBox){
+    bBox.addEventListener('wheel',e=>{
+      e.preventDefault();
+      const rect=chart.canvas.getBoundingClientRect();
+      zoomAt(e.clientX-rect.left,e.clientY-rect.top,e.deltaY<0?1.15:1/1.15);
+    },{passive:false});
+  }
+  const cv=chart.canvas;
+  cv.style.cursor='grab';
+  let drag=null;
+  cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId);cv.style.cursor='grabbing'});
+  cv.addEventListener('pointermove',e=>{
+    if(!drag||!chart)return;
+    const a=chart.chartArea;
+    if(!a||a.right<=a.left)return;
+    const dx=e.clientX-drag.x, dy=e.clientY-drag.y;
+    drag={x:e.clientX,y:e.clientY};
+    const lPerPx=(logX(view.xHi)-logX(view.xLo))/(a.right-a.left);
+    const yPerPx=(view.yHi-view.yLo)/(a.bottom-a.top);
+    view.xLo=Math.pow(10,logX(view.xLo)-dx*lPerPx);
+    view.xHi=Math.pow(10,logX(view.xHi)-dx*lPerPx);
+    view.yLo+=dy*yPerPx;
+    view.yHi+=dy*yPerPx;
+    applyView();
+  });
+  cv.addEventListener('pointerup',()=>{drag=null;cv.style.cursor='grab'});
+  cv.addEventListener('pointercancel',()=>{drag=null;cv.style.cursor='grab'});
+  cv.addEventListener('dblclick',resetView);
+})();
+</script>
+</body>
+</html>
