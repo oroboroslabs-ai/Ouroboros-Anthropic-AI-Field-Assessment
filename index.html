@@ -354,9 +354,9 @@ Object.keys(RECORDS).forEach(k=>{
 paintRecord();
 
 /* theme switch — re-render canvas with resolved theme colors */
-document.querySelectorAll('.tbtn').forEach(b=>{
+document.querySelectorAll('.tbtn[data-t]').forEach(b=>{
   b.onclick=()=>{
-    document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tbtn[data-t]').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
     document.documentElement.dataset.theme=b.dataset.t;
     makeChart();
@@ -460,7 +460,7 @@ function makeLine(){
   const ac=cssv('--accent');
   const theme=document.documentElement.dataset.theme||'dark';
   const light=(theme==='white'||theme==='neutral');
-  const pill=light?'rgba(255,255,255,.85)':'rgba(10,12,16,.78)';
+  const pill=light?'#ffffff':'rgba(10,12,16,.78)';
   const txt=light?'#141413':'#ffffff';
   const ours=Object.keys(RECORDS).map(k=>{
     const R=RECORDS[k];
