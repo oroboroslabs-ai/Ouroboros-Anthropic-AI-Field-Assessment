@@ -82,8 +82,8 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 .cell:hover .tip{opacity:1}
 .foot{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:10px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase;flex-wrap:wrap;gap:6px}
 .foot b{color:var(--accent)}
-#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--accent-line);color:var(--ink);font-size:12px;font-weight:600;padding:10px 20px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:999}
-#toast.show{opacity:1}
+.foot a{color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.1em}
+.foot a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -99,7 +99,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
       <button class="tbtn" data-t="neutral">Neutral</button>
       <button class="tbtn" data-t="brand">In-House</button>
       <button class="tbtn" id="zoomBtn">Zoom: 1.0×</button>
-      <button class="tbtn" id="shotBtn">Snapshot</button>
+      <a class="tbtn" href="line.html">Line Chart →</a>
     </div>
   </div>
   <div class="bar" style="border-top:1px solid var(--line);justify-content:flex-start;gap:10px;flex-wrap:wrap">
@@ -414,105 +414,6 @@ makeBar();
 function refreshBubble(){
   makeChart();
   makeBar();
-}
-
-/* ============ SNAPSHOT — full page + top half + bottom half, all at once ============ */
-const toast=document.createElement('div');
-toast.id='toast';
-document.body.appendChild(toast);
-function showToast(msg){
-  toast.textContent=msg;
-  toast.classList.add('show');
-  setTimeout(()=>toast.classList.remove('show'),2600);
-}
-document.getElementById('shotBtn').onclick=async()=>{
-  const date=new Date().toISOString().slice(0,10);
-  const panel=document.getElementById('panel');
-  const top=document.querySelector('.top');
-  const bottom=document.querySelector('.bottom');
-  const targets=[
-    {node:panel,name:'oroboros_field_dashboard_full_'+date+'.png'},
-    {node:top,name:'oroboros_field_dashboard_top_'+date+'.png'},
-    {node:bottom,name:'oroboros_field_dashboard_bottom_'+date+'.png'}
-  ];
-  showToast('Capturing…');
-  /* pick the folder FIRST — while the click gesture is still fresh.
-     showDirectoryPicker must run synchronously in the gesture or the
-     browser refuses to show it. */
-  let dir=null;
-  if(window.showDirectoryPicker){
-    try{
-      dir=await window.showDirectoryPicker({mode:'readwrite'});
-    }catch(err){
-      if(err.name==='AbortError'){showToast('Snapshot cancelled');return;}
-      dir=null; /* SecurityError / blocked → fall back to downloads */
-    }
-  }
-  await ensureHtml2Canvas();
-  if(dir){
-    try{
-      for(let i=0;i<targets.length;i++){
-        const t=targets[i];
-        const clone=cloneWithCharts(t.node);
-        clone.style.position='fixed';clone.style.left='-10000px';clone.style.top='0';
-        clone.style.width=t.node.offsetWidth+'px';
-        document.body.appendChild(clone);
-        try{
-          const blob=await new Promise(res=>shot(clone,res));
-          const fh=await dir.getFileHandle(t.name,{create:true});
-          const w=await fh.createWritable();
-          await w.write(blob);
-          await w.close();
-        }finally{clone.remove()}
-        if(i<targets.length-1)await new Promise(r=>setTimeout(r,400));
-      }
-      showToast('Saved 3 snapshots to selected folder');
-    }catch(err){
-      showToast('Save failed: '+err.message);
-    }
-    return;
-  }
-  /* fallback: programmatic downloads (may be blocked by the browser) */
-  for(let i=0;i<targets.length;i++){
-    const t=targets[i];
-    const clone=cloneWithCharts(t.node);
-    clone.style.position='fixed';clone.style.left='-10000px';clone.style.top='0';
-    clone.style.width=t.node.offsetWidth+'px';
-    document.body.appendChild(clone);
-    try{
-      const blob=await new Promise(res=>shot(clone,res));
-      const a=document.createElement('a');
-      a.download=t.name;
-      a.href=URL.createObjectURL(blob);
-      a.click();
-    }finally{clone.remove()}
-    if(i<targets.length-1)await new Promise(r=>setTimeout(r,500));
-  }
-  showToast('Saved 3 snapshots to Downloads');
-};
-function cloneWithCharts(node){
-  const clone=node.cloneNode(true);
-  clone.querySelectorAll('canvas').forEach(cv=>{
-    const img=document.createElement('img');
-    img.src=cv.toDataURL('image/png');
-    img.style.width='100%';img.style.height='100%';
-    cv.replaceWith(img);
-  });
-  return clone;
-}
-function ensureHtml2Canvas(){
-  return new Promise(resolve=>{
-    if(window.html2canvas)return resolve();
-    const s=document.createElement('script');
-    s.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
-    s.onload=resolve;
-    document.head.appendChild(s);
-  });
-}
-function shot(node,resolve){
-  html2canvas(node,{backgroundColor:null,scale:2}).then(c=>{
-    c.toBlob(b=>resolve(b),'image/png');
-  });
 }
 
 /* ============ ZOOM — isolated at the very end, nothing at load touches it ============ */
