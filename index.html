@@ -99,7 +99,8 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
       <button class="tbtn" data-t="neutral">Neutral</button>
       <button class="tbtn" data-t="brand">In-House</button>
       <button class="tbtn" id="zoomBtn">Zoom: 1.0×</button>
-      <a class="tbtn" href="line.html">Line Chart →</a>
+      <span style="width:1px;height:20px;background:var(--line);display:inline-block"></span>
+      <button class="tbtn" id="viewLineBtn">Interactive Line Chart ↓</button>
     </div>
   </div>
   <div class="bar" style="border-top:1px solid var(--line);justify-content:flex-start;gap:10px;flex-wrap:wrap">
@@ -119,7 +120,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
   </div>
 
   <!-- ============ BOTTOM HALF — our record ============ -->
-  <div class="bottom">
+  <div class="bottom" id="viewDash">
     <div class="bot-head">
       <div>
         <div class="kick" style="margin-bottom:6px">THE 100% RECORD — <b>FULL BENCHMARK</b></div>
@@ -141,6 +142,25 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
       <span>57/57 · 100.0</span>
       <span>CROWN 8718 HZ</span>
       <span>TEMP 0.0 · SEED 1272</span>
+      <span>2026-09-09</span>
+    </div>
+  </div>
+
+  <!-- ============ LINE CHART — below the bar chart, scroll to it ============ -->
+  <div class="bottom" id="viewLine">
+    <div class="bot-head">
+      <div>
+        <div class="kick" style="margin-bottom:6px">INTELLIGENCE INDEX — <b>THE WHOLE FIELD, CONNECTED</b></div>
+        <h2>Interactive Line Chart</h2>
+      </div>
+      <div class="big" style="font-size:30px">100<small> summit</small></div>
+    </div>
+    <div class="note" style="font-size:11px;color:var(--ink2);max-width:640px;line-height:1.7;margin-bottom:14px">Each dot is a model in its vendor color — <b style="color:var(--accent)">dot size = actual benchmark size</b> (57 cases for us, 10 for the field). The line connects the field in order; our models connect at the end of the chart, at the summit.</div>
+    <div class="bubble-box" style="height:560px"><canvas id="lineChart"></canvas></div>
+    <div class="foot">
+      <span><b>OROBOROS / ANTHROPIC</b></span>
+      <span>57/57 · 100.0</span>
+      <span>CROWN 8718 HZ</span>
       <span>2026-09-09</span>
     </div>
   </div>
@@ -188,6 +208,7 @@ Object.entries(VENDCOL).forEach(([name,key])=>{
 });
 
 let chart;
+let lineChart;
 function allPoints(){
   return [oursPoint(),...FIELD];
 }
@@ -340,6 +361,7 @@ document.querySelectorAll('.tbtn').forEach(b=>{
     document.documentElement.dataset.theme=b.dataset.t;
     makeChart();
     makeBar();
+    if(lineChart)makeLine();
     paintCells();
   };
 });
@@ -410,10 +432,140 @@ paintCells();
 makeChart();
 makeBar();
 
+/* ============ LINE VIEW — dots sized by actual benchmark size ============ */
+const LINEFIELD=[
+ ['Claude Fable 5.1 (fb)',57,10,'anth'],
+ ['Claude Fable 5 (fb)',53,10,'anth'],
+ ['Claude Opus 5',54,10,'anth'],
+ ['GPT-6 Astra (high)',55,10,'red'],
+ ['GPT-6 Astra (max)',54.5,10,'red'],
+ ['GPT-6 Astra (low)',51.5,10,'red'],
+ ['GPT-5.6 Sol (high)',51,10,'gray'],
+ ['GPT-5.6 Luna (max)',50.5,10,'gray'],
+ ['GPT-5.6 (max)',47,10,'gray'],
+ ['Muse Spark 1.3 (max)',53,10,'purple'],
+ ['Muse Spark 1.2 (xhigh)',49,10,'purple'],
+ ['Grok 4.6 (high)',51,10,'purple'],
+ ['Gemini 3.8 Flash (high)',47,10,'green'],
+ ['Gemini 3.8 Flash (low)',45.5,10,'green'],
+ ['Kimi K3 (max)',50,10,'blue'],
+ ['GLM-5.3',49,10,'zblack'],
+ ['GLM-5.3 Flash',46,10,'zblack'],
+ ['Qwen3.8 2.4T A95B',47,10,'orange'],
+ ['DeepSeek V4 Pro 0813',42,10,'deep'],
+ ['MiniMax-M3',32,10,'pink']
+];
+function makeLine(){
+  if(lineChart)lineChart.destroy();
+  const ac=cssv('--accent');
+  const ours=Object.keys(RECORDS).map(k=>{
+    const R=RECORDS[k];
+    const cases=R.suites.reduce((s,[,n])=>s+n,0);
+    return ['★ '+R.short,R.rate,cases,'US'];
+  });
+  const rows=[...LINEFIELD].sort((a,b)=>a[1]-b[1]).concat(ours);
+  const rMax=Math.max(...rows.map(r=>r[2]));
+  const rMin=Math.min(...rows.map(r=>r[2]));
+  const rad=r=>3+((r-rMin)/(rMax-rMin))*9;   /* 3..12 px by actual cases */
+  lineChart=new Chart(document.getElementById('lineChart'),{
+    type:'line',
+    data:{
+      labels:rows.map(r=>r[0].replace('★ ','')),
+      datasets:[{
+        data:rows.map(r=>r[1]),
+        borderColor:ac,
+        borderWidth:2,
+        backgroundColor:'transparent',
+        pointBackgroundColor:rows.map(r=>r[3]==='US'?ac:HEX[r[3]]),
+        pointBorderColor:rows.map(r=>r[3]==='US'?ac:HEX[r[3]]),
+        pointBorderWidth:rows.map(r=>r[3]==='US'?2.5:1.2),
+        pointRadius:rows.map(r=>rad(r[2])),
+        pointHoverRadius:rows.map(r=>rad(r[2])+4),
+        tension:0,
+        spanGaps:false
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      animations:{y:{from:0,duration:1600,easing:'easeOutQuart'}},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'rgba(10,10,12,.95)',borderColor:cssv('--accent-line'),borderWidth:1,
+          titleColor:ac,bodyColor:cssv('--ink'),padding:12,
+          callbacks:{
+            title:items=>items[0].label,
+            label:ctx=>{
+              const r=rows[ctx.dataIndex];
+              return r[3]==='US'
+                ?['  Index 100 — '+r[2]+'/'+r[2]+', all suites','  Benchmark size: '+r[2]+' cases','  $0.00/task — local crown-locked']
+                :['  Index: '+ctx.raw,'  Benchmark size: '+r[2]+' cases'];
+            }
+          }}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{color:cssv('--ink2'),font:{size:10.5,weight:'600'},maxRotation:60,minRotation:45},
+           title:{display:true,text:'MODELS — FIELD FIRST, OURS AT THE END',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
+        y:{min:20,max:108,grid:{color:cssv('--grid')},ticks:{stepSize:10,color:cssv('--ink2'),callback:v=>v+'%'},
+           title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}}
+      }
+    },
+    plugins:[{id:'summit',afterDatasetsDraw(c){
+      const {ctx}=c;
+      const meta=lineChart.getDatasetMeta(0);
+      const first=meta.data[meta.data.length-ours.length];
+      const last=meta.data[meta.data.length-1];
+      if(!first||!last)return;
+      const cx=(first.x+last.x)/2;
+      const topY=Math.min(first.y,last.y);
+      ctx.save();
+      ctx.font='800 13px Segoe UI';
+      const lbl='OROBOROS / ANTHROPIC';
+      const tw=ctx.measureText(lbl).width;
+      const lx=cx-tw/2-8, ly=topY-30;
+      ctx.fillStyle='rgba(10,12,16,.78)';
+      ctx.beginPath();ctx.roundRect(lx-4,ly-13,tw+16,20,5);ctx.fill();
+      ctx.fillStyle='#ffffff';
+      ctx.textAlign='left';
+      ctx.fillText(lbl,lx+4,ly+2);
+      ctx.restore();
+    }},{id:'tags',afterDatasetsDraw(c){
+      const {ctx}=c;
+      const meta=lineChart.getDatasetMeta(0);
+      const tagMap={
+        'Claude Fable 5.1 (fb)':'ANTHROPIC',
+        'GPT-6 Astra (high)':'OPENAI',
+        'Muse Spark 1.3 (max)':'XAI / GROK',
+        'DeepSeek V4 Pro 0813':'DEEPSEEK'
+      };
+      rows.forEach((r,i)=>{
+        const lbl=tagMap[r[0]];
+        if(!lbl)return;
+        const el=meta.data[i];
+        if(!el)return;
+        ctx.save();
+        ctx.font='700 10.5px Segoe UI';
+        const tw=ctx.measureText(lbl).width;
+        const lx=el.x+rad(r[2])+6, ly=el.y+4;
+        ctx.fillStyle='rgba(10,12,16,.72)';
+        ctx.beginPath();ctx.roundRect(lx-4,ly-11,tw+8,15,4);ctx.fill();
+        ctx.fillStyle='#ffffff';
+        ctx.fillText(lbl,lx,ly);
+        ctx.restore();
+      });
+    }}]
+  });
+}
+
+/* ============ LINE CHART BUTTON — scroll down to it ============ */
+document.getElementById('viewLineBtn').onclick=()=>{
+  if(!lineChart)makeLine();
+  document.getElementById('viewLine').scrollIntoView({behavior:'smooth',block:'start'});
+};
+
 /* refresh bubble + bar when the model changes */
 function refreshBubble(){
   makeChart();
   makeBar();
+  if(lineChart)makeLine();
 }
 
 /* ============ ZOOM — isolated at the very end, nothing at load touches it ============ */
