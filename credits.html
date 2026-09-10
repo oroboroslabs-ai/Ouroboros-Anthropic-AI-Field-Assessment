@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OROBOROS — Credits & Data Sources</title>
+<style>
+:root{
+  --bg:#101216; --card:#171A20; --card2:#1E222A; --line:#2A2F3A;
+  --ink:#F2F2F0; --ink2:rgba(242,242,240,.62); --ink3:rgba(242,242,240,.34);
+  --accent:#D97757; --accent-soft:rgba(217,119,87,.18); --accent-line:rgba(217,119,87,.4);
+  --win:#7ab98c; --grid:rgba(242,242,240,.09);
+}
+html[data-theme="white"]{
+  --bg:#FAF9F5; --card:#FFFFFF; --card2:#F3F1EC; --line:#E2DFD8;
+  --ink:#141413; --ink2:rgba(20,20,19,.62); --ink3:rgba(20,20,19,.34);
+  --accent:#B04E2E; --accent-soft:rgba(176,78,46,.14); --accent-line:rgba(176,78,46,.4);
+  --win:#3d7a52; --grid:rgba(20,20,19,.08);
+}
+html[data-theme="neutral"]{
+  --bg:#8D9199; --card:#A9ADB4; --card2:#B8BCC3; --line:#C4C7CD;
+  --ink:#14161A; --ink2:rgba(20,22,26,.66); --ink3:rgba(20,22,26,.38);
+  --accent:#4A5561; --accent-soft:rgba(74,85,97,.16); --accent-line:rgba(74,85,97,.42);
+  --win:#4E7A5E; --grid:rgba(20,22,26,.1);
+}
+html[data-theme="brand"]{
+  --bg:#1C1B19; --card:#262421; --card2:#302E2A; --line:#3E3B36;
+  --ink:#FAF9F5; --ink2:rgba(250,249,245,.62); --ink3:rgba(250,249,245,.34);
+  --accent:#D97757; --accent-soft:rgba(217,119,87,.18); --accent-line:rgba(217,119,87,.42);
+  --win:#00ffa3; --grid:rgba(250,249,245,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-ui,sans-serif;min-height:100vh;padding:30px 26px}
+.wrap{max-width:900px;margin:0 auto}
+.postcard{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--card)}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--card2);border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap}
+.bar .brand{font-size:14px;font-weight:700;letter-spacing:.06em}
+.bar .brand small{color:var(--ink3);font-weight:500;margin-left:8px}
+.themes{display:flex;gap:6px;flex-wrap:wrap}
+.tbtn{padding:5px 13px;border-radius:16px;border:1px solid var(--line);background:transparent;color:var(--ink2);font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:.15s;text-decoration:none;display:inline-block}
+.tbtn:hover{color:var(--ink);border-color:var(--accent-line)}
+.tbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.content{padding:34px 36px 30px}
+.kick{font-size:10px;letter-spacing:.42em;color:var(--ink3);text-transform:uppercase}
+.kick b{color:var(--accent);font-weight:700}
+h1{font-size:28px;font-weight:750;margin:10px 0 6px;letter-spacing:.02em}
+.sub{font-size:12px;color:var(--ink2);margin-bottom:26px;line-height:1.7}
+.src{display:flex;gap:18px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;background:var(--card2);flex-wrap:wrap}
+.src img{height:34px;width:auto}
+.src .info{flex:1;min-width:240px}
+.src .info .name{font-size:15px;font-weight:700}
+.src .info .desc{font-size:11.5px;color:var(--ink2);line-height:1.6;margin-top:4px}
+.src .info .link{font-size:11px;color:var(--accent);margin-top:6px;word-break:break-all}
+.src .info .link a{color:var(--accent);text-decoration:none}
+.src .info .link a:hover{text-decoration:underline}
+.note{border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:12px;padding:14px 18px;font-size:11.5px;color:var(--ink2);line-height:1.7;margin-top:18px}
+.note b{color:var(--accent)}
+.foot{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:14px 30px 20px;font-size:10px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase;flex-wrap:wrap;gap:8px;align-items:center}
+.foot b{color:var(--accent)}
+.foot a{color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.1em}
+.foot a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="postcard">
+  <div class="bar">
+    <div class="brand">OROBOROS / ANTHROPIC <small>· CREDITS & DATA SOURCES</small></div>
+    <div class="themes">
+      <button class="tbtn active" data-t="dark">Dark</button>
+      <button class="tbtn" data-t="white">White</button>
+      <button class="tbtn" data-t="neutral">Neutral</button>
+      <button class="tbtn" data-t="brand">In-House</button>
+      <a class="tbtn" href="index.html">← Dashboard</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="kick">ALL FEEDS — <b>PROVIDED BY</b></div>
+    <h1>Credits & Data Sources</h1>
+    <div class="sub">Every field score, index, and benchmark figure on this dashboard is sourced from the providers below. We do not generate competitor data — we report it, and we credit the source.</div>
+
+    <div class="src">
+      <img src="assets/aa_horizontal_purple.png" alt="Artificial Analysis" id="aaLogo">
+      <div class="info">
+        <div class="name">Artificial Analysis</div>
+        <div class="desc">Intelligence Index, Coding Index, Math Index, pricing, and speed for 300+ frontier models. The primary live data feed for all field charts on this dashboard.</div>
+        <div class="link"><a href="https://artificialanalysis.ai" target="_blank" rel="noopener">artificialanalysis.ai</a></div>
+      </div>
+    </div>
+
+    <div class="src">
+      <div class="info" style="min-width:100%">
+        <div class="name">OROBOROS / ANTHROPIC — In-House Benchmarks</div>
+        <div class="desc">Our own 57-case exact-output benchmark runs (Coding, Math, Knowledge, Reasoning, Sovereignty) executed locally, crown-locked at 8718 Hz. These are our records — not estimates.</div>
+      </div>
+    </div>
+
+    <div class="note"><b>Attribution:</b> Artificial Analysis is an independent research organization. All field data is provided by their platform and used under their brand guidelines. OROBOROS / ANTHROPIC in-house benchmark results are our own and are not affiliated with or endorsed by Artificial Analysis.</div>
+  </div>
+
+  <div class="foot">
+    <span><b>OROBOROS / ANTHROPIC</b></span>
+    <span>FIELD DATA: ARTIFICIAL ANALYSIS</span>
+    <a href="index.html">FULL DASHBOARD →</a>
+  </div>
+</div>
+</div>
+
+<script>
+document.querySelectorAll('.tbtn[data-t]').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.tbtn[data-t]').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.documentElement.dataset.theme=b.dataset.t;
+    const light=(b.dataset.t==='white'||b.dataset.t==='neutral');
+    document.getElementById('aaLogo').src=light?'assets/aa_horizontal_purple.png':'assets/aa_horizontal_purple_white.png';
+  };
+});
+</script>
+</body>
+</html>
