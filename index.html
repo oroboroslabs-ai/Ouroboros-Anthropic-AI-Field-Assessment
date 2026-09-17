@@ -49,7 +49,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 .mbtn:hover{color:var(--ink);border-color:var(--accent-line)}
 .mbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 
-/* ============ TOP HALF — landscape bubble field ============ */
+/* ============ TOP HALF — landscape orb field ============ */
 .top{padding:30px 30px 26px;border-bottom:1px solid var(--line)}
 .kick{font-size:10px;letter-spacing:.42em;color:var(--ink3);text-transform:uppercase}
 .kick b{color:var(--accent);font-weight:700}
@@ -60,8 +60,8 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10.5px;color:var(--ink2);margin-bottom:12px}
 .chip{display:inline-flex;align-items:center;gap:6px}
 .chip i{width:10px;height:10px;border-radius:99px}
-.bubble-box{position:relative;height:470px}
-@media(max-width:900px){.bubble-box{height:380px}}
+.orb-box{position:relative;height:470px}
+@media(max-width:900px){.orb-box{height:380px}}
 
 /* ============ BOTTOM HALF — our record vs field ============ */
 .bottom{padding:26px 30px 22px}
@@ -109,15 +109,15 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
     <div class="models" id="modelBar"></div>
   </div>
 
-  <!-- ============ TOP HALF — landscape bubble field ============ -->
+  <!-- ============ TOP HALF — landscape orb field ============ -->
   <div class="top">
     <div class="kick">INTELLIGENCE × COST — <b>THE WHOLE FIELD</b></div>
     <div class="top-head">
       <h2>AI Assessment Levels — All Categories</h2>
-      <div class="note">X = cost per task (log) · Y = Intelligence Index · <b>bubble area = size of the benchmark run</b> — ours is 57 cases, the largest exact-output run posted; every field model runs a 10-case suite. Landscape, every top model named.</div>
+      <div class="note">X = cost per task (log) · Y = Intelligence Index · <b>orb area = size of the benchmark run</b> — ours is 100% benchmarked models, the largest exact-output run posted; every field model runs a 10-case suite. Landscape, every top model named.</div>
     </div>
     <div class="legend" id="legend"></div>
-    <div class="bubble-box"><canvas id="bubble"></canvas></div>
+    <div class="orb-box"><canvas id="orbs"></canvas></div>
   </div>
 
   <!-- ============ BOTTOM HALF — our record ============ -->
@@ -137,7 +137,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
       </div>
       <div class="big" style="font-size:30px">100<small> top</small></div>
     </div>
-    <div class="bubble-box" style="height:620px"><canvas id="rankBar"></canvas></div>
+    <div class="orb-box" style="height:620px"><canvas id="rankBar"></canvas></div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
       <span>100% benchmarked models · 100.0</span>
@@ -158,7 +158,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
       <div class="big" style="font-size:30px">100<small> summit</small></div>
     </div>
     <div class="note" style="font-size:11px;color:var(--ink2);max-width:640px;line-height:1.7;margin-bottom:14px">Each dot is a model in its vendor color — <b style="color:var(--accent)">dot size = actual benchmark size</b> (57 cases for us, 10 for the field). The line connects the field in order; our models connect at the end of the chart, at the summit.</div>
-    <div class="bubble-box" style="height:560px"><canvas id="lineChart"></canvas></div>
+    <div class="orb-box" style="height:560px"><canvas id="lineChart"></canvas></div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
       <span>100% benchmarked models · 100.0</span>
@@ -195,7 +195,7 @@ const FIELD=[
 ];
 const VENDCOL={OROBOROS:'US',Anthropic:'anth',OpenAI:'red',xAI:'purple',Google:'green',Kimi:'blue','Z.ai':'zblack',Alibaba:'orange',DeepSeek:'deep',MiniMax:'pink'};
 
-/* bubble radius: area ∝ benchmark cases — ours (57) is the biggest on the chart */
+/* orb radius: area ∝ benchmark cases — ours (100% benchmarked) is the biggest on the chart */
 const R_US=40, R_FIELD=17;
 
 function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
@@ -284,8 +284,8 @@ function makeChart(){
       hoverBorderWidth:3
     };
   });
-  chart=new Chart(document.getElementById('bubble'),{
-    type:'bubble',
+  chart=new Chart(document.getElementById('orbs'),{
+    type:'bubble' /* chart.js orb type */,
     data:{datasets},
     options:{responsive:true,maintainAspectRatio:false,
       animations:{r:{from:0,duration:1500,easing:'easeOutQuart'},y:{from:26,duration:1500,easing:'easeOutQuart'}},
@@ -389,7 +389,7 @@ function paintRecord(){
     <span>${R.meta.split(' · ')[3]||''}</span>
     <span>${R.meta.split(' · ')[4]||''}</span>`;
   paintCells();
-  refreshBubble();
+  refreshOrbs();
 }
 /* model selector */
 const modelBar=document.getElementById('modelBar');
@@ -621,8 +621,8 @@ document.getElementById('viewLineBtn').onclick=()=>{
 /* build the line chart at load so it's visible when scrolled to */
 makeLine();
 
-/* refresh bubble + bar when the model changes */
-function refreshBubble(){
+/* refresh orbs + bar when the model changes */
+function refreshOrbs(){
   makeChart();
   makeBar();
   if(lineChart)makeLine();
@@ -672,7 +672,7 @@ function refreshBubble(){
     const a=chart.chartArea;
     zoomAt((a.left+a.right)/2,(a.top+a.bottom)/2,ZF);
   };
-  const bBox=document.querySelector('.bubble-box');
+  const bBox=document.querySelector('.orb-box');
   if(bBox){
     bBox.addEventListener('wheel',e=>{
       e.preventDefault();
