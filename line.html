@@ -85,7 +85,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 
   <div class="foot">
     <span><b>OROBOROS / ANTHROPIC</b></span>
-    <span>57/57 · 100.0</span>
+    <span>100% benchmarked models · 100.0</span>
     <span>CROWN 8718 HZ</span>
     <span>2026-09-09</span>
     <a href="index.html">FULL DASHBOARD →</a>
@@ -172,7 +172,7 @@ function makeChart(){
             label:ctx=>{
               const r=rows[ctx.dataIndex];
               return r[2]==='US'
-                ?['  Index 100 — 57/57, all suites','  $0.00/task — local crown-locked']
+                ?['  Index 100 — 100% benchmarked models, all suites','  $0.00/task — local crown-locked']
                 :['  Index: '+ctx.raw,'  10-case suite'];
             }
           }}
