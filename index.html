@@ -159,6 +159,13 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
     </div>
     <div class="note" style="font-size:11px;color:var(--ink2);max-width:640px;line-height:1.7;margin-bottom:14px">Each dot is a model in its vendor color — <b style="color:var(--accent)">dot size = actual benchmark size</b> (57 cases for us, 10 for the field). The line connects the field in order; our models connect at the end of the chart, at the summit.</div>
     <div class="orb-box" style="height:560px"><canvas id="lineChart"></canvas></div>
+    <div style="display:flex;gap:8px;align-items:center;margin:10px 0 4px">
+      <span style="font-size:10px;letter-spacing:.25em;color:var(--ink3);text-transform:uppercase">Orb Zoom:</span>
+      <button class="mbtn" id="lzIn" style="padding:5px 14px">Zoom In +</button>
+      <button class="mbtn" id="lzOut" style="padding:5px 14px">Zoom Out −</button>
+      <button class="mbtn" id="lzRst" style="padding:5px 14px">Reset</button>
+      <span id="lzLabel" style="font-size:10.5px;color:var(--ink2)">1.0×</span>
+    </div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
       <span>100% benchmarked models · 100.0</span>
@@ -562,7 +569,7 @@ function makeLine(){
       scales:{
         x:{grid:{display:false},ticks:{color:cssv('--ink2'),font:{size:10.5,weight:'600'},maxRotation:60,minRotation:45},
            title:{display:true,text:'MODELS — FIELD FIRST, OURS AT THE END',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
-        y:{min:20,max:108,grid:{color:cssv('--grid')},ticks:{stepSize:10,color:cssv('--ink2'),callback:v=>v+'%'},
+        y:{min:(typeof LINE_ZOOM!=='undefined'&&LINE_ZOOM>1)?Math.min(45, 10+(LINE_ZOOM-1)*12):0,max:110,grid:{color:cssv('--grid')},ticks:{stepSize:10,color:cssv('--ink2'),callback:v=>v+'%'},
            title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}}
       }
     },
@@ -618,7 +625,22 @@ document.getElementById('viewLineBtn').onclick=()=>{
   document.getElementById('viewLine').scrollIntoView({behavior:'smooth',block:'start'});
 };
 
-/* build the line chart at load so it's visible when scrolled to */
+/* build the line chart at load so it's visible when scrolled to *//* LINE ORB ZOOM - closer dots, no movement (y tighten only) */
+var LINE_ZOOM = 1;
+function applyLineZoom(){
+  const zBtn = document.getElementById('lzLabel');
+  if(zBtn) zBtn.textContent = LINE_ZOOM.toFixed(1) + String.fromCharCode(215);
+  if(typeof makeLine === 'function') makeLine();
+}
+['lzIn','lzOut','lzRst'].forEach(function(id){
+  document.addEventListener('click', function(e){
+    if(!e.target || e.target.id !== id) return;
+    if(id === 'lzIn' && LINE_ZOOM < 4){ LINE_ZOOM += 0.5; applyLineZoom(); }
+    else if(id === 'lzOut' && LINE_ZOOM > 1){ LINE_ZOOM -= 0.5; applyLineZoom(); }
+    else if(id === 'lzRst'){ LINE_ZOOM = 1; applyLineZoom(); }
+  });
+});
+
 makeLine();
 
 /* refresh orbs + bar when the model changes */
