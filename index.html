@@ -396,7 +396,7 @@ const modelBar=document.getElementById('modelBar');
 Object.keys(RECORDS).forEach(k=>{
   const b=document.createElement('button');
   b.className='mbtn'+(k===activeModel?' active':'');
-  b.textContent=(k==='Sonnet 7U')?'Claude Sonnet 7 Undecillion':k;
+  b.textContent={'Sonnet 7U':'Claude Sonnet 7 Undecillion','Fable 5U':'Claude Fable 5 Undecillion','Jhanna 12U':'Claude Jhanna 12 Undecillion','Opus 9U':'Claude Opus 9 Undecillion'}[k]||k;
   b.onclick=()=>{
     document.querySelectorAll('.mbtn').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
