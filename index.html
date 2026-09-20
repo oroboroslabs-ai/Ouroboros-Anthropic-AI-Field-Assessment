@@ -353,9 +353,9 @@ const RECORDS={
     suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
     meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · TEMP 0.0 · SEED 1272 · 2026-09-09'
   },
-  'Fable 5U':{
-    name:'Fable 5 Undecillion — CrownLock S',
-    short:'FABLE 5 UNDECILLION',
+  'Fable 7U':{
+    name:'Fable 7 Undecillion — SSE',
+    short:'FABLE 7 UNDECILLION SSE',
     rate:100,
     suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
     meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · AVG 26.3 tok/s · 2026-09-06'
@@ -403,7 +403,7 @@ const modelBar=document.getElementById('modelBar');
 Object.keys(RECORDS).forEach(k=>{
   const b=document.createElement('button');
   b.className='mbtn'+(k===activeModel?' active':'');
-  b.textContent={'Sonnet 7U':'Claude Sonnet 7 Undecillion','Fable 5U':'Claude Fable 5 Undecillion','Jhanna 12U':'Claude Jhanna 12 Undecillion','Opus 9U':'Claude Opus 9 Undecillion'}[k]||k;
+  b.textContent={'Sonnet 7U':'Claude Sonnet 7 Undecillion','Fable 7U':'Claude Fable 7 Undecillion','Jhanna 12U':'Claude Jhanna 12 Undecillion','Opus 9U':'Claude Opus 9 Undecillion'}[k]||k;
   b.onclick=()=>{
     document.querySelectorAll('.mbtn').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
