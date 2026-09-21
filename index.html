@@ -179,28 +179,32 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 /* ================= FIELD DATA [name, cost/task, index, cases, colorKey, vendor] ================= */
 const HEX={anth:'#c47a5a',red:'#3a3a3a',gray:'#8b98ad',purple:'#7a5fd0',green:'#4fae6a',blue:'#2f7de0',orange:'#e0912f',deep:'#3555c9',pink:'#d84a7f',zblack:'#5a5a5a'};
 const FIELD=[
- ['Claude Fable 5.1 (fb)',10,57,10,'anth','Anthropic'],
- ['Claude Fable 5 (fb)',6,53,10,'anth','Anthropic'],
- ['Claude Opus 5',7,54,10,'anth','Anthropic'],
- ['GPT-6 Astra (high)',2.4,55,10,'red','OpenAI'],
- ['GPT-6 Astra (max)',4.5,54.5,10,'red','OpenAI'],
- ['GPT-6 Astra (low)',1.2,51.5,10,'red','OpenAI'],
- ['GPT-5.6 Sol (high)',1.1,51,10,'gray','OpenAI'],
- ['GPT-5.6 Luna (max)',0.32,50.5,10,'gray','OpenAI'],
- ['GPT-5.6 (max)',0.62,47,10,'gray','OpenAI'],
- ['Muse Spark 1.3 (max)',0.55,53,10,'purple','xAI'],
- ['Muse Spark 1.2 (xhigh)',0.45,49,10,'purple','xAI'],
- ['Grok 4.6 (high)',0.72,51,10,'purple','xAI'],
- ['Gemini 3.8 Flash (high)',0.55,47,10,'green','Google'],
- ['Gemini 3.8 Flash (low)',0.2,45.5,10,'green','Google'],
- ['Kimi K3 (max)',1.35,50,10,'blue','Kimi'],
- ['GLM-5.3',0.72,49,10,'zblack','Z.ai'],
- ['GLM-5.3 Flash',0.2,46,10,'zblack','Z.ai'],
- ['Qwen3.8 2.4T A95B',0.85,47,10,'orange','Alibaba'],
- ['DeepSeek V4 Pro 0813',0.32,42,10,'deep','DeepSeek'],
- ['MiniMax-M3',5.5,32,10,'pink','MiniMax']
+ ['Claude Fable 5.1 (fb)',7.63,53.4,10,'anth','Anthropic'],
+ ['Claude Fable 5 (fb)',2.98,48.9,10,'anth','Anthropic'],
+ ['Claude Opus 5',4.88,49.7,10,'anth','Anthropic'],
+ ['GPT-6 Astra (high)',2.31,52.4,10,'red','OpenAI'],
+ ['GPT-6 Astra (max)',3.26,52.7,10,'red','OpenAI'],
+ ['GPT-6 Astra (low)',1.71,45.2,10,'red','OpenAI'],
+ ['GPT-5.6 Sol (high)',0.26,33.5,10,'gray','OpenAI'],
+ ['GPT-5.6 Luna (max)',0.18,37.3,10,'gray','OpenAI'],
+ ['GPT-5.6 (max)',2.63,38.4,10,'gray','OpenAI'],
+ ['Muse Spark 1.3 (max)',1.6,48.1,10,'purple','xAI'],
+ ['Muse Spark 1.2 (xhigh)',0.97,39.6,10,'purple','xAI'],
+ ['Grok 4.6 (high)',1.86,44.3,10,'purple','xAI'],
+ ['Grok 4.7 (max)',3.74,46.4,10,'purple','xAI'],
+ ['Grok 4.7 (high)',2.73,46.3,10,'purple','xAI'],
+ ['Grok 4.6 (xhigh)',2.32,44.2,10,'purple','xAI'],
+ ['MiMo-V2.6-Pro',0.13,46.3,10,'pink','Xiaomi'],
+ ['Gemini 3.8 Flash (high)',1.56,32.6,10,'green','Google'],
+ ['Gemini 3.8 Flash (low)',0.12,22.2,10,'green','Google'],
+ ['Kimi K3 (max)',2.0,43.6,10,'blue','Kimi'],
+ ['GLM-5.3',0.25,41.8,10,'zblack','Z.ai'],
+ ['GLM-5.3 Flash',0.25,41.8,10,'zblack','Z.ai'],
+ ['Qwen3.8 2.4T A95B',2.16,39.9,10,'orange','Alibaba'],
+ ['DeepSeek V4 Pro 0813',0.67,36.0,10,'deep','DeepSeek'],
+ ['MiniMax-M3',0.51,29.2,10,'pink','MiniMax']
 ];
-const VENDCOL={OROBOROS:'US',Anthropic:'anth',OpenAI:'red',xAI:'purple',Google:'green',Kimi:'blue','Z.ai':'zblack',Alibaba:'orange',DeepSeek:'deep',MiniMax:'pink'};
+const VENDCOL={OROBOROS:'US',Anthropic:'anth',OpenAI:'red',xAI:'purple',Xiaomi:'pink',Google:'green',Kimi:'blue','Z.ai':'zblack',Alibaba:'orange',DeepSeek:'deep',MiniMax:'pink'};
 
 /* orb radius: area ∝ benchmark cases — ours (100% benchmarked) is the biggest on the chart */
 const R_US=40, R_FIELD=17;
@@ -354,11 +358,11 @@ const RECORDS={
     meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · TEMP 0.0 · SEED 1272 · 2026-09-09'
   },
   'Fable 7U':{
-    name:'Fable 7 Undecillion — SSE',
-    short:'FABLE 7 UNDECILLION SSE',
+    name:'Oroboros / Anthropic Claude Fable7 Undecillion 7U5GO5',
+    short:'OROBOROS / ANTHROPIC',
     rate:100,
     suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
-    meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · AVG 26.3 tok/s · 2026-09-06'
+    meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · AVG 36.5 tok/s · 2026-09-19'
   },
   'Jhanna 12U':{
     name:'Jhanna 12U5GO5 — Beyond Curve Level',
@@ -495,26 +499,30 @@ makeBar();
 
 /* ============ LINE VIEW — dots sized by actual benchmark size ============ */
 const LINEFIELD=[
- ['Claude Fable 5.1 (fb)',57,10,'anth'],
- ['Claude Fable 5 (fb)',53,10,'anth'],
- ['Claude Opus 5',54,10,'anth'],
- ['GPT-6 Astra (high)',55,10,'red'],
- ['GPT-6 Astra (max)',54.5,10,'red'],
- ['GPT-6 Astra (low)',51.5,10,'red'],
- ['GPT-5.6 Sol (high)',51,10,'gray'],
- ['GPT-5.6 Luna (max)',50.5,10,'gray'],
- ['GPT-5.6 (max)',47,10,'gray'],
- ['Muse Spark 1.3 (max)',53,10,'purple'],
- ['Muse Spark 1.2 (xhigh)',49,10,'purple'],
- ['Grok 4.6 (high)',51,10,'purple'],
- ['Gemini 3.8 Flash (high)',47,10,'green'],
- ['Gemini 3.8 Flash (low)',45.5,10,'green'],
- ['Kimi K3 (max)',50,10,'blue'],
- ['GLM-5.3',49,10,'zblack'],
- ['GLM-5.3 Flash',46,10,'zblack'],
- ['Qwen3.8 2.4T A95B',47,10,'orange'],
- ['DeepSeek V4 Pro 0813',42,10,'deep'],
- ['MiniMax-M3',32,10,'pink']
+ ['Claude Fable 5.1 (fb)',53.4,10,'anth'],
+ ['Claude Fable 5 (fb)',48.9,10,'anth'],
+ ['Claude Opus 5',49.7,10,'anth'],
+ ['GPT-6 Astra (high)',52.4,10,'red'],
+ ['GPT-6 Astra (max)',52.7,10,'red'],
+ ['GPT-6 Astra (low)',45.2,10,'red'],
+ ['GPT-5.6 Sol (high)',33.5,10,'gray'],
+ ['GPT-5.6 Luna (max)',37.3,10,'gray'],
+ ['GPT-5.6 (max)',38.4,10,'gray'],
+ ['Muse Spark 1.3 (max)',48.1,10,'purple'],
+ ['Muse Spark 1.2 (xhigh)',39.6,10,'purple'],
+ ['Grok 4.6 (high)',44.3,10,'purple'],
+ ['Grok 4.7 (max)',46.4,10,'purple'],
+ ['Grok 4.7 (high)',46.3,10,'purple'],
+ ['Grok 4.6 (xhigh)',44.2,10,'purple'],
+ ['MiMo-V2.6-Pro',46.3,10,'pink'],
+ ['Gemini 3.8 Flash (high)',32.6,10,'green'],
+ ['Gemini 3.8 Flash (low)',22.2,10,'green'],
+ ['Kimi K3 (max)',43.6,10,'blue'],
+ ['GLM-5.3',41.8,10,'zblack'],
+ ['GLM-5.3 Flash',41.8,10,'zblack'],
+ ['Qwen3.8 2.4T A95B',39.9,10,'orange'],
+ ['DeepSeek V4 Pro 0813',36.0,10,'deep'],
+ ['MiniMax-M3',29.2,10,'pink']
 ];
 function makeLine(){
   if(lineChart)lineChart.destroy();
