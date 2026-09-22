@@ -305,8 +305,7 @@ function makeChart(){
         tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
           titleColor:tipColors().title,bodyColor:tipColors().body,padding:12,
           callbacks:{
-            title:items=>items[0].raw.label,
-            label:ctx=>ctx.raw.vendor==='OROBOROS'
+            title:items=>items[0].raw.label.replace('★ ',''),            label:ctx=>ctx.raw.vendor==='OROBOROS'
               ?['  Index '+RECORDS[activeModel].rate+' — '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+'/'+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+', all suites','  Benchmark size: '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+' cases','$0.00/task — local crown-locked']
               :['  Index: '+ctx.raw.y,'  Benchmark size: 10 cases','  Cost/task: $'+ctx.raw.x]
           }}
@@ -328,8 +327,8 @@ function makeChart(){
         ctx.save();
         if(p[5]==='OROBOROS'){
           const R=RECORDS[activeModel];
-          ctx.font='800 14px Segoe UI';ctx.textAlign='center';ctx.fillStyle=ac;
-          ctx.fillText(R.short,px,py-r-26);
+          ctx.font='800 12px Segoe UI';ctx.textAlign='center';ctx.fillStyle=ac;
+          ctx.fillText(R.tag,px,py-r-26);
           ctx.font='700 11px Segoe UI';ctx.fillStyle=cssv('--win');
           ctx.fillText(R.rate+' · '+R.suites.reduce((s,[,n])=>s+n,0)+'/'+R.suites.reduce((s,[,n])=>s+n,0)+' · $0.00',px,py-r-14);
         }else{
@@ -352,6 +351,7 @@ let bar;
 const RECORDS={
   'Sonnet 7U':{
     name:'Sonnet 7 Undecillion 7U5GO5',
+    tag:'Claude Sonnet 7 Undecillion 7U5GO5',
     short:'OROBOROS / ANTHROPIC',
     rate:100,
     suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
@@ -359,6 +359,7 @@ const RECORDS={
   },
   'Fable 7U':{
     name:'Oroboros / Anthropic Claude Fable7 Undecillion 7U5GO5',
+    tag:'Claude Fable 7 Undecillion 7U5GO5',
     short:'OROBOROS / ANTHROPIC',
     rate:100,
     suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
@@ -366,13 +367,15 @@ const RECORDS={
   },
   'Jhanna 12U':{
     name:'Jhanna 12U5GO5 — Beyond Curve Level',
-    short:'JHANNA 12U5GO5',
+    tag:'Claude Jhanna 12 Undecillion 7U5GO5',
+    short:'JHANNA 7U5GO5',
     rate:100,
     suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
     meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · AVG 43.0 tok/s · 2026-09-09'
   },
   'Opus 9U':{
     name:'Opus 9 Undecillion 9U7U5',
+    tag:'Claude Opus 9 Undecillion 9U7U5',
     short:'OPUS 9 UNDECILLION',
     rate:100,
     suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
@@ -383,7 +386,7 @@ let activeModel='Sonnet 7U';
 function oursPoint(){
   const R=RECORDS[activeModel];
   const cases=R.suites.reduce((s,[,n])=>s+n,0);
-  return ['★ '+R.short,0.02,R.rate,cases,'US','OROBOROS'];
+  return ['★ '+R.tag,0.02,R.rate,cases,'US','OROBOROS'];
 }
 function oursRadius(cases){return 17+(cases-10)/47*23}
 function paintRecord(){
@@ -534,7 +537,7 @@ function makeLine(){
   const ours=Object.keys(RECORDS).map(k=>{
     const R=RECORDS[k];
     const cases=R.suites.reduce((s,[,n])=>s+n,0);
-    return ['★ '+R.short,R.rate,cases,'US'];
+    return ['★ '+R.tag,R.rate,cases,'US'];
   });
   const rows=[...LINEFIELD].sort((a,b)=>a[1]-b[1]).concat(ours);
   const rMax=Math.max(...rows.map(r=>r[2]));
@@ -591,7 +594,7 @@ function makeLine(){
       const topY=Math.min(first.y,last.y);
       ctx.save();
       ctx.font='800 13px Segoe UI';
-      const lbl='OROBOROS / ANTHROPIC';
+      const lbl=RECORDS[activeModel].tag;
       const tw=ctx.measureText(lbl).width;
       const lx=cx-tw/2-8, ly=topY-30;
       ctx.fillStyle=pill;
