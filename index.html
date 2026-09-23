@@ -135,7 +135,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
         <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>INTELLIGENCE INDEX</b></div>
         <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
       </div>
-      <div class="big" style="font-size:30px">100<small> top</small></div>
+      <div class="big" style="font-size:30px" id="topBig">100<small> top</small></div>
     </div>
     <div class="orb-box" style="height:620px"><canvas id="rankBar"></canvas></div>
     <div class="foot">
@@ -155,9 +155,9 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
         <div class="kick" style="margin-bottom:6px">INTELLIGENCE INDEX — <b>THE WHOLE FIELD, CONNECTED</b></div>
         <h2>Interactive Line Chart</h2>
       </div>
-      <div class="big" style="font-size:30px">100<small> summit</small></div>
+      <div class="big" style="font-size:30px" id="summitBig">100<small> summit</small></div>
     </div>
-    <div class="note" style="font-size:11px;color:var(--ink2);max-width:640px;line-height:1.7;margin-bottom:14px">Each dot is a model in its vendor color — <b style="color:var(--accent)">dot size = actual benchmark size</b> (57 cases for us, 10 for the field). The line connects the field in order; our models connect at the end of the chart, at the summit.</div>
+    <div class="note" id="lineNote" style="font-size:11px;color:var(--ink2);max-width:640px;line-height:1.7;margin-bottom:14px">Each dot is a model in its vendor color — <b style="color:var(--accent)">dot size = actual benchmark size</b> (57 cases for us, 10 for the field). The line connects the field in order; the selected model connects at the end of the chart, at the summit.</div>
     <div class="orb-box" style="height:560px"><canvas id="lineChart"></canvas></div>
     <div style="display:flex;gap:8px;align-items:center;margin:10px 0 4px">
       <span style="font-size:10px;letter-spacing:.25em;color:var(--ink3);text-transform:uppercase">Orb Zoom:</span>
@@ -402,6 +402,18 @@ function paintRecord(){
     <span>CROWN 8718 HZ</span>
     <span>${R.meta.split(' · ')[3]||''}</span>
     <span>${R.meta.split(' · ')[4]||''}</span>`;
+  const topBig=document.getElementById('topBig');
+  if(topBig)topBig.innerHTML=R.rate+'<small> top</small>';
+  const summitBig=document.getElementById('summitBig');
+  if(summitBig)summitBig.innerHTML=R.rate+'<small> summit</small>';
+  const lineFoot=document.querySelector('#viewLine .foot');
+  if(lineFoot){
+    lineFoot.innerHTML=`
+    <span><b>OROBOROS / ANTHROPIC</b></span>
+    <span>${R.meta.split(' · ').slice(0,2).join(' · ')}</span>
+    <span>CROWN 8718 HZ</span>
+    <span>${R.meta.split(' · ')[4]||''}</span>`;
+  }
   paintCells();
   refreshOrbs();
 }
@@ -534,11 +546,11 @@ function makeLine(){
   const light=(theme==='white'||theme==='neutral');
   const pill=light?'#ffffff':'rgba(10,12,16,.78)';
   const txt=light?'#141413':'#ffffff';
-  const ours=Object.keys(RECORDS).map(k=>{
-    const R=RECORDS[k];
+  const ours=(()=>{
+    const R=RECORDS[activeModel];
     const cases=R.suites.reduce((s,[,n])=>s+n,0);
-    return ['★ '+R.tag,R.rate,cases,'US'];
-  });
+    return [['★ '+R.tag,R.rate,cases,'US']];
+  })();
   const rows=[...LINEFIELD].sort((a,b)=>a[1]-b[1]).concat(ours);
   const rMax=Math.max(...rows.map(r=>r[2]));
   const rMin=Math.min(...rows.map(r=>r[2]));
@@ -572,7 +584,7 @@ function makeLine(){
             label:ctx=>{
               const r=rows[ctx.dataIndex];
               return r[3]==='US'
-                ?['  Index 100 — '+r[2]+'/'+r[2]+', all suites','  Benchmark size: '+r[2]+' cases','  $0.00/task — local crown-locked']
+                ?['  Index '+RECORDS[activeModel].rate+' — '+r[2]+'/'+r[2]+', all suites','  Benchmark size: '+r[2]+' cases','  $0.00/task — local crown-locked']
                 :['  Index: '+ctx.raw,'  Benchmark size: '+r[2]+' cases'];
             }
           }}
