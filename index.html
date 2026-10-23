@@ -351,12 +351,13 @@ function makeChart(){
     const col=displayColor(raw);
     const darkRing=(colorKey==='red'||colorKey==='zblack');
     const ourGPT=vendor==='Oroboros OpenAI';
+    const ourPrime=vendor==='Oroboros DeepSeek';
     return {
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3]})),
       backgroundColor:vendor==='OROBOROS'?col+'EC':col+'99',
-      borderColor:ourGPT?'#0A0A0A':col,
-      borderWidth:vendor==='OROBOROS'?2.5:(ourGPT?1:(darkRing?2.2:1.2)),
+      borderColor:(ourGPT||ourPrime)?'#0A0A0A':col,
+      borderWidth:vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?1:(darkRing?2.2:1.2)),
       hoverBorderWidth:3
     };
   });
@@ -389,7 +390,7 @@ function makeChart(){
       const {ctx,scales:{x,y}}=c;
       ctx.save();
       c.data.datasets.forEach(ds=>{
-        if(ds.label!=='Oroboros OpenAI')return;
+        if(ds.label!=='Oroboros OpenAI'&&ds.label!=='Oroboros DeepSeek')return;
         ds.data.forEach(p=>{
           const px=x.getPixelForValue(p.x),py=y.getPixelForValue(p.y);
           ctx.beginPath();
@@ -576,8 +577,8 @@ function makeBar(){
       datasets:[{
         data:rows.map(r=>r[2]),
         backgroundColor:rows.map(r=>displayColor(r[4]==='US'?ac:HEX[r[4]])+'cc'),
-        borderColor:rows.map(r=>r[5]==='Oroboros OpenAI'?'#0A0A0A':displayColor(r[4]==='US'?ac:HEX[r[4]])),
-        borderWidth:rows.map(r=>r[5]==='Oroboros OpenAI'?1:((r[4]==='red'||r[4]==='zblack')?1.8:1.2)),
+        borderColor:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?'#0A0A0A':displayColor(r[4]==='US'?ac:HEX[r[4]])),
+        borderWidth:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?1:((r[4]==='red'||r[4]==='zblack')?1.8:1.2)),
         borderRadius:6,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -625,7 +626,7 @@ function makeBar(){
       const meta=bar.getDatasetMeta(0);
       ctx.save();
       rows.forEach((r,i)=>{
-        if(r[5]!=='Oroboros OpenAI')return;
+        if(r[5]!=='Oroboros OpenAI'&&r[5]!=='Oroboros DeepSeek')return;
         const el=meta.data[i];
         if(!el)return;
         const x0=Math.min(el.base,el.x),x1=Math.max(el.base,el.x);
@@ -805,8 +806,8 @@ function makeIndexBars(){
       datasets:[{
         data:rows.map(b=>b.val),
         backgroundColor:cols,
-        borderColor:rows.map(b=>b.vendor==='Oroboros OpenAI'?'#0A0A0A':(isDarkTheme()?'rgba(242,242,240,.18)':'transparent')),
-        borderWidth:rows.map(b=>b.vendor==='Oroboros OpenAI'?1:(isDarkTheme()?1:0)),
+        borderColor:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?'#0A0A0A':(isDarkTheme()?'rgba(242,242,240,.18)':'transparent')),
+        borderWidth:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?1:(isDarkTheme()?1:0)),
         borderRadius:0,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -836,7 +837,7 @@ function makeIndexBars(){
       const meta=indexBars.getDatasetMeta(0);
       ctx.save();
       rows.forEach((b,i)=>{
-        if(b.vendor!=='Oroboros OpenAI')return;
+        if(b.vendor!=='Oroboros OpenAI'&&b.vendor!=='Oroboros DeepSeek')return;
         const el=meta.data[i];
         if(!el)return;
         ctx.save();
@@ -886,7 +887,7 @@ function makeLine(){
     const {ctx,scales:{x,y}}=c;
     ctx.save();
     rows.forEach(r=>{
-      if(r.vendor!=='Oroboros OpenAI')return;
+      if(r.vendor!=='Oroboros OpenAI'&&r.vendor!=='Oroboros DeepSeek')return;
       const px=x.getPixelForValue(r.x),py=y.getPixelForValue(r.y);
       ctx.beginPath();
       ctx.arc(px,py,r.ours?10:8,0,Math.PI*2);
@@ -934,8 +935,8 @@ function makeLine(){
        fill:false,tension:0,order:2},
       {label:'Models',data:rows,
        backgroundColor:rows.map(r=>displayColor(r.color)),
-       borderColor:rows.map(r=>r.vendor==='Oroboros OpenAI'?'#0A0A0A':displayColor(r.color)),
-       borderWidth:rows.map(r=>r.vendor==='Oroboros OpenAI'?1:(r.ours?2:(r.fleet?1.5:1))),
+       borderColor:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?'#0A0A0A':displayColor(r.color)),
+       borderWidth:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?1:(r.ours?2:(r.fleet?1.5:1))),
        pointRadius:rows.map(r=>r.ours?9:(r.fleet?7:5.5)),
        pointHoverRadius:rows.map(r=>r.ours?12:(r.fleet?10:8)),
        order:1}
