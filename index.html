@@ -135,6 +135,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <span style="width:1px;height:20px;background:var(--line);display:inline-block"></span>
       <button class="tbtn" id="viewLineBtn">Intelligence × Cost ↓</button>
       <a class="tbtn" href="artificial-analysis.html">Field Data</a>
+      <a class="tbtn" href="report.html">Reports</a>
       <button class="tbtn" id="reportBtn">Daily Report</button>
     </div>
   </div>
@@ -356,8 +357,8 @@ function makeChart(){
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3]})),
       backgroundColor:vendor==='OROBOROS'?col+'EC':col+'99',
-      borderColor:(ourGPT||ourPrime)?'#0A0A0A':col,
-      borderWidth:vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?1:(darkRing?2.2:1.2)),
+      borderColor:(ourGPT||ourPrime)?'#000000':col,
+      borderWidth:vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?2:(darkRing?2.2:1.2)),
       hoverBorderWidth:3
     };
   });
@@ -394,10 +395,10 @@ function makeChart(){
         ds.data.forEach(p=>{
           const px=x.getPixelForValue(p.x),py=y.getPixelForValue(p.y);
           ctx.beginPath();
-          ctx.arc(px,py,p.r+3,0,Math.PI*2);
-          ctx.fillStyle='rgba(242,160,123,.16)';
-          ctx.shadowColor='rgba(242,160,123,.85)';
-          ctx.shadowBlur=16;
+          ctx.arc(px,py,p.r+5,0,Math.PI*2);
+          ctx.fillStyle='rgba(242,160,123,.24)';
+          ctx.shadowColor='rgba(242,160,123,.95)';
+          ctx.shadowBlur=20;
           ctx.fill();
         });
       });
@@ -577,8 +578,8 @@ function makeBar(){
       datasets:[{
         data:rows.map(r=>r[2]),
         backgroundColor:rows.map(r=>displayColor(r[4]==='US'?ac:HEX[r[4]])+'cc'),
-        borderColor:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?'#0A0A0A':displayColor(r[4]==='US'?ac:HEX[r[4]])),
-        borderWidth:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?1:((r[4]==='red'||r[4]==='zblack')?1.8:1.2)),
+        borderColor:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?'#000000':displayColor(r[4]==='US'?ac:HEX[r[4]])),
+        borderWidth:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?2:((r[4]==='red'||r[4]==='zblack')?1.8:1.2)),
         borderRadius:6,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -632,11 +633,11 @@ function makeBar(){
         const x0=Math.min(el.base,el.x),x1=Math.max(el.base,el.x);
         const y0=el.y-el.height/2;
         ctx.save();
-        ctx.shadowColor='rgba(242,160,123,.75)';
-        ctx.shadowBlur=14;
-        ctx.fillStyle='rgba(242,160,123,.16)';
+        ctx.shadowColor='rgba(242,160,123,.9)';
+        ctx.shadowBlur=18;
+        ctx.fillStyle='rgba(242,160,123,.24)';
         ctx.beginPath();
-        ctx.roundRect(x0-2,y0-2,(x1-x0)+4,el.height+4,6);
+        ctx.roundRect(x0-4,y0-4,(x1-x0)+8,el.height+8,6);
         ctx.fill();
         ctx.restore();
       });
@@ -806,8 +807,8 @@ function makeIndexBars(){
       datasets:[{
         data:rows.map(b=>b.val),
         backgroundColor:cols,
-        borderColor:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?'#0A0A0A':(isDarkTheme()?'rgba(242,242,240,.18)':'transparent')),
-        borderWidth:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?1:(isDarkTheme()?1:0)),
+        borderColor:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?'#000000':(isDarkTheme()?'rgba(242,242,240,.18)':'transparent')),
+        borderWidth:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?2:(isDarkTheme()?1:0)),
         borderRadius:0,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -841,11 +842,11 @@ function makeIndexBars(){
         const el=meta.data[i];
         if(!el)return;
         ctx.save();
-        ctx.shadowColor='rgba(242,160,123,.75)';
-        ctx.shadowBlur=14;
-        ctx.fillStyle='rgba(242,160,123,.16)';
+        ctx.shadowColor='rgba(242,160,123,.9)';
+        ctx.shadowBlur=18;
+        ctx.fillStyle='rgba(242,160,123,.24)';
         ctx.beginPath();
-        ctx.roundRect(el.x-el.width/2-2,el.y-2,el.width+4,el.height+4,3);
+        ctx.roundRect(el.x-el.width/2-4,el.y-4,el.width+8,el.height+8,3);
         ctx.fill();
         ctx.restore();
       });
@@ -890,10 +891,10 @@ function makeLine(){
       if(r.vendor!=='Oroboros OpenAI'&&r.vendor!=='Oroboros DeepSeek')return;
       const px=x.getPixelForValue(r.x),py=y.getPixelForValue(r.y);
       ctx.beginPath();
-      ctx.arc(px,py,r.ours?10:8,0,Math.PI*2);
-      ctx.fillStyle='rgba(242,160,123,.16)';
-      ctx.shadowColor='rgba(242,160,123,.8)';
-      ctx.shadowBlur=16;
+      ctx.arc(px,py,r.ours?12:10,0,Math.PI*2);
+      ctx.fillStyle='rgba(242,160,123,.24)';
+      ctx.shadowColor='rgba(242,160,123,.95)';
+      ctx.shadowBlur=20;
       ctx.fill();
     });
     ctx.restore();
@@ -935,8 +936,8 @@ function makeLine(){
        fill:false,tension:0,order:2},
       {label:'Models',data:rows,
        backgroundColor:rows.map(r=>displayColor(r.color)),
-       borderColor:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?'#0A0A0A':displayColor(r.color)),
-       borderWidth:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?1:(r.ours?2:(r.fleet?1.5:1))),
+       borderColor:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?'#000000':displayColor(r.color)),
+       borderWidth:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?2:(r.ours?2:(r.fleet?1.5:1))),
        pointRadius:rows.map(r=>r.ours?9:(r.fleet?7:5.5)),
        pointHoverRadius:rows.map(r=>r.ours?12:(r.fleet?10:8)),
        order:1}
