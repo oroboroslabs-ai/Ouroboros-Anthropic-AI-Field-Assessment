@@ -255,7 +255,7 @@ const FIELD=[
  ['GLM-5.3 Flash',0.25,41.8,10,'zblack','Z.ai'],
  ['Qwen3.8 2.4T A95B',2.16,39.9,10,'orange','Alibaba'],
  ['DeepSeek V4 Pro 0813',0.67,36.0,10,'deep','DeepSeek'],
- ['★ OA Prime 10duo20quiin10',0.03,98.0,100,'deep','Oroboros DeepSeek'],
+ ['★ OA Prime 10DUO20QUIN10',0.03,98.0,100,'deep','Oroboros DeepSeek'],
  ['★ GPT-5.6 Sol 6U5GO5',0.04,98.2,57,'openai','Oroboros OpenAI'],
  ['★ GPT-Astra 7 7U5GO5',0.05,86.0,57,'openai','Oroboros OpenAI'],
  ['MiniMax-M3',0.51,29.2,10,'pink','MiniMax']
@@ -277,12 +277,14 @@ function tipColors(){
 
 /* ============ LIVE DATA — Artificial Analysis feed ============ */
 let liveData=null;
+let aaMeta=null;
 let liveStamp='';
 async function loadLiveData(){
   try{
     const r=await fetch('field_data.json',{cache:'no-store'});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const d=await r.json();
+    aaMeta=d;
     liveData=d.models||{};
     liveStamp=d.fetched_at||'';
     applyLiveData();
@@ -556,7 +558,7 @@ function hfLink(name){
   const links={
     'GPT-5.6 Sol 6U5GO5':'https://huggingface.co/spaces/oroboros-labs/oroboros-gpt-benchmarks',
     'GPT-Astra 7 7U5GO5':'https://huggingface.co/spaces/oroboros-labs/oroboros-gpt-benchmarks',
-    'OA Prime 10duo20quiin10':'https://huggingface.co/spaces/oroboros-labs/deepseek-prime-impressions'
+    'OA Prime 10DUO20QUIN10':'https://huggingface.co/spaces/oroboros-labs/deepseek-prime-impressions'
   };
   return links[name]||'';
 }
@@ -669,7 +671,7 @@ const AA_VENDOR_COLORS={
   OROBOROS:'ACCENT'
 };
 const AA_BARS=[
- ['OA Prime 10duo20quiin10',98,'Oroboros DeepSeek'],
+ ['OA Prime 10DUO20QUIN10',98,'Oroboros DeepSeek'],
  ['GPT-5.6 Sol 6U5GO5',98.2,'Oroboros OpenAI'],
  ['GPT-Astra 7 7U5GO5',86,'Oroboros OpenAI'],
  ['Claude Opus 5.5 (max with fallback)',58,'Anthropic'],
@@ -748,7 +750,7 @@ const SCATTER_LABELS={
  'Qwen3.8 Max (0902)':{dx:9,dy:4,al:'left'},
  'Claude Sonnet 5.5 (max with fallback)':{dx:-6,dy:-26,al:'right'},
  'Claude Opus 5.5 (max with fallback)':{dx:-6,dy:30,al:'right'},
- 'OA Prime 10duo20quiin10':{dx:10,dy:-6,al:'left',text:'OA DeepSeek · 98'},
+ 'OA Prime 10DUO20QUIN10':{dx:10,dy:-6,al:'left',text:'OA DeepSeek · 98'},
  'GPT-5.6 Sol 6U5GO5':{dx:10,dy:14,al:'left',text:'OA GPT-5.6 · 98.2'},
  'GPT-Astra 7 7U5GO5':{dx:10,dy:6,al:'left',text:'OA GPT-Astra · 86'},
  'OROBOROS':{dx:0,dy:-20,al:'center'}
@@ -1075,14 +1077,14 @@ function refreshOrbs(){
 })();
 
 /* ============ CHART SNAPSHOTS ============ */
-function canvasSnapshot(id){
+function canvasSnapshot(id,bgOverride){
   const src=document.getElementById(id);
   if(!src)return null;
   const out=document.createElement('canvas');
   out.width=src.width;out.height=src.height;
   const ctx=out.getContext('2d');
   const panel=src.closest('.aa-panel');
-  const bg=panel?getComputedStyle(panel).backgroundColor:getComputedStyle(document.body).backgroundColor;
+  const bg=bgOverride||(panel?getComputedStyle(panel).backgroundColor:getComputedStyle(document.body).backgroundColor);
   ctx.fillStyle=(bg&&bg!=='rgba(0, 0, 0, 0)')?bg:(document.documentElement.dataset.theme==='white'?'#FFFFFF':'#101216');
   ctx.fillRect(0,0,out.width,out.height);
   ctx.drawImage(src,0,0);
@@ -1145,58 +1147,111 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 function buildDailyReport(){
   const stamp=liveStamp||new Date().toISOString();
   const day=new Date().toISOString().slice(0,10);
-  const rows=[oursPoint(),...FIELD].map(p=>({
-    name:String(p[0]).replace('★ ',''),
-    cost:p[1],index:p[2],cases:p[3],
-    vendor:String(p[5]).replace('Oroboros ','OROBOROS '),
-    ours:p[5]==='OROBOROS'||String(p[5]).indexOf('Oroboros')===0
-  })).sort((a,b)=>b.index-a.index);
+  const PALETTE={
+    white:{bg:'#FAF9F5',card:'#FFFFFF',card2:'#F3F1EC',line:'#E2DFD8',ink:'#141413',muted:'#5C5A55',accent:'#B04E2E',us:'#F2A07B'},
+    neutral:{bg:'#8D9199',card:'#A9ADB4',card2:'#B8BCC3',line:'#C4C7CD',ink:'#14161A',muted:'#4A4D53',accent:'#4A5561',us:'#F2A07B'},
+    dark:{bg:'#101216',card:'#171A20',card2:'#1E232B',line:'#2A2E36',ink:'#F2F2F0',muted:'rgba(242,242,240,.62)',accent:'#D97757',us:'#F2A07B'},
+    brand:{bg:'#1C1B19',card:'#262421',card2:'#302E2A',line:'#3E3B36',ink:'#FAF9F5',muted:'rgba(250,249,245,.62)',accent:'#D97757',us:'#F2A07B'}
+  };
+  const p=PALETTE[htmlLang()]||PALETTE.dark;
+  const aa=liveData||{};
+  const meta=aaMeta||{};
+  const rows=[oursPoint(),...FIELD].map(p=>{
+    const name=String(p[0]).replace('★ ','');
+    const lv=aa[name]||{};
+    return {
+      name,
+      aa_name:lv.aa_name||name,
+      slug:lv.slug||'',
+      cost:p[1],index:p[2],cases:p[3],
+      coding:lv.coding_index!=null?lv.coding_index:null,
+      tps:lv.tps!=null?lv.tps:null,
+      vendor:String(p[5]).replace('Oroboros ','OROBOROS '),
+      ours:p[5]==='OROBOROS'||String(p[5]).indexOf('Oroboros')===0
+    };
+  });
+  const seen=new Set(rows.map(r=>r.slug||r.name));
+  Object.entries(aa).forEach(([name,d])=>{
+    const key=d.slug||name;
+    if(seen.has(key))return;
+    seen.add(key);
+    rows.push({
+      name,
+      aa_name:d.aa_name||name,
+      slug:d.slug||'',
+      cost:d.cost_per_task,
+      index:d.index,
+      cases:10,
+      coding:d.coding_index!=null?d.coding_index:null,
+      tps:d.tps!=null?d.tps:null,
+      vendor:'AA field',
+      ours:false
+    });
+  });
+  rows.sort((a,b)=>b.index-a.index);
   const fieldRows=rows.filter(r=>!r.ours);
   const topField=fieldRows[0];
   const ourRows=rows.filter(r=>r.ours);
   const R=RECORDS[activeModel];
   const charts=[['orbs','Orb Field — Intelligence × Cost'],['indexBars','Artificial Analysis Intelligence Index'],['rankBar','Model Leaderboard'],['lineChart','Intelligence Index vs. Cost per Task']]
-    .map(([id,label])=>{const url=canvasSnapshot(id);return url?`<figure><img src="${url}" alt="${esc(label)}"><figcaption>${esc(label)}</figcaption></figure>`:''})
+    .map(([id,label])=>{const url=canvasSnapshot(id,p.card);return url?`<figure><img src="${url}" alt="${esc(label)}"><figcaption>${esc(label)}</figcaption></figure>`:''})
     .join('');
-  const table=rows.map(r=>`<tr class="${r.ours?'ours':''}"><td>${esc(r.name)}</td><td>${esc(r.vendor)}</td><td class="num">${r.index}</td><td class="num">${r.ours?'$0.00':'$'+Number(r.cost).toFixed(2)}</td><td class="num">${r.cases}</td><td>${r.ours?'OROBOROS':'AA field'}</td></tr>`).join('');
+  const table=rows.map(r=>`<tr class="${r.ours?'ours':''}"><td>${esc(r.name)}<br><small>${esc(r.aa_name)}</small></td><td class="slug">${esc(r.slug||'—')}</td><td>${esc(r.vendor)}</td><td class="num">${r.index}</td><td class="num">${r.coding!=null?r.coding:'—'}</td><td class="num">${r.ours?'$0.00':(r.cost!=null?'$'+Number(r.cost).toFixed(2):'—')}</td><td class="num">${r.tps!=null?Number(r.tps).toFixed(1):'—'}</td><td class="num">${r.cases}</td><td>${r.ours?'OROBOROS':'AA field'}</td></tr>`).join('');
   const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>OROBOROS Daily Field Report — ${esc(day)}</title>
 <style>
-:root{--ink:#141413;--ink2:#5c5a55;--line:#e4e1da;--accent:#D97757;--us:#F2A07B;--bg:#FAF9F5}
+:root{--ink:${p.ink};--ink2:${p.muted};--line:${p.line};--accent:${p.accent};--us:${p.us};--bg:${p.bg};--card:${p.card};--card2:${p.card2}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 'Segoe UI',Inter,system-ui,sans-serif}
 .wrap{max-width:1120px;margin:0 auto;padding:40px 28px 60px}
 .kicker{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink2)}
 h1{font-size:32px;margin:8px 0 6px;letter-spacing:.01em}h1 b{color:var(--us)}
 .sub{color:var(--ink2);font-size:12px;max-width:760px}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
-.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
 .kpi .k{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
-.kpi .v{font-size:27px;font-weight:800;color:var(--us);margin-top:4px;line-height:1.1}
+.kpi .v{font-size:27px;font-weight:800;color:var(--ink);margin-top:4px;line-height:1.1}
 .kpi .n{font-size:11px;color:var(--ink2);margin-top:2px}
 h2{font-size:17px;margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:12px}
-th{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);text-align:left;padding:10px 12px;background:#F3F1EC}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:12px}
+th{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);text-align:left;padding:10px 12px;background:var(--card2)}
 td{padding:8px 12px;border-top:1px solid var(--line)}
 td.num{text-align:right;font-variant-numeric:tabular-nums}
-tr.ours td{background:#FFF4EE;font-weight:600}
+td small{display:block;font-size:10px;color:var(--ink2);margin-top:1px}
+td.slug{font-family:ui-monospace,Consolas,monospace;font-size:10px;color:var(--ink2)}
+.prov{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 0}
+.prov>div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.prov .k{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.prov .v{font-size:12px;margin-top:3px;color:var(--ink);word-break:break-word}
+tr.ours td{background:color-mix(in srgb,var(--us) 18%,var(--card));font-weight:600}
 .charts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-figure{margin:0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 figure img{width:100%;display:block}
 figcaption{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);padding:9px 12px;border-top:1px solid var(--line)}
 .foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-@media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}}
+@media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.prov{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}}
 </style></head><body><div class="wrap">
 <div class="kicker">OROBOROS / ANTHROPIC · FIELD REPORT</div>
 <h1>Daily Intelligence × Cost Report — <b>${esc(day)}</b></h1>
-<div class="sub">Artificial Analysis Intelligence Index v4.3.2 · weighted average cost per task · data fetched ${esc(stamp)}. Generated ${esc(new Date().toLocaleString())} from the live ${esc(htmlLang())} field dashboard.</div>
+<div class="sub">Artificial Analysis Intelligence Index v${esc(meta.intelligence_index_version||'4.3.2')} · weighted average cost per task · data fetched ${esc(stamp)}. Generated ${esc(new Date().toLocaleString())} from the live ${esc(htmlLang())} dashboard. Every field returned by the AA feed is propagated below — index, coding index, cost/task, tokens/s, AA name and slug — alongside our own runs.</div>
 <div class="kpis">
   <div class="kpi"><div class="k">Field Models</div><div class="v">${fieldRows.length}</div><div class="n">10-case AA suites</div></div>
   <div class="kpi"><div class="k">Top Field Model</div><div class="v">${topField?topField.index:'—'}</div><div class="n">${topField?esc(topField.name):'—'}</div></div>
   <div class="kpi"><div class="k">Our Record</div><div class="v">${R.rate}<span style="font-size:14px">%</span></div><div class="n">${esc(R.name)}</div></div>
   <div class="kpi"><div class="k">Our Runs</div><div class="v">${ourRows.length}</div><div class="n">local · $0.00/task</div></div>
 </div>
+<h2>AA Feed</h2>
+<div class="prov">
+  <div><div class="k">Source</div><div class="v">${esc(meta.source||'Artificial Analysis API')}</div></div>
+  <div><div class="k">Endpoint</div><div class="v">${esc(meta.endpoint||'—')}</div></div>
+  <div><div class="k">Fetched</div><div class="v">${esc(meta.fetched_at||stamp||'—')}</div></div>
+  <div><div class="k">Index version</div><div class="v">${esc(meta.intelligence_index_version||'—')}</div></div>
+  <div><div class="k">Pages cached</div><div class="v">${esc((meta.pages_cached||[]).join(', ')||'—')}</div></div>
+  <div><div class="k">AA models</div><div class="v">${Object.keys(aa).length}</div></div>
+  <div><div class="k">Total rows</div><div class="v">${rows.length}</div></div>
+  <div><div class="k">Our runs</div><div class="v">${ourRows.length}</div></div>
+</div>
 <h2>Model Ledger</h2>
-<table><thead><tr><th>Model</th><th>Vendor</th><th class="num">Index</th><th class="num">Cost / Task</th><th class="num">Cases</th><th>Source</th></tr></thead><tbody>${table}</tbody></table>
+<table><thead><tr><th>Model / AA name</th><th>AA slug</th><th>Vendor</th><th class="num">Index</th><th class="num">Coding</th><th class="num">Cost / Task</th><th class="num">t/s</th><th class="num">Cases</th><th>Source</th></tr></thead><tbody>${table}</tbody></table>
 <h2>Charts</h2>
 <div class="charts">${charts}</div>
 <div class="foot"><span><b>OROBOROS / ANTHROPIC</b></span><span>100% benchmarked models · CROWN 8718 HZ</span><span>${esc(day)}</span></div>
