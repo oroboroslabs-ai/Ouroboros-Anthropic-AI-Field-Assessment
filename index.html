@@ -39,10 +39,10 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 /* ============ POSTCARD FRAME — one page, top + bottom halves ============ */
 .postcard{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--card)}
 .bar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--card2);border-bottom:1px solid var(--line);gap:12px;flex-wrap:wrap}
-.bar .brand{font-size:14px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.bar .brand{font-size:13px;font-weight:700;letter-spacing:.03em;white-space:nowrap}
 .bar .brand small{color:var(--ink3);font-weight:500;margin-left:8px}
-.themes{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-.tbtn{padding:5px 10px;border-radius:16px;border:1px solid var(--line);background:transparent;color:var(--ink2);font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:.15s;white-space:nowrap}
+.themes{display:flex;gap:4px;flex-wrap:nowrap;justify-content:flex-end}
+.tbtn{padding:5px 9px;border-radius:16px;border:1px solid var(--line);background:transparent;color:var(--ink2);font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:.15s;white-space:nowrap;text-decoration:none}
 .tbtn:hover{color:var(--ink);border-color:var(--accent-line)}
 .tbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .models{display:flex;gap:6px;flex-wrap:wrap}
@@ -133,7 +133,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <button class="tbtn" data-t="brand">In-House</button>
       <button class="tbtn" id="zoomBtn">Zoom: 1.0×</button>
       <span style="width:1px;height:20px;background:var(--line);display:inline-block"></span>
-      <button class="tbtn" id="viewLineBtn">Intelligence × Cost ↓</button>
+      <button class="tbtn" id="viewLineBtn" title="Intelligence Index vs. Cost per Task">Index × Cost ↓</button>
       <a class="tbtn" href="artificial-analysis.html">Field Data</a>
       <a class="tbtn" href="report.html">Reports</a>
       <button class="tbtn" id="reportBtn">Daily Report</button>
