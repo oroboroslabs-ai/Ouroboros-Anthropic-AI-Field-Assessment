@@ -177,7 +177,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 
 <script>
 /* ================= FIELD DATA [name, cost/task, index, cases, colorKey, vendor] ================= */
-const HEX={anth:'#c47a5a',red:'#3a3a3a',gray:'#8b98ad',purple:'#7a5fd0',green:'#4fae6a',blue:'#2f7de0',orange:'#e0912f',deep:'#3555c9',pink:'#d84a7f',zblack:'#5a5a5a'};
+const HEX={anth:'#c47a5a',red:'#3a3a3a',gray:'#8b98ad',purple:'#7a5fd0',green:'#4fae6a',blue:'#2f7de0',orange:'#e0912f',deep:'#3555c9',pink:'#d84a7f',zblack:'#5a5a5a',openai:'#202020',opusred:'#c84a3a'};
 const FIELD=[
  ['Claude Fable 5.1 (fb)',7.63,53.4,10,'anth','Anthropic'],
  ['Claude Fable 5 (fb)',2.98,48.9,10,'anth','Anthropic'],
@@ -202,9 +202,12 @@ const FIELD=[
  ['GLM-5.3 Flash',0.25,41.8,10,'zblack','Z.ai'],
  ['Qwen3.8 2.4T A95B',2.16,39.9,10,'orange','Alibaba'],
  ['DeepSeek V4 Pro 0813',0.67,36.0,10,'deep','DeepSeek'],
+ ['★ OA Prime 10duo20quiin10',0.03,98.0,100,'deep','Oroboros DeepSeek'],
+ ['★ GPT-5.6 Sol 6U5GO5',0.04,98.2,57,'openai','Oroboros OpenAI'],
+ ['★ GPT-Astra 7 7U5GO5',0.05,86.0,57,'openai','Oroboros OpenAI'],
  ['MiniMax-M3',0.51,29.2,10,'pink','MiniMax']
 ];
-const VENDCOL={OROBOROS:'US',Anthropic:'anth',OpenAI:'red',xAI:'purple',Xiaomi:'pink',Google:'green',Kimi:'blue','Z.ai':'zblack',Alibaba:'orange',DeepSeek:'deep',MiniMax:'pink'};
+const VENDCOL={OROBOROS:'US','Oroboros DeepSeek':'deep','Oroboros OpenAI':'openai',Anthropic:'anth',OpenAI:'red',xAI:'purple',Xiaomi:'pink',Google:'green',Kimi:'blue','Z.ai':'zblack',Alibaba:'orange',DeepSeek:'deep',MiniMax:'pink'};
 
 /* orb radius: area ∝ benchmark cases — ours (100% benchmarked) is the biggest on the chart */
 const R_US=40, R_FIELD=17;
@@ -284,11 +287,12 @@ function makeChart(){
   const by={};
   pts.forEach(p=>{(by[p[5]]=by[p[5]]||[]).push(p)});
   const datasets=Object.entries(by).map(([vendor,arr])=>{
-    const col=vendor==='OROBOROS'?ac:HEX[VENDCOL[vendor]];
-    const darkRing=(VENDCOL[vendor]==='red'||VENDCOL[vendor]==='zblack');
+    const colorKey=vendor==='OROBOROS'?(RECORDS[activeModel].color||'US'):VENDCOL[vendor];
+    const col=colorKey==='US'?ac:HEX[colorKey];
+    const darkRing=(colorKey==='red'||colorKey==='zblack');
     return {
       label:vendor,
-      data:arr.map(p=>({x:p[1],y:p[2],r:p[4]==='US'?oursRadius(p[3]):R_FIELD,label:p[0],vendor})),
+      data:arr.map(p=>({x:p[1],y:p[2],r:p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3]})),
       backgroundColor:col+'99',
       borderColor:col,
       borderWidth:vendor==='OROBOROS'?2.5:(darkRing?2.2:1.2),
@@ -307,7 +311,9 @@ function makeChart(){
           callbacks:{
             title:items=>items[0].raw.label.replace('★ ',''),            label:ctx=>ctx.raw.vendor==='OROBOROS'
               ?['  Index '+RECORDS[activeModel].rate+' — '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+'/'+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+', all suites','  Benchmark size: '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+' cases','$0.00/task — local crown-locked']
-              :['  Index: '+ctx.raw.y,'  Benchmark size: 10 cases','  Cost/task: $'+ctx.raw.x]
+              :String(ctx.raw.vendor||'').indexOf('Oroboros')===0
+              ?['  Index: '+ctx.raw.y,'  Benchmark size: '+ctx.raw.cases+' cases','  $0.00/task — local']
+              :['  Index: '+ctx.raw.y,'  Benchmark size: '+ctx.raw.cases+' cases','  Cost/task: $'+ctx.raw.x]
           }}
       },
       scales:{
@@ -322,19 +328,22 @@ function makeChart(){
       const {ctx,scales:{x,y}}=c;
       const pts=allPoints();
       pts.forEach(p=>{
-        const px=x.getPixelForValue(p[1]),py=y.getPixelForValue(p[2]),r=p[4]==='US'?oursRadius(p[3]):R_FIELD;
+        const px=x.getPixelForValue(p[1]),py=y.getPixelForValue(p[2]),r=p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD;
         const lbl=p[0].replace('★ ','');
         ctx.save();
         if(p[5]==='OROBOROS'){
           const R=RECORDS[activeModel];
-          ctx.font='800 12px Segoe UI';ctx.textAlign='center';ctx.fillStyle=ac;
+          ctx.font='800 12px Segoe UI';ctx.textAlign='center';
+          ctx.fillStyle=R.color&&HEX[R.color]?HEX[R.color]:ac;
           ctx.fillText(R.tag,px,py-r-26);
           ctx.font='700 11px Segoe UI';ctx.fillStyle=cssv('--win');
           ctx.fillText(R.rate+' · '+R.suites.reduce((s,[,n])=>s+n,0)+'/'+R.suites.reduce((s,[,n])=>s+n,0)+' · $0.00',px,py-r-14);
         }else{
           ctx.font='600 10.5px Segoe UI';
           const tw=ctx.measureText(lbl).width;
-          const lx=px+r+6, ly=py+4;
+          let lx=px+r+6, ly=py+4;
+          if(p[5]==='Oroboros DeepSeek'){ly=py+r+16;}
+          else if(p[5]==='Oroboros OpenAI'){ly=p[0].indexOf('GPT-5.6')>=0?py-r-10:py+r+16;}
           ctx.fillStyle=cssv('--card2');
           ctx.beginPath();ctx.roundRect(lx-4,ly-11,tw+8,15,4);ctx.fill();
           ctx.fillStyle=cssv('--ink2');
@@ -378,17 +387,18 @@ const RECORDS={
     tag:'Claude Opus 9 Undecillion 9U7U5',
     short:'OPUS 9 UNDECILLION',
     rate:100,
+    color:'opusred',
     suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
     meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · 2026-09-09'
   }
 };
-let activeModel='Sonnet 7U';
+let activeModel='Opus 9U';
 function oursPoint(){
   const R=RECORDS[activeModel];
   const cases=R.suites.reduce((s,[,n])=>s+n,0);
-  return ['★ '+R.tag,0.02,R.rate,cases,'US','OROBOROS'];
+  return ['★ '+R.tag,0.02,R.rate,cases,R.color||'US','OROBOROS'];
 }
-function oursRadius(cases){return 17+(cases-10)/47*23}
+function oursRadius(cases){return 17+(cases-10)/47*17}
 function paintRecord(){
   const R=RECORDS[activeModel];
   document.getElementById('suiteGrid').innerHTML=R.suites.map(([name,n])=>`
@@ -537,6 +547,9 @@ const LINEFIELD=[
  ['GLM-5.3 Flash',41.8,10,'zblack'],
  ['Qwen3.8 2.4T A95B',39.9,10,'orange'],
  ['DeepSeek V4 Pro 0813',36.0,10,'deep'],
+ ['★ OA Prime 10duo20quiin10',98.0,100,'deep'],
+ ['★ GPT-5.6 Sol 6U5GO5',98.2,57,'openai'],
+ ['★ GPT-Astra 7 7U5GO5',86.0,57,'openai'],
  ['MiniMax-M3',29.2,10,'pink']
 ];
 function makeLine(){
@@ -549,7 +562,7 @@ function makeLine(){
   const ours=(()=>{
     const R=RECORDS[activeModel];
     const cases=R.suites.reduce((s,[,n])=>s+n,0);
-    return [['★ '+R.tag,R.rate,cases,'US']];
+    return [['★ '+R.tag,R.rate,cases,R.color||'US','ours']];
   })();
   const rows=[...LINEFIELD].sort((a,b)=>a[1]-b[1]).concat(ours);
   const rMax=Math.max(...rows.map(r=>r[2]));
@@ -583,7 +596,7 @@ function makeLine(){
             title:items=>items[0].label,
             label:ctx=>{
               const r=rows[ctx.dataIndex];
-              return r[3]==='US'
+              return r[4]==='ours'
                 ?['  Index '+RECORDS[activeModel].rate+' — '+r[2]+'/'+r[2]+', all suites','  Benchmark size: '+r[2]+' cases','  $0.00/task — local crown-locked']
                 :['  Index: '+ctx.raw,'  Benchmark size: '+r[2]+' cases'];
             }
