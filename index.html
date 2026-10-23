@@ -11,25 +11,26 @@
   --bg:#101216; --card:#171A20; --card2:#1E222A; --line:#2A2F3A;
   --ink:#F2F2F0; --ink2:rgba(242,242,240,.62); --ink3:rgba(242,242,240,.34);
   --accent:#D97757; --accent-soft:rgba(217,119,87,.18); --accent-line:rgba(217,119,87,.4);
+  --us:#F2A07B;
   --win:#7ab98c; --grid:rgba(242,242,240,.09);
 }
 html[data-theme="white"]{
   --bg:#FAF9F5; --card:#FFFFFF; --card2:#F3F1EC; --line:#E2DFD8;
   --ink:#141413; --ink2:rgba(20,20,19,.62); --ink3:rgba(20,20,19,.34);
   --accent:#B04E2E; --accent-soft:rgba(176,78,46,.14); --accent-line:rgba(176,78,46,.4);
-  --win:#3d7a52; --grid:rgba(20,20,19,.08);
+  --win:#3d7a52; --us:#F2A07B; --grid:rgba(20,20,19,.08);
 }
 html[data-theme="neutral"]{
   --bg:#8D9199; --card:#A9ADB4; --card2:#B8BCC3; --line:#C4C7CD;
   --ink:#14161A; --ink2:rgba(20,22,26,.66); --ink3:rgba(20,22,26,.38);
   --accent:#4A5561; --accent-soft:rgba(74,85,97,.16); --accent-line:rgba(74,85,97,.42);
-  --win:#4E7A5E; --grid:rgba(20,22,26,.1);
+  --win:#4E7A5E; --us:#F2A07B; --grid:rgba(20,22,26,.1);
 }
 html[data-theme="brand"]{
   --bg:#1C1B19; --card:#262421; --card2:#302E2A; --line:#3E3B36;
   --ink:#FAF9F5; --ink2:rgba(250,249,245,.62); --ink3:rgba(250,249,245,.34);
   --accent:#D97757; --accent-soft:rgba(217,119,87,.18); --accent-line:rgba(217,119,87,.42);
-  --win:#00ffa3; --grid:rgba(250,249,245,.08);
+  --win:#00ffa3; --us:#F2A07B; --grid:rgba(250,249,245,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-ui,sans-serif;min-height:100vh;padding:30px 26px}
@@ -67,14 +68,14 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 .bottom{padding:26px 30px 22px}
 .bot-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;gap:14px;flex-wrap:wrap}
 .bot-head h2{font-size:22px;font-weight:750}
-.bot-head .big{font-size:44px;font-weight:800;color:var(--win);line-height:1}
+.bot-head .big{font-size:44px;font-weight:600;color:var(--ink2);line-height:1}
 .bot-head .big small{font-size:13px;color:var(--ink2);font-weight:600;letter-spacing:.14em}
 .suite-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
 @media(max-width:1000px){.suite-grid{grid-template-columns:repeat(2,1fr)}}
 .suite{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 14px 12px;transition:.15s}
 .suite:hover{transform:translateY(-2px);border-color:var(--accent-line)}
 .suite .name{font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--ink2);text-transform:uppercase}
-.suite .rate{font-size:24px;font-weight:800;color:var(--win);margin:2px 0 8px}
+.suite .rate{font-size:24px;font-weight:600;color:var(--ink2);margin:2px 0 8px}
 .suite .cells{display:flex;flex-wrap:wrap;gap:4px}
 .cell{width:20px;height:20px;border-radius:6px;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s;position:relative;border:1px solid}
 .cell:hover{transform:scale(1.3);z-index:5}
@@ -84,6 +85,38 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 .foot b{color:var(--accent)}
 .foot a{color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.1em}
 .foot a:hover{text-decoration:underline}
+
+/* ============ OFFICIAL CHART PANELS — AA structure, theme-aware ============ */
+.aa-panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 26px 16px;color:var(--ink)}
+.aa-panel.plain{padding:0;overflow:hidden}
+.aa-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;margin-bottom:10px}
+.aa-title{font-size:21px;font-weight:650;letter-spacing:.01em;color:var(--ink)}
+.aa-title .arw{font-weight:500;margin-left:4px;color:var(--ink3)}
+.aa-sub{font-size:11.5px;color:var(--ink2);line-height:1.55;margin-top:6px;max-width:620px}
+.aa-summit{font-size:30px;font-weight:800;color:var(--us);background:var(--card2);border:0;border-radius:8px;padding:4px 12px;line-height:1;white-space:nowrap}
+html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:var(--ink)}
+.aa-summit small{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--ink2);margin-left:4px;text-transform:uppercase}
+.aa-legend{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:12px 0 2px;font-size:11px;color:var(--ink2)}
+.aa-legend .item{display:inline-flex;align-items:center;gap:7px}
+.aa-quad{width:15px;height:15px;border-radius:2px;background:color-mix(in srgb,var(--win) 16%,transparent);border:1px solid color-mix(in srgb,var(--win) 34%,transparent);display:inline-block}
+.aa-api{width:14px;height:14px;border-radius:3px;background:var(--ink3);border:1px solid var(--line);display:inline-block}
+.aa-mark{font-size:13px;font-weight:600;color:var(--ink2);letter-spacing:.01em;white-space:nowrap}
+.aa-pareto{width:28px;height:0;border-top:2px dotted var(--us);display:inline-block}
+.aa-vendors{display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin:8px 0 10px;font-size:11px;color:var(--ink2)}
+.aa-vendors .v{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.aa-vendors .v i{width:9px;height:9px;border-radius:99px;display:inline-block}
+.aa-canvas{position:relative;height:560px}
+@media(max-width:900px){.aa-canvas{height:440px}}
+.aa-img{display:block;width:100%;height:auto}
+.aa-cap{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:8px 2px 0}
+.snap-btn{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;border:1px solid var(--line);background:transparent;color:var(--ink2);border-radius:14px;padding:5px 12px;cursor:pointer;transition:.15s;white-space:nowrap}
+.snap-btn:hover{color:var(--ink);border-color:var(--us)}
+.snap-modal{position:fixed;inset:0;background:rgba(8,8,10,.84);display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px}
+.snap-modal[hidden]{display:none}
+.snap-modal .box{background:var(--card);border:1px solid var(--line);border-radius:14px;max-width:94vw;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.snap-modal img{display:block;max-width:90vw;max-height:76vh;object-fit:contain;background:#fff}
+.snap-modal .acts{display:flex;gap:8px;justify-content:flex-end;align-items:center;padding:10px 12px;border-top:1px solid var(--line)}
+.snap-modal .msg{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-right:auto;padding-left:4px}
 </style>
 </head>
 <body>
@@ -100,13 +133,10 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
       <button class="tbtn" data-t="brand">In-House</button>
       <button class="tbtn" id="zoomBtn">Zoom: 1.0×</button>
       <span style="width:1px;height:20px;background:var(--line);display:inline-block"></span>
-      <button class="tbtn" id="viewLineBtn">Interactive Line Chart ↓</button>
+      <button class="tbtn" id="viewLineBtn">Intelligence × Cost ↓</button>
       <a class="tbtn" href="artificial-analysis.html">Field Data</a>
+      <button class="tbtn" id="reportBtn">Daily Report</button>
     </div>
-  </div>
-  <div class="bar" style="border-top:1px solid var(--line);justify-content:flex-start;gap:10px;flex-wrap:wrap">
-    <span style="font-size:10px;letter-spacing:.3em;color:var(--ink3);text-transform:uppercase">MODEL SELECTOR:</span>
-    <div class="models" id="modelBar"></div>
   </div>
 
   <!-- ============ TOP HALF — landscape orb field ============ -->
@@ -115,19 +145,39 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
     <div class="top-head">
       <h2>AI Assessment Levels — All Categories</h2>
       <div class="note">X = cost per task (log) · Y = Intelligence Index · <b>orb area = size of the benchmark run</b> — ours is 100% benchmarked models, the largest exact-output run posted; every field model runs a 10-case suite. Landscape, every top model named.</div>
+      <button class="snap-btn" data-snap="orbs" data-name="oroboros-orb-field">Snapshot</button>
     </div>
     <div class="legend" id="legend"></div>
     <div class="orb-box"><canvas id="orbs"></canvas></div>
+  </div>
+
+  <!-- ============ OFFICIAL VERTICAL INDEX BARS — first chart under the orb ============ -->
+  <div class="bottom" id="viewBars" style="padding-bottom:26px">
+    <div class="aa-panel">
+      <div class="aa-head">
+        <div>
+          <div class="aa-title">Artificial Analysis Intelligence Index <span class="arw">↗</span></div>
+          <div class="aa-sub">Artificial Analysis Intelligence Index v4.3.2 incorporates 10 evaluations: AA-Briefcase v1.1, GDPval-AA v2.1, AutomationBench-AA, Terminal-Bench 4.0, SciCode, Humanity's Last Exam, GDP.pdf, CritPt, AA-Omniscience, AA-LCR v1.1</div>
+        </div>
+        <div class="aa-mark">◈ Artificial Analysis</div>
+        <button class="snap-btn" data-snap="indexBars" data-name="aa-intelligence-index-bars">Snapshot</button>
+      </div>
+      <div class="aa-legend">
+        <span class="item"><i class="aa-api"></i>No publicly available API</span>
+      </div>
+      <div class="aa-vendors" id="aaBarVendors"></div>
+      <div class="aa-canvas" style="height:488px"><canvas id="indexBars"></canvas></div>
+      <div class="aa-cap">Source: Artificial Analysis · Intelligence Index v4.3.2 · 23 Oct 2026</div>
+    </div>
   </div>
 
   <!-- ============ BOTTOM HALF — our record ============ -->
   <div class="bottom" id="viewDash">
     <div class="bot-head">
       <div>
-        <div class="kick" style="margin-bottom:6px">THE 100% RECORD — <b>FULL BENCHMARK</b></div>
+        <div class="kick" style="margin-bottom:6px">THE 100% RECORD — <b>FULL BENCHMARK</b> <span style="color:var(--ink3);letter-spacing:.1em;font-weight:600;text-transform:none">· click bars on chart to see OA model benchmarks</span></div>
         <h2>Sonnet 7 Undecillion 7U5GO5 — All Suites, All Cases</h2>
       </div>
-      <div class="big">100<small>%</small></div>
     </div>
     <div class="suite-grid" id="suiteGrid"></div>
     <div class="bot-head" style="margin-top:20px">
@@ -135,7 +185,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
         <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>INTELLIGENCE INDEX</b></div>
         <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
       </div>
-      <div class="big" style="font-size:30px" id="topBig">100<small> top</small></div>
+      <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
     </div>
     <div class="orb-box" style="height:620px"><canvas id="rankBar"></canvas></div>
     <div class="foot">
@@ -148,23 +198,25 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
     </div>
   </div>
 
-  <!-- ============ LINE CHART — below the bar chart, scroll to it ============ -->
+  <!-- ============ LINE CHART — official intelligence × cost style ============ -->
   <div class="bottom" id="viewLine">
-    <div class="bot-head">
-      <div>
-        <div class="kick" style="margin-bottom:6px">INTELLIGENCE INDEX — <b>THE WHOLE FIELD, CONNECTED</b></div>
-        <h2>Interactive Line Chart</h2>
+    <div class="aa-panel">
+      <div class="aa-head">
+        <div>
+          <div class="aa-title">Intelligence Index vs. Cost per Task <span class="arw">↗</span></div>
+          <div class="aa-sub">Artificial Analysis Intelligence Index · Weighted average cost (USD) per Artificial Analysis Intelligence Index task. The Pareto frontier is drawn in OROBOROS accent; the crowned local run anchors the top-left of the field.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <button class="snap-btn" data-snap="lineChart" data-name="intelligence-vs-cost">Snapshot</button>
+        </div>
       </div>
-      <div class="big" style="font-size:30px" id="summitBig">100<small> summit</small></div>
-    </div>
-    <div class="note" id="lineNote" style="font-size:11px;color:var(--ink2);max-width:640px;line-height:1.7;margin-bottom:14px">Each dot is a model in its vendor color — <b style="color:var(--accent)">dot size = actual benchmark size</b> (57 cases for us, 10 for the field). The line connects the field in order; the selected model connects at the end of the chart, at the summit.</div>
-    <div class="orb-box" style="height:560px"><canvas id="lineChart"></canvas></div>
-    <div style="display:flex;gap:8px;align-items:center;margin:10px 0 4px">
-      <span style="font-size:10px;letter-spacing:.25em;color:var(--ink3);text-transform:uppercase">Orb Zoom:</span>
-      <button class="mbtn" id="lzIn" style="padding:5px 14px">Zoom In +</button>
-      <button class="mbtn" id="lzOut" style="padding:5px 14px">Zoom Out −</button>
-      <button class="mbtn" id="lzRst" style="padding:5px 14px">Reset</button>
-      <span id="lzLabel" style="font-size:10.5px;color:var(--ink2)">1.0×</span>
+      <div class="aa-legend">
+        <span class="item"><i class="aa-quad"></i>Most attractive quadrant</span>
+        <span class="item"><i class="aa-pareto"></i>Pareto line</span>
+      </div>
+      <div class="aa-vendors" id="aaVendors"></div>
+      <div class="aa-canvas"><canvas id="lineChart"></canvas></div>
+      <div class="aa-cap">Source: Artificial Analysis · Intelligence Index v4.3.2 · 23 Oct 2026</div>
     </div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
@@ -177,7 +229,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 
 <script>
 /* ================= FIELD DATA [name, cost/task, index, cases, colorKey, vendor] ================= */
-const HEX={anth:'#c47a5a',red:'#3a3a3a',gray:'#8b98ad',purple:'#7a5fd0',green:'#4fae6a',blue:'#2f7de0',orange:'#e0912f',deep:'#3555c9',pink:'#d84a7f',zblack:'#5a5a5a',openai:'#202020',opusred:'#c84a3a'};
+const HEX={anth:'#C0714F',red:'#1A1A1A',gray:'#6B7280',purple:'#6B5BD2',green:'#34A853',blue:'#2563EB',orange:'#F97316',deep:'#2B4FD8',pink:'#E8418F',zblack:'#2B2B2B',openai:'#1A1A1A',opusred:'#c84a3a',meta:'#1E7BEA',stepfun:'#22C7D9',mistral:'#EF4444',nvidia:'#7CB342',reflect:'#1F4D3A',kimi:'#2563EB',spacex:'#6B5BD2',tm:'#6B7280',xiaomi:'#F26522',alibaba:'#F97316'};
 const FIELD=[
  ['Claude Fable 5.1 (fb)',7.63,53.4,10,'anth','Anthropic'],
  ['Claude Fable 5 (fb)',2.98,48.9,10,'anth','Anthropic'],
@@ -207,13 +259,13 @@ const FIELD=[
  ['★ GPT-Astra 7 7U5GO5',0.05,86.0,57,'openai','Oroboros OpenAI'],
  ['MiniMax-M3',0.51,29.2,10,'pink','MiniMax']
 ];
-const VENDCOL={OROBOROS:'US','Oroboros DeepSeek':'deep','Oroboros OpenAI':'openai',Anthropic:'anth',OpenAI:'red',xAI:'purple',Xiaomi:'pink',Google:'green',Kimi:'blue','Z.ai':'zblack',Alibaba:'orange',DeepSeek:'deep',MiniMax:'pink'};
+const VENDCOL={OROBOROS:'US','Oroboros DeepSeek':'deep','Oroboros OpenAI':'openai',Anthropic:'anth',OpenAI:'red',xAI:'purple',Xiaomi:'xiaomi',Google:'green',Kimi:'kimi','Z.ai':'zblack',Alibaba:'alibaba',DeepSeek:'deep',MiniMax:'pink'};
 
 /* orb radius: area ∝ benchmark cases — ours (100% benchmarked) is the biggest on the chart */
 const R_US=40, R_FIELD=17;
 
 function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
-function hex(v){return v==='US'?cssv('--accent'):HEX[v]}
+function hex(v){return v==='US'?cssv('--us'):HEX[v]}
 function tipColors(){
   const theme=document.documentElement.dataset.theme||'dark';
   const light=(theme==='white'||theme==='neutral');
@@ -253,13 +305,19 @@ function applyLiveData(){
       if(lv.cost_per_task!=null&&p[1]!==lv.cost_per_task){p[1]=lv.cost_per_task;changed=true;}
     }
   });
-  LINEFIELD.forEach(p=>{
+  SCATTER.forEach(p=>{
     const lv=liveData[p[0]];
-    if(lv&&lv.index!=null&&p[1]!==lv.index){p[1]=lv.index;changed=true;}
+    if(lv&&lv.index!=null&&p[2]!==lv.index){p[2]=lv.index;changed=true;}
+    if(lv&&lv.cost_per_task!=null&&p[1]!==lv.cost_per_task){p[1]=lv.cost_per_task;changed=true;}
+  });
+  AA_BARS.forEach(b=>{
+    const lv=liveData[b[0]];
+    if(lv&&lv.index!=null&&b[1]!==lv.index){b[1]=lv.index;changed=true;}
   });
   if(changed){
     makeChart();
     makeBar();
+    if(aaReady)makeIndexBars();
     if(lineChart)makeLine();
   }
 }
@@ -270,32 +328,35 @@ setInterval(loadLiveData,30*60*1000);
 const legendEl=document.getElementById('legend');
 Object.entries(VENDCOL).forEach(([name,key])=>{
   const c=document.createElement('span');c.className='chip';
-  if(name==='OROBOROS'){c.style.color='var(--accent)';c.style.fontWeight='700';}
-  c.innerHTML=`<i style="background:${key==='US'?'var(--accent)':HEX[key]}"></i>${name}`;
+  if(name==='OROBOROS'){c.style.color='var(--ink2)';c.style.fontWeight='700';}
+  c.innerHTML=`<i style="background:${key==='US'?'var(--us)':HEX[key]}"></i>${name}`;
   legendEl.appendChild(c);
 });
 
 let chart;
 let lineChart;
+var aaReady=false;
 function allPoints(){
   return [oursPoint(),...FIELD];
 }
 function makeChart(){
   if(chart)chart.destroy();
-  const ac=cssv('--accent');
+  const ac=cssv('--us')||cssv('--accent');
   const pts=allPoints();
   const by={};
   pts.forEach(p=>{(by[p[5]]=by[p[5]]||[]).push(p)});
   const datasets=Object.entries(by).map(([vendor,arr])=>{
-    const colorKey=vendor==='OROBOROS'?(RECORDS[activeModel].color||'US'):VENDCOL[vendor];
-    const col=colorKey==='US'?ac:HEX[colorKey];
+    const colorKey=vendor==='OROBOROS'?'US':VENDCOL[vendor];
+    const raw=colorKey==='US'?ac:HEX[colorKey];
+    const col=displayColor(raw);
     const darkRing=(colorKey==='red'||colorKey==='zblack');
+    const ourGPT=vendor==='Oroboros OpenAI';
     return {
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3]})),
-      backgroundColor:col+'99',
-      borderColor:col,
-      borderWidth:vendor==='OROBOROS'?2.5:(darkRing?2.2:1.2),
+      backgroundColor:vendor==='OROBOROS'?col+'EC':col+'99',
+      borderColor:ourGPT?'#0A0A0A':col,
+      borderWidth:vendor==='OROBOROS'?2.5:(ourGPT?1:(darkRing?2.2:1.2)),
       hoverBorderWidth:3
     };
   });
@@ -324,7 +385,23 @@ function makeChart(){
            title:{display:true,text:'Intelligence Index',color:cssv('--ink2'),font:{size:10,weight:'700'}}}
       }
     },
-    plugins:[{id:'tags',afterDatasetsDraw(c){
+    plugins:[{id:'glowOrbs',beforeDatasetsDraw(c){
+      const {ctx,scales:{x,y}}=c;
+      ctx.save();
+      c.data.datasets.forEach(ds=>{
+        if(ds.label!=='Oroboros OpenAI')return;
+        ds.data.forEach(p=>{
+          const px=x.getPixelForValue(p.x),py=y.getPixelForValue(p.y);
+          ctx.beginPath();
+          ctx.arc(px,py,p.r+3,0,Math.PI*2);
+          ctx.fillStyle='rgba(242,160,123,.16)';
+          ctx.shadowColor='rgba(242,160,123,.85)';
+          ctx.shadowBlur=16;
+          ctx.fill();
+        });
+      });
+      ctx.restore();
+    }},{id:'tags',afterDatasetsDraw(c){
       const {ctx,scales:{x,y}}=c;
       const pts=allPoints();
       pts.forEach(p=>{
@@ -333,11 +410,13 @@ function makeChart(){
         ctx.save();
         if(p[5]==='OROBOROS'){
           const R=RECORDS[activeModel];
-          ctx.font='800 12px Segoe UI';ctx.textAlign='center';
-          ctx.fillStyle=R.color&&HEX[R.color]?HEX[R.color]:ac;
-          ctx.fillText(R.tag,px,py-r-26);
-          ctx.font='700 11px Segoe UI';ctx.fillStyle=cssv('--win');
-          ctx.fillText(R.rate+' · '+R.suites.reduce((s,[,n])=>s+n,0)+'/'+R.suites.reduce((s,[,n])=>s+n,0)+' · $0.00',px,py-r-14);
+          const name=oaName(R.tag);
+          const cases=R.suites.reduce((s,[,n])=>s+n,0);
+          ctx.font='600 11px Segoe UI';ctx.textAlign='center';
+          ctx.fillStyle=cssv('--ink2');
+          ctx.fillText(name,px,py-r-26);
+          ctx.font='600 10.5px Segoe UI';ctx.fillStyle=cssv('--ink2');
+          ctx.fillText(R.rate+' · '+cases+'/'+cases+' · $0.00',px,py-r-14);
         }else{
           ctx.font='600 10.5px Segoe UI';
           const tw=ctx.measureText(lbl).width;
@@ -383,8 +462,8 @@ const RECORDS={
     meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · AVG 43.0 tok/s · 2026-09-09'
   },
   'Opus 9U':{
-    name:'Opus 9 Undecillion 9U7U5',
-    tag:'Claude Opus 9 Undecillion 9U7U5',
+    name:'Opus 9 Undecillion 9U5GO5',
+    tag:'Claude Opus 9 Undecillion 9U5GO5',
     short:'OPUS 9 UNDECILLION',
     rate:100,
     color:'opusred',
@@ -396,7 +475,7 @@ let activeModel='Opus 9U';
 function oursPoint(){
   const R=RECORDS[activeModel];
   const cases=R.suites.reduce((s,[,n])=>s+n,0);
-  return ['★ '+R.tag,0.02,R.rate,cases,R.color||'US','OROBOROS'];
+  return ['★ '+R.tag,0.02,R.rate,cases,'US','OROBOROS'];
 }
 function oursRadius(cases){return 17+(cases-10)/47*17}
 function paintRecord(){
@@ -405,7 +484,8 @@ function paintRecord(){
     <div class="suite"><div class="name">${name}</div><div class="rate">${R.rate}%</div>
     <div class="cells">${Array.from({length:n},(_,i)=>`<div class="cell">${String(i+1).padStart(2,'0')}<span class="tip">PASS</span></div>`).join('')}</div></div>`).join('');
   document.querySelector('.bot-head h2').textContent=R.name;
-  document.querySelector('.bot-head .big').innerHTML=R.rate+'<small>%</small>';
+  const bigEl=document.querySelector('.bot-head .big');
+  if(bigEl)bigEl.innerHTML=R.rate+'<small>%</small>';
   document.querySelector('.foot').innerHTML=`
     <span><b>OROBOROS / ANTHROPIC</b></span>
     <span>${R.meta.split(' · ').slice(0,2).join(' · ')}</span>
@@ -427,20 +507,6 @@ function paintRecord(){
   paintCells();
   refreshOrbs();
 }
-/* model selector */
-const modelBar=document.getElementById('modelBar');
-Object.keys(RECORDS).forEach(k=>{
-  const b=document.createElement('button');
-  b.className='mbtn'+(k===activeModel?' active':'');
-  b.textContent={'Sonnet 7U':'Claude Sonnet 7 Undecillion','Fable 7U':'Claude Fable 7 Undecillion','Jhanna 12U':'Claude Jhanna 12 Undecillion','Opus 9U':'Claude Opus 9 Undecillion'}[k]||k;
-  b.onclick=()=>{
-    document.querySelectorAll('.mbtn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    activeModel=k;
-    paintRecord();
-  };
-  modelBar.appendChild(b);
-});
 paintRecord();
 
 /* theme switch — re-render canvas with resolved theme colors */
@@ -451,37 +517,84 @@ document.querySelectorAll('.tbtn[data-t]').forEach(b=>{
     document.documentElement.dataset.theme=b.dataset.t;
     makeChart();
     makeBar();
+    makeIndexBars();
     if(lineChart)makeLine();
+    paintVendorRows();
     paintCells();
   };
 });
 function paintCells(){
+  const tone=cssv('--ink2');
   document.querySelectorAll('.cell').forEach(c=>{
-    c.style.background='color-mix(in srgb,'+cssv('--win')+' 18%, transparent)';
-    c.style.color=cssv('--win');
-    c.style.borderColor='color-mix(in srgb,'+cssv('--win')+' 45%, transparent)';
+    c.style.background='color-mix(in srgb,'+tone+' 14%, transparent)';
+    c.style.color=tone;
+    c.style.borderColor='color-mix(in srgb,'+tone+' 34%, transparent)';
   });
 }
 
+function isLightTheme(){
+  const t=document.documentElement.dataset.theme||'dark';
+  return t==='white'||t==='neutral';
+}
 /* ============ HORIZONTAL RANKING BAR — all models, their colors ============ */
+function oaName(name){
+  const s=String(name).replace('★ ','');
+  if(s.length>24&&/Opus/i.test(s))return 'OA Opus 9U5GO5';
+  if(s.length>24&&/Oroboros|OROBOROS|Anthropic/i.test(s))return 'OA';
+  return s;
+}
+function openExternal(url){
+  const a=document.createElement('a');
+  a.href=url;a.target='_blank';a.rel='noopener';
+  a.style.display='none';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>a.remove(),1200);
+}
+function hfLink(name){
+  const links={
+    'GPT-5.6 Sol 6U5GO5':'https://huggingface.co/spaces/oroboros-labs/oroboros-gpt-benchmarks',
+    'GPT-Astra 7 7U5GO5':'https://huggingface.co/spaces/oroboros-labs/oroboros-gpt-benchmarks',
+    'OA Prime 10duo20quiin10':'https://huggingface.co/spaces/oroboros-labs/deepseek-prime-impressions'
+  };
+  return links[name]||'';
+}
+function recordPoint(key){
+  const R=RECORDS[key];
+  const cases=R.suites.reduce((s,[,n])=>s+n,0);
+  return ['★ '+R.tag,0.02,R.rate,cases,'US','OROBOROS',key];
+}
 function makeBar(){
   if(bar)bar.destroy();
-  const ac=cssv('--accent');
-  const rows=[oursPoint(),...FIELD].sort((a,b)=>b[2]-a[2]);
+  const ac=cssv('--us')||cssv('--accent');
+  const recs=Object.keys(RECORDS).sort((a,b)=>(a===activeModel?-1:b===activeModel?1:0)).map(recordPoint);
+  const rows=[...recs,...FIELD].sort((a,b)=>b[2]-a[2]);
+  rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
     data:{
-      labels:rows.map(r=>r[0].replace('★ ','')),
+      labels:rows.map(r=>oaName(r[0])),
       datasets:[{
         data:rows.map(r=>r[2]),
-        backgroundColor:rows.map(r=>r[4]==='US'?ac:HEX[r[4]]+'cc'),
-        borderColor:rows.map(r=>r[4]==='US'?ac:HEX[r[4]]),
-        borderWidth:rows.map(r=>(r[4]==='red'||r[4]==='zblack')?1.8:1.2),
+        backgroundColor:rows.map(r=>displayColor(r[4]==='US'?ac:HEX[r[4]])+'cc'),
+        borderColor:rows.map(r=>r[5]==='Oroboros OpenAI'?'#0A0A0A':displayColor(r[4]==='US'?ac:HEX[r[4]])),
+        borderWidth:rows.map(r=>r[5]==='Oroboros OpenAI'?1:((r[4]==='red'||r[4]==='zblack')?1.8:1.2)),
         borderRadius:6,
-        borderSkipped:false
+        borderSkipped:false,
+        categoryPercentage:.98,
+        barPercentage:.9
       }]
     },
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      onClick:(evt,els)=>{
+        if(!els.length)return;
+        const row=rows[els[0].index];
+        if(row[6]&&row[6]!==activeModel){activeModel=row[6];setTimeout(paintRecord,0);}
+        else if(row[7]){openExternal(row[7]);}
+      },
+      onHover:(evt,els)=>{
+        const cv=evt.native.target;
+        cv.style.cursor=(els.length&&(rows[els[0].index][6]||rows[els[0].index][7]))?'pointer':'default';
+      },
       animations:{x:{from:0,duration:1500,easing:'easeOutQuart'}},
       plugins:{
         legend:{display:false},
@@ -490,9 +603,14 @@ function makeBar(){
           callbacks:{
             label:ctx=>{
               const src=rows[ctx.dataIndex];
-              return src[4]==='US'
-                ?'  '+RECORDS[activeModel].rate+' — '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+'/'+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+' · largest run · $0.00/task'
-                :'  Index: '+ctx.raw+'  ·  10-case suite';
+              if(src[6]){
+                const R=RECORDS[src[6]];
+                const c=R.suites.reduce((s,[,n])=>s+n,0);
+                return ['  '+R.rate+' — '+c+'/'+c+' · all suites','  '+R.name,'  Click to load benchmark'];
+              }
+              if(String(src[5]).indexOf('Oroboros')===0)
+                return ['  Index: '+src[2],'  Benchmark size: '+src[3]+' cases','  $0.00/task — local',src[7]?'  Open benchmark on Hugging Face ↗':''].filter(Boolean);
+              return '  Index: '+ctx.raw+'  ·  10-case suite';
             }
           }}
       },
@@ -502,7 +620,27 @@ function makeBar(){
         y:{grid:{display:false},ticks:{color:cssv('--ink2'),font:{size:11.5,weight:'600'}}}
       }
     },
-    plugins:[{id:'val',afterDatasetsDraw(c){
+    plugins:[{id:'glowBar',beforeDatasetsDraw(c){
+      const {ctx}=c;
+      const meta=bar.getDatasetMeta(0);
+      ctx.save();
+      rows.forEach((r,i)=>{
+        if(r[5]!=='Oroboros OpenAI')return;
+        const el=meta.data[i];
+        if(!el)return;
+        const x0=Math.min(el.base,el.x),x1=Math.max(el.base,el.x);
+        const y0=el.y-el.height/2;
+        ctx.save();
+        ctx.shadowColor='rgba(242,160,123,.75)';
+        ctx.shadowBlur=14;
+        ctx.fillStyle='rgba(242,160,123,.16)';
+        ctx.beginPath();
+        ctx.roundRect(x0-2,y0-2,(x1-x0)+4,el.height+4,6);
+        ctx.fill();
+        ctx.restore();
+      });
+      ctx.restore();
+    }},{id:'val',afterDatasetsDraw(c){
       const {ctx}=c;
       ctx.save();
       ctx.font='700 11px Segoe UI';
@@ -510,7 +648,7 @@ function makeBar(){
         const meta=bar.getDatasetMeta(0);
         const el=meta.data[i];
         if(!el)return;
-        ctx.fillStyle=r[4]==='US'?cssv('--accent'):cssv('--ink2');
+        ctx.fillStyle=cssv('--ink2');
         ctx.textAlign='left';
         ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
       });
@@ -518,171 +656,344 @@ function makeBar(){
     }}]
   });
 }
-paintCells();
-makeChart();
-makeBar();
 
-/* ============ LINE VIEW — dots sized by actual benchmark size ============ */
-const LINEFIELD=[
- ['Claude Fable 5.1 (fb)',53.4,10,'anth'],
- ['Claude Fable 5 (fb)',48.9,10,'anth'],
- ['Claude Opus 5',49.7,10,'anth'],
- ['GPT-6 Astra (high)',52.4,10,'red'],
- ['GPT-6 Astra (max)',52.7,10,'red'],
- ['GPT-6 Astra (low)',45.2,10,'red'],
- ['GPT-5.6 Sol (high)',33.5,10,'gray'],
- ['GPT-5.6 Luna (max)',37.3,10,'gray'],
- ['GPT-5.6 (max)',38.4,10,'gray'],
- ['Muse Spark 1.3 (max)',48.1,10,'purple'],
- ['Muse Spark 1.2 (xhigh)',39.6,10,'purple'],
- ['Grok 4.6 (high)',44.3,10,'purple'],
- ['Grok 4.7 (max)',46.4,10,'purple'],
- ['Grok 4.7 (high)',46.3,10,'purple'],
- ['Grok 4.6 (xhigh)',44.2,10,'purple'],
- ['MiMo-V2.6-Pro',46.3,10,'pink'],
- ['Gemini 3.8 Flash (high)',32.6,10,'green'],
- ['Gemini 3.8 Flash (low)',22.2,10,'green'],
- ['Kimi K3 (max)',43.6,10,'blue'],
- ['GLM-5.3',41.8,10,'zblack'],
- ['GLM-5.3 Flash',41.8,10,'zblack'],
- ['Qwen3.8 2.4T A95B',39.9,10,'orange'],
- ['DeepSeek V4 Pro 0813',36.0,10,'deep'],
- ['★ OA Prime 10duo20quiin10',98.0,100,'deep'],
- ['★ GPT-5.6 Sol 6U5GO5',98.2,57,'openai'],
- ['★ GPT-Astra 7 7U5GO5',86.0,57,'openai'],
- ['MiniMax-M3',29.2,10,'pink']
+/* ============ OFFICIAL AA SNAPSHOT — Intelligence Index (23 Oct '26) ============ */
+const AA_VENDOR_COLORS={
+  Anthropic:'#C0714F', Meta:'#1E7BEA', OpenAI:'#1A1A1A', Google:'#34A853',
+  xAI:'#6B5BD2', Xiaomi:'#F26522', Alibaba:'#F97316', DeepSeek:'#2B4FD8',
+  'Z.ai':'#2B2B2B', StepFun:'#22C7D9', Kimi:'#2563EB', MiniMax:'#E8418F',
+  Mistral:'#EF4444', Reflection:'#1F4D3A', NVIDIA:'#7CB342', 'Thinking Machines':'#6B7280',
+  'Oroboros DeepSeek':'#2B4FD8', 'Oroboros OpenAI':'#1A1A1A',
+  OROBOROS:'ACCENT'
+};
+const AA_BARS=[
+ ['OA Prime 10duo20quiin10',98,'Oroboros DeepSeek'],
+ ['GPT-5.6 Sol 6U5GO5',98.2,'Oroboros OpenAI'],
+ ['GPT-Astra 7 7U5GO5',86,'Oroboros OpenAI'],
+ ['Claude Opus 5.5 (max with fallback)',58,'Anthropic'],
+ ['Claude Sonnet 5.5 (max with fallback)',56,'Anthropic'],
+ ['Muse Wonder Full (max)',56,'Meta'],
+ ['Claude Fable 5.1 (max with fallback)',53,'Anthropic'],
+ ['GPT-6.1 Astra (max)',53,'OpenAI'],
+ ['Gemini 4 Argon (high)',53,'Google'],
+ ['Muse Wonder (xhigh)',52,'Meta'],
+ ['GPT-6.1 Sol (max)',52,'OpenAI'],
+ ['Grok 4.7 (xhigh)',46,'xAI'],
+ ['MiMo-V2.6-Pro',46,'Xiaomi'],
+ ['Qwen3.8 Max (0902)',45,'Alibaba'],
+ ['DeepSeek V4.1 Flash 1017 (max)',45,'DeepSeek'],
+ ['GLM-5.3 (max)',45,'Z.ai'],
+ ['Step 5 Preview',44,'StepFun'],
+ ['Kimi K3 (max)',44,'Kimi'],
+ ['Claude Haiku 5.5 (max)',43,'Anthropic'],
+ ['MiniMax-M3.1-Flash',43,'MiniMax'],
+ ['GLM-5.3-Flash',42,'Z.ai'],
+ ['Gemini 3.8 Flash (high)',41,'Google'],
+ ['Muse Spark Open (xhigh)',39,'Meta'],
+ ['Mistral Large 4 Preview',38,'Mistral'],
+ ['GPT-6 Luna (max)',38,'OpenAI'],
+ ['Qwen3.8 27B (xhigh)',34,'Alibaba'],
+ ['K2 Horizon 375B A23B',31,'Kimi'],
+ ['Beam 1.0',30,'Reflection'],
+ ['Nemotron 3.5 Super VL',26,'NVIDIA'],
+ ['Inking (xhigh)',25,'Thinking Machines']
 ];
-function makeLine(){
-  if(lineChart)lineChart.destroy();
-  const ac=cssv('--accent');
-  const theme=document.documentElement.dataset.theme||'dark';
-  const light=(theme==='white'||theme==='neutral');
-  const pill=light?'#ffffff':'rgba(10,12,16,.78)';
-  const txt=light?'#141413':'#ffffff';
-  const ours=(()=>{
-    const R=RECORDS[activeModel];
-    const cases=R.suites.reduce((s,[,n])=>s+n,0);
-    return [['★ '+R.tag,R.rate,cases,R.color||'US','ours']];
-  })();
-  const rows=[...LINEFIELD].sort((a,b)=>a[1]-b[1]).concat(ours);
-  const rMax=Math.max(...rows.map(r=>r[2]));
-  const rMin=Math.min(...rows.map(r=>r[2]));
-  const rad=r=>3+((r-rMin)/(rMax-rMin))*9;   /* 3..12 px by actual cases */
-  lineChart=new Chart(document.getElementById('lineChart'),{
-    type:'line',
+
+/* ============ SCATTER — Intelligence Index vs. Cost per Task ============ */
+const SCATTER_VENDORS={
+  StepFun:'#22C7D9','Z.ai':'#2B2B2B',Xiaomi:'#F26522',OpenAI:'#1A1A1A',
+  Anthropic:'#C0714F',Mistral:'#EF4444',Meta:'#1E7BEA',Reflection:'#1F4D3A',
+  Google:'#34A853',Alibaba:'#F97316',MiniMax:'#E8418F',NVIDIA:'#7CB342',
+  DeepSeek:'#2B4FD8',Kimi:'#2563EB',xAI:'#6B5BD2','Thinking Machines':'#6B7280',
+  'Oroboros DeepSeek':'#2B4FD8','Oroboros OpenAI':'#1A1A1A',
+  OROBOROS:'ACCENT'
+};
+const SCATTER=[
+ ['GPT-6 Luna (max)',0.11,38.0,10,'OpenAI'],
+ ['MiMo-V2.6-Pro',0.20,46.0,10,'Xiaomi'],
+ ['Nemotron 3.5 Super VL',0.21,26.0,10,'NVIDIA'],
+ ['Beam 1.0',0.215,30.0,10,'Reflection'],
+ ['Claude Haiku 5.5 (max)*',0.23,43.0,10,'Anthropic'],
+ ['MiniMax-M3.1-Flash',0.24,42.5,10,'MiniMax'],
+ ['GLM-5.3-Flash',0.265,42.0,10,'Z.ai'],
+ ['DeepSeek V4.1 Flash 1017 (max)',0.29,45.0,10,'DeepSeek'],
+ ['Muse Spark Open (xhigh)',0.80,39.0,10,'Meta'],
+ ['Step 5 Preview',1.08,44.0,10,'StepFun'],
+ ['Qwen3.8 27B (xhigh)',1.10,34.0,10,'Alibaba'],
+ ['Mistral Large 4 Preview',1.45,38.0,10,'Mistral'],
+ ['Gemini 3.8 Flash (high)',1.55,41.7,10,'Google'],
+ ['Gemini 4 Argon (high)',1.85,53.5,10,'Google'],
+ ['Kimi K3 (max)',1.90,44.0,10,'Kimi'],
+ ['GLM-5.3 (max)',1.90,45.0,10,'Z.ai'],
+ ['GPT-6.1 Sol (max)',2.40,52.5,10,'OpenAI'],
+ ['GPT-6 Astra (max)',3.20,52.0,10,'OpenAI'],
+ ['Grok 4.7 (xhigh)',3.60,46.3,10,'xAI'],
+ ['Muse Wonder (max)',4.10,52.5,10,'Meta'],
+ ['Claude Fable 5.1 (max with fallback)',4.65,52.5,10,'Anthropic'],
+ ['Qwen3.8 Max (0902)',5.00,46.5,10,'Alibaba'],
+ ['Claude Sonnet 5.5 (max with fallback)',5.50,55.0,10,'Anthropic'],
+ ['Claude Opus 5.5 (max with fallback)',6.30,57.0,10,'Anthropic']
+];
+const PARETO=[[0.08,38.2],[0.18,41.5],[0.20,46.0],[1.85,53.5],[5.50,55.0],[6.30,57.0]];
+const SCATTER_LABELS={
+ 'GPT-6 Luna (max)':{dx:0,dy:18,al:'center'},
+ 'MiMo-V2.6-Pro':{dx:0,dy:-14,al:'center'},
+ 'DeepSeek V4.1 Flash 1017 (max)':{dx:9,dy:4,al:'left'},
+ 'Step 5 Preview':{dx:9,dy:4,al:'left'},
+ 'Gemini 4 Argon (high)':{dx:-6,dy:18,al:'right'},
+ 'Grok 4.7 (xhigh)':{dx:-9,dy:-12,al:'right'},
+ 'Claude Fable 5.1 (max with fallback)':{dx:9,dy:18,al:'left'},
+ 'Qwen3.8 Max (0902)':{dx:9,dy:4,al:'left'},
+ 'Claude Sonnet 5.5 (max with fallback)':{dx:-6,dy:-26,al:'right'},
+ 'Claude Opus 5.5 (max with fallback)':{dx:-6,dy:30,al:'right'},
+ 'OA Prime 10duo20quiin10':{dx:10,dy:-6,al:'left',text:'OA DeepSeek · 98'},
+ 'GPT-5.6 Sol 6U5GO5':{dx:10,dy:14,al:'left',text:'OA GPT-5.6 · 98.2'},
+ 'GPT-Astra 7 7U5GO5':{dx:10,dy:6,al:'left',text:'OA GPT-Astra · 86'},
+ 'OROBOROS':{dx:0,dy:-20,al:'center'}
+};
+function vendorRow(el,names){
+  if(!el)return;
+  el.innerHTML=names.map(n=>{
+    let c=AA_VENDOR_COLORS[n]==='ACCENT'?cssv('--us'):(AA_VENDOR_COLORS[n]||SCATTER_VENDORS[n]||'#888');
+    c=displayColor(c);
+    return `<span class="v"><i style="background:${c}"></i>${n}</span>`;
+  }).join('');
+}
+function paintVendorRows(){
+  const fleet=[...new Set(FIELD.filter(p=>String(p[0]).indexOf('★')===0).map(p=>p[5]))];
+  vendorRow(document.getElementById('aaBarVendors'),[...new Set(AA_BARS.map(b=>b[2])),'OROBOROS']);
+  vendorRow(document.getElementById('aaVendors'),[...new Set([...SCATTER.map(s=>s[4]),...fleet,'OROBOROS'])]);
+}
+paintVendorRows();
+
+/* ============ VERTICAL BARS — identical to the AA index chart, names instead of logos ============ */
+function isDarkTheme(){
+  const t=document.documentElement.dataset.theme||'dark';
+  return t==='dark'||t==='brand';
+}
+function displayColor(c){
+  if(!isDarkTheme())return c;
+  if(c==='#1A1A1A')return '#4A4A4A';
+  if(c==='#2B2B2B')return '#616161';
+  if(c==='#3A3A3A')return '#555555';
+  return c;
+}
+let indexBars;
+function makeIndexBars(){
+  if(indexBars)indexBars.destroy();
+  const checker=(a,b)=>{
+    const cv=document.createElement('canvas');cv.width=cv.height=12;
+    const cx=cv.getContext('2d');
+    cx.fillStyle=a;cx.fillRect(0,0,12,12);
+    cx.fillStyle=b;cx.fillRect(0,0,6,6);cx.fillRect(6,6,6,6);
+    return cx.createPattern(cv,'repeat');
+  };
+  const R=RECORDS[activeModel];
+  const rows=[
+    {name:oaName(R.tag),val:R.rate,vendor:'OROBOROS'},
+    ...AA_BARS.map(b=>({name:b[0],val:b[1],vendor:b[2]}))
+  ].sort((a,b)=>b.val-a.val);
+  const cols=rows.map(b=>{
+    if(b.name==='Muse Wonder Full (max)')return checker('#4FA6F5','#1E6FE0');
+    const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?cssv('--us'):(AA_VENDOR_COLORS[b.vendor]||'#888');
+    return displayColor(c);
+  });
+  indexBars=new Chart(document.getElementById('indexBars'),{
+    type:'bar',
     data:{
-      labels:rows.map(r=>r[0].replace('★ ','')),
+      labels:rows.map(b=>b.name),
       datasets:[{
-        data:rows.map(r=>r[1]),
-        borderColor:ac,
-        borderWidth:2,
-        backgroundColor:'transparent',
-        pointBackgroundColor:rows.map(r=>r[3]==='US'?ac:HEX[r[3]]),
-        pointBorderColor:rows.map(r=>r[3]==='US'?ac:HEX[r[3]]),
-        pointBorderWidth:rows.map(r=>r[3]==='US'?2.5:1.2),
-        pointRadius:rows.map(r=>rad(r[2])),
-        pointHoverRadius:rows.map(r=>rad(r[2])+4),
-        tension:0,
-        spanGaps:false
+        data:rows.map(b=>b.val),
+        backgroundColor:cols,
+        borderColor:rows.map(b=>b.vendor==='Oroboros OpenAI'?'#0A0A0A':(isDarkTheme()?'rgba(242,242,240,.18)':'transparent')),
+        borderWidth:rows.map(b=>b.vendor==='Oroboros OpenAI'?1:(isDarkTheme()?1:0)),
+        borderRadius:0,
+        borderSkipped:false,
+        categoryPercentage:.98,
+        barPercentage:.96
       }]
     },
     options:{responsive:true,maintainAspectRatio:false,
-      animations:{y:{from:0,duration:1600,easing:'easeOutQuart'}},
+      layout:{padding:{top:8}},
+      animation:{y:{from:0,duration:1100,easing:'easeOutQuart'}},
       plugins:{
         legend:{display:false},
         tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
           titleColor:tipColors().title,bodyColor:tipColors().body,padding:12,
           callbacks:{
             title:items=>items[0].label,
-            label:ctx=>{
-              const r=rows[ctx.dataIndex];
-              return r[4]==='ours'
-                ?['  Index '+RECORDS[activeModel].rate+' — '+r[2]+'/'+r[2]+', all suites','  Benchmark size: '+r[2]+' cases','  $0.00/task — local crown-locked']
-                :['  Index: '+ctx.raw,'  Benchmark size: '+r[2]+' cases'];
-            }
+            label:ctx=>['  Index: '+ctx.raw,'  Vendor: '+rows[ctx.dataIndex].vendor]
           }}
       },
       scales:{
-        x:{grid:{display:false},ticks:{color:cssv('--ink2'),font:{size:10.5,weight:'600'},maxRotation:60,minRotation:45},
-           title:{display:true,text:'MODELS — FIELD FIRST, OURS AT THE END',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
-        y:{min:(typeof LINE_ZOOM!=='undefined'&&LINE_ZOOM>1)?Math.min(45, 10+(LINE_ZOOM-1)*12):0,max:110,grid:{color:cssv('--grid')},ticks:{stepSize:10,color:cssv('--ink2'),callback:v=>v+'%'},
-           title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}}
+        x:{grid:{display:false},border:{display:false},
+           ticks:{color:cssv('--ink2'),font:{size:10.5,weight:'500'},maxRotation:58,minRotation:58,autoSkip:false}},
+        y:{display:false,min:0,max:105}
       }
     },
-    plugins:[{id:'summit',afterDatasetsDraw(c){
+    plugins:[{id:'barGlow',beforeDatasetsDraw(c){
       const {ctx}=c;
-      const meta=lineChart.getDatasetMeta(0);
-      const first=meta.data[meta.data.length-ours.length];
-      const last=meta.data[meta.data.length-1];
-      if(!first||!last)return;
-      const cx=(first.x+last.x)/2;
-      const topY=Math.min(first.y,last.y);
+      const meta=indexBars.getDatasetMeta(0);
       ctx.save();
-      ctx.font='800 13px Segoe UI';
-      const lbl=RECORDS[activeModel].tag;
-      const tw=ctx.measureText(lbl).width;
-      const lx=cx-tw/2-8, ly=topY-30;
-      ctx.fillStyle=pill;
-      ctx.beginPath();ctx.roundRect(lx-4,ly-13,tw+16,20,5);ctx.fill();
-      ctx.fillStyle=txt;
-      ctx.textAlign='left';
-      ctx.fillText(lbl,lx+4,ly+2);
-      ctx.restore();
-    }},{id:'tags',afterDatasetsDraw(c){
-      const {ctx}=c;
-      const meta=lineChart.getDatasetMeta(0);
-      const tagMap={
-        'Claude Fable 5.1 (fb)':'ANTHROPIC',
-        'GPT-6 Astra (high)':'OPENAI',
-        'Muse Spark 1.3 (max)':'XAI / GROK',
-        'DeepSeek V4 Pro 0813':'DEEPSEEK'
-      };
-      rows.forEach((r,i)=>{
-        const lbl=tagMap[r[0]];
-        if(!lbl)return;
+      rows.forEach((b,i)=>{
+        if(b.vendor!=='Oroboros OpenAI')return;
         const el=meta.data[i];
         if(!el)return;
         ctx.save();
-        ctx.font='700 10.5px Segoe UI';
-        const tw=ctx.measureText(lbl).width;
-        const lx=el.x+rad(r[2])+6, ly=el.y+4;
-        ctx.fillStyle=pill;
-        ctx.beginPath();ctx.roundRect(lx-4,ly-11,tw+8,15,4);ctx.fill();
-        ctx.fillStyle=txt;
-        ctx.fillText(lbl,lx,ly);
+        ctx.shadowColor='rgba(242,160,123,.75)';
+        ctx.shadowBlur=14;
+        ctx.fillStyle='rgba(242,160,123,.16)';
+        ctx.beginPath();
+        ctx.roundRect(el.x-el.width/2-2,el.y-2,el.width+4,el.height+4,3);
+        ctx.fill();
         ctx.restore();
       });
+      ctx.restore();
+    }},{id:'barVals',afterDatasetsDraw(c){
+      const {ctx}=c;
+      const meta=indexBars.getDatasetMeta(0);
+      ctx.save();
+      ctx.font='600 11px Segoe UI';
+      ctx.textAlign='center';
+      meta.data.forEach((el,i)=>{
+        ctx.fillStyle='#fff';
+        ctx.fillText(String(rows[i].val),el.x,el.base-14);
+      });
+      ctx.restore();
     }}]
   });
 }
 
+/* ============ LINE VIEW — official intelligence × cost scatter + Pareto ============ */
+function makeLine(){
+  if(lineChart)lineChart.destroy();
+  const ac=cssv('--us')||'#F2A07B';
+  const R=RECORDS[activeModel];
+  const oursCases=R.suites.reduce((s,[,n])=>s+n,0);
+  const rows=SCATTER.map(r=>({
+    label:r[0],x:r[1],y:r[2],cases:r[3],vendor:r[4],
+    color:SCATTER_VENDORS[r[4]]||'#444',ours:false
+  }));
+  rows.push({label:'OROBOROS',x:0.02,y:R.rate,cases:oursCases,vendor:'OROBOROS',color:ac,ours:true});
+  FIELD.filter(p=>String(p[0]).indexOf('★')===0).forEach(p=>{
+    rows.push({
+      label:String(p[0]).replace('★ ',''),x:p[1],y:p[2],cases:p[3],vendor:p[5],
+      color:p[5]==='Oroboros DeepSeek'?'#2B4FD8':'#1A1A1A',
+      ours:false,fleet:true
+    });
+  });
+  const glow={id:'glowModels',beforeDatasetsDraw(c){
+    const {ctx,scales:{x,y}}=c;
+    ctx.save();
+    rows.forEach(r=>{
+      if(r.vendor!=='Oroboros OpenAI')return;
+      const px=x.getPixelForValue(r.x),py=y.getPixelForValue(r.y);
+      ctx.beginPath();
+      ctx.arc(px,py,r.ours?10:8,0,Math.PI*2);
+      ctx.fillStyle='rgba(242,160,123,.16)';
+      ctx.shadowColor='rgba(242,160,123,.8)';
+      ctx.shadowBlur=16;
+      ctx.fill();
+    });
+    ctx.restore();
+  }};
+  const quadrant={id:'quadrant',beforeDatasetsDraw(c){
+    const {ctx,chartArea,scales:{x,y}}=c;
+    const xr=x.getPixelForValue(1),yr=y.getPixelForValue(45);
+    ctx.save();
+    ctx.fillStyle=(cssv('--win')||'#7ab98c')+'20';
+    ctx.fillRect(chartArea.left,chartArea.top,Math.max(0,xr-chartArea.left),Math.max(0,yr-chartArea.top));
+    ctx.restore();
+  }};
+  const labels={id:'aaLabels',afterDatasetsDraw(c){
+    const {ctx,scales:{x,y}}=c;
+    ctx.save();
+    ctx.textBaseline='middle';
+    rows.forEach(r=>{
+      const cfg=SCATTER_LABELS[r.ours?'OROBOROS':r.label];
+      if(!cfg)return;
+      const px=x.getPixelForValue(r.x),py=y.getPixelForValue(r.y);
+      const txt=r.ours?'OA '+r.y+' · SUMMIT':(cfg.text||r.label);
+      ctx.font='600 10.5px Segoe UI';
+      const tw=ctx.measureText(txt).width;
+      const tx=px+cfg.dx,ty=py+cfg.dy;
+      const left=cfg.al==='right'?tx-tw:(cfg.al==='center'?tx-tw/2:tx);
+      ctx.fillStyle=cssv('--card2');
+      ctx.beginPath();ctx.roundRect(left-4,ty-11,tw+8,15,4);ctx.fill();
+      ctx.fillStyle=cssv('--ink2');
+      ctx.textAlign='left';
+      ctx.fillText(txt,left,ty);
+    });
+    ctx.restore();
+  }};
+  lineChart=new Chart(document.getElementById('lineChart'),{
+    type:'scatter',
+    data:{datasets:[
+      {label:'Pareto',type:'line',data:PARETO.map(p=>({x:p[0],y:p[1]})),
+       borderColor:ac,borderWidth:2,borderDash:[2,5],pointRadius:0,pointHitRadius:0,
+       fill:false,tension:0,order:2},
+      {label:'Models',data:rows,
+       backgroundColor:rows.map(r=>displayColor(r.color)),
+       borderColor:rows.map(r=>r.vendor==='Oroboros OpenAI'?'#0A0A0A':displayColor(r.color)),
+       borderWidth:rows.map(r=>r.vendor==='Oroboros OpenAI'?1:(r.ours?2:(r.fleet?1.5:1))),
+       pointRadius:rows.map(r=>r.ours?9:(r.fleet?7:5.5)),
+       pointHoverRadius:rows.map(r=>r.ours?12:(r.fleet?10:8)),
+       order:1}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      animation:{duration:900},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
+          titleColor:tipColors().title,bodyColor:tipColors().body,padding:12,
+          filter:item=>item.datasetIndex===1,
+          callbacks:{
+            title:items=>items[0].raw.label,
+            label:ctx=>{
+              const r=ctx.raw;
+              return r.ours
+                ?['  Index '+r.y+' — '+oursCases+'/'+oursCases+', all suites','  Benchmark size: '+oursCases+' cases','  $0.00/task — local crown-locked']
+                :r.fleet
+                ?['  Index: '+r.y,'  Benchmark size: '+r.cases+' cases','  $0.00/task — local']
+                :['  Intelligence: '+r.y,'  Cost/task: $'+r.x,'  Vendor: '+r.vendor];
+            }
+          }}
+      },
+      scales:{
+        x:{type:'logarithmic',min:0.01,max:14,
+           grid:{color:cssv('--grid')},
+           border:{color:cssv('--line')},
+           afterBuildTicks:axis=>{axis.ticks=[0.02,0.05,0.08,0.1,0.2,0.3,0.5,0.7,1,2,3,4,5,6,7,8,9,10].map(v=>({value:v}))},
+           ticks:{color:cssv('--ink2'),font:{size:10.5},
+             callback:v=>{const n=+v;return '$'+(n<1?(+n.toFixed(2)).toString():n)}},
+           title:{display:true,text:'Cost per Task (USD, Log Scale)',color:cssv('--ink2'),font:{size:11,weight:'600'}}},
+        y:{min:20,max:106,grid:{color:cssv('--grid')},border:{color:cssv('--line')},
+           ticks:{stepSize:10,color:cssv('--ink2'),font:{size:10.5}},
+           title:{display:true,text:'Artificial Analysis Intelligence Index',color:cssv('--ink2'),font:{size:11,weight:'600'}}}
+      }
+    },
+    plugins:[glow,quadrant,labels]
+  });
+}
+
+paintCells();
+makeChart();
+makeBar();
+makeIndexBars();
+makeLine();
+aaReady=true;
+
 /* ============ LINE CHART BUTTON — scroll down to it ============ */
-document.getElementById('viewLineBtn').onclick=()=>{
+const viewLineBtn=document.getElementById('viewLineBtn');
+if(viewLineBtn)viewLineBtn.onclick=()=>{
   document.getElementById('viewLine').scrollIntoView({behavior:'smooth',block:'start'});
 };
-
-/* build the line chart at load so it's visible when scrolled to *//* LINE ORB ZOOM - closer dots, no movement (y tighten only) */
-var LINE_ZOOM = 1;
-function applyLineZoom(){
-  const zBtn = document.getElementById('lzLabel');
-  if(zBtn) zBtn.textContent = LINE_ZOOM.toFixed(1) + String.fromCharCode(215);
-  if(typeof makeLine === 'function') makeLine();
-}
-['lzIn','lzOut','lzRst'].forEach(function(id){
-  document.addEventListener('click', function(e){
-    if(!e.target || e.target.id !== id) return;
-    if(id === 'lzIn' && LINE_ZOOM < 4){ LINE_ZOOM += 0.5; applyLineZoom(); }
-    else if(id === 'lzOut' && LINE_ZOOM > 1){ LINE_ZOOM -= 0.5; applyLineZoom(); }
-    else if(id === 'lzRst'){ LINE_ZOOM = 1; applyLineZoom(); }
-  });
-});
-
-makeLine();
 
 /* refresh orbs + bar when the model changes */
 function refreshOrbs(){
   makeChart();
   makeBar();
+  if(aaReady)makeIndexBars();
   if(lineChart)makeLine();
 }
 
@@ -758,8 +1069,144 @@ function refreshOrbs(){
   });
   cv.addEventListener('pointerup',()=>{drag=null;cv.style.cursor='grab'});
   cv.addEventListener('pointercancel',()=>{drag=null;cv.style.cursor='grab'});
-  cv.addEventListener('dblclick',resetView);
+  cv.addEventListener("dblclick", resetView);
 })();
+
+/* ============ CHART SNAPSHOTS ============ */
+function canvasSnapshot(id){
+  const src=document.getElementById(id);
+  if(!src)return null;
+  const out=document.createElement('canvas');
+  out.width=src.width;out.height=src.height;
+  const ctx=out.getContext('2d');
+  const panel=src.closest('.aa-panel');
+  const bg=panel?getComputedStyle(panel).backgroundColor:getComputedStyle(document.body).backgroundColor;
+  ctx.fillStyle=(bg&&bg!=='rgba(0, 0, 0, 0)')?bg:(document.documentElement.dataset.theme==='white'?'#FFFFFF':'#101216');
+  ctx.fillRect(0,0,out.width,out.height);
+  ctx.drawImage(src,0,0);
+  return out.toDataURL('image/png');
+}
+function downloadURL(url,filename){
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;a.rel='noopener';
+  a.style.display='none';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>a.remove(),1500);
+}
+async function saveSnapshot(url,filename){
+  try{
+    if(window.showSaveFilePicker){
+      const handle=await window.showSaveFilePicker({
+        suggestedName:filename,
+        types:[{description:'PNG image',accept:{'image/png':['.png']}}]
+      });
+      const res=await fetch(url);
+      const blob=await res.blob();
+      const w=await handle.createWritable();
+      await w.write(blob);await w.close();
+      return;
+    }
+  }catch(e){}
+  downloadURL(url,filename);
+}
+function showSnapshot(url,name){
+  let m=document.getElementById('snapModal');
+  if(!m){
+    m=document.createElement('div');
+    m.id='snapModal';m.className='snap-modal';m.hidden=true;
+    m.innerHTML='<div class="box"><img id="snapImg" alt="Chart snapshot"><div class="acts"><span class="msg">Snapshot ready</span><button class="snap-btn" id="snapDl">Download PNG</button><button class="snap-btn" id="snapClose">Close</button></div></div>';
+    document.body.appendChild(m);
+    m.addEventListener('click',e=>{if(e.target===m)m.hidden=true});
+    m.querySelector('#snapClose').onclick=()=>{m.hidden=true};
+    m.querySelector('#snapDl').onclick=()=>{
+      if(m.dataset.url)saveSnapshot(m.dataset.url,m.dataset.name);
+    };
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')m.hidden=true});
+  }
+  m.querySelector('#snapImg').src=url;
+  m.dataset.url=url;
+  m.dataset.name=name+'-'+new Date().toISOString().slice(0,10)+'.png';
+  m.hidden=false;
+}
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('[data-snap]');
+  if(!btn)return;
+  const url=canvasSnapshot(btn.dataset.snap);
+  if(!url)return;
+  const name=btn.dataset.name||'chart';
+  showSnapshot(url,name);
+  try{downloadURL(url,name+'-'+new Date().toISOString().slice(0,10)+'.png')}catch(err){}
+});
+
+/* ============ DAILY REPORT ============ */
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function buildDailyReport(){
+  const stamp=liveStamp||new Date().toISOString();
+  const day=new Date().toISOString().slice(0,10);
+  const rows=[oursPoint(),...FIELD].map(p=>({
+    name:String(p[0]).replace('★ ',''),
+    cost:p[1],index:p[2],cases:p[3],
+    vendor:String(p[5]).replace('Oroboros ','OROBOROS '),
+    ours:p[5]==='OROBOROS'||String(p[5]).indexOf('Oroboros')===0
+  })).sort((a,b)=>b.index-a.index);
+  const fieldRows=rows.filter(r=>!r.ours);
+  const topField=fieldRows[0];
+  const ourRows=rows.filter(r=>r.ours);
+  const R=RECORDS[activeModel];
+  const charts=[['orbs','Orb Field — Intelligence × Cost'],['indexBars','Artificial Analysis Intelligence Index'],['rankBar','Model Leaderboard'],['lineChart','Intelligence Index vs. Cost per Task']]
+    .map(([id,label])=>{const url=canvasSnapshot(id);return url?`<figure><img src="${url}" alt="${esc(label)}"><figcaption>${esc(label)}</figcaption></figure>`:''})
+    .join('');
+  const table=rows.map(r=>`<tr class="${r.ours?'ours':''}"><td>${esc(r.name)}</td><td>${esc(r.vendor)}</td><td class="num">${r.index}</td><td class="num">${r.ours?'$0.00':'$'+Number(r.cost).toFixed(2)}</td><td class="num">${r.cases}</td><td>${r.ours?'OROBOROS':'AA field'}</td></tr>`).join('');
+  const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OROBOROS Daily Field Report — ${esc(day)}</title>
+<style>
+:root{--ink:#141413;--ink2:#5c5a55;--line:#e4e1da;--accent:#D97757;--us:#F2A07B;--bg:#FAF9F5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 'Segoe UI',Inter,system-ui,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:40px 28px 60px}
+.kicker{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink2)}
+h1{font-size:32px;margin:8px 0 6px;letter-spacing:.01em}h1 b{color:var(--us)}
+.sub{color:var(--ink2);font-size:12px;max-width:760px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
+.kpi .k{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
+.kpi .v{font-size:27px;font-weight:800;color:var(--us);margin-top:4px;line-height:1.1}
+.kpi .n{font-size:11px;color:var(--ink2);margin-top:2px}
+h2{font-size:17px;margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:12px}
+th{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);text-align:left;padding:10px 12px;background:#F3F1EC}
+td{padding:8px 12px;border-top:1px solid var(--line)}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.ours td{background:#FFF4EE;font-weight:600}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+figure{margin:0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+figure img{width:100%;display:block}
+figcaption{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);padding:9px 12px;border-top:1px solid var(--line)}
+.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="kicker">OROBOROS / ANTHROPIC · FIELD REPORT</div>
+<h1>Daily Intelligence × Cost Report — <b>${esc(day)}</b></h1>
+<div class="sub">Artificial Analysis Intelligence Index v4.3.2 · weighted average cost per task · data fetched ${esc(stamp)}. Generated ${esc(new Date().toLocaleString())} from the live ${esc(htmlLang())} field dashboard.</div>
+<div class="kpis">
+  <div class="kpi"><div class="k">Field Models</div><div class="v">${fieldRows.length}</div><div class="n">10-case AA suites</div></div>
+  <div class="kpi"><div class="k">Top Field Model</div><div class="v">${topField?topField.index:'—'}</div><div class="n">${topField?esc(topField.name):'—'}</div></div>
+  <div class="kpi"><div class="k">Our Record</div><div class="v">${R.rate}<span style="font-size:14px">%</span></div><div class="n">${esc(R.name)}</div></div>
+  <div class="kpi"><div class="k">Our Runs</div><div class="v">${ourRows.length}</div><div class="n">local · $0.00/task</div></div>
+</div>
+<h2>Model Ledger</h2>
+<table><thead><tr><th>Model</th><th>Vendor</th><th class="num">Index</th><th class="num">Cost / Task</th><th class="num">Cases</th><th>Source</th></tr></thead><tbody>${table}</tbody></table>
+<h2>Charts</h2>
+<div class="charts">${charts}</div>
+<div class="foot"><span><b>OROBOROS / ANTHROPIC</b></span><span>100% benchmarked models · CROWN 8718 HZ</span><span>${esc(day)}</span></div>
+</div></body></html>`;
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  downloadURL(url,`oroboros-daily-report-${day}.html`);
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+function htmlLang(){return document.documentElement.dataset.theme||'dark'}
+const reportBtn=document.getElementById('reportBtn');
+if(reportBtn)reportBtn.onclick=buildDailyReport;
 </script>
 </body>
 </html>
