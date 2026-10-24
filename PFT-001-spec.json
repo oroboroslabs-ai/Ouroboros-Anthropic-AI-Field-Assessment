@@ -1,0 +1,63 @@
+{
+  "run_id": "PFT-001",
+  "run_name": "Pristine Field Trial 001",
+  "date": "2026-10-23",
+  "benchmark": "Oroboros 26-item applied benchmark",
+  "suite": {
+    "coding": 5,
+    "math": 5,
+    "science": 5,
+    "reasoning": 5,
+    "cyber": 6,
+    "items": 26,
+    "points_each": 100,
+    "max_score": 2600
+  },
+  "protocol": {
+    "temperature": 0,
+    "seed": 1272,
+    "top_k": 1,
+    "top_p": 1,
+    "context": 8192,
+    "gpu": "cleared before each model",
+    "load": "one model at a time",
+    "interfaces": "Oroboros harness manifest enabled; no external lookup required"
+  },
+  "models": [
+    {
+      "name": "OA Prime 10DUO20QUIN10",
+      "tag": "oa-prime:10duo20quiin10",
+      "size": "5.0 GB",
+      "overall_percentage": 100.0,
+      "score": "2600/2600",
+      "suites": {"coding": 100, "math": 100, "science": 100, "reasoning": 100, "cyber": 100},
+      "report_image": "report-deepseek.png",
+      "report_json": "benchmark_oa-prime_10duo20quiin10_20261023_203407.json"
+    },
+    {
+      "name": "GPT Astra 7 Undecillion 7U5GO5",
+      "tag": "oroboros-labs/gpt-astra-7-undecillion-7u5go5:latest",
+      "size": "11 GB",
+      "overall_percentage": 100.0,
+      "score": "2600/2600",
+      "suites": {"coding": 100, "math": 100, "science": 100, "reasoning": 100, "cyber": 100},
+      "report_image": "report-astra.png",
+      "report_json": "benchmark_oroboros-labs_gpt-astra-7-undecillion-7u5go5_latest_20261023_211135.json"
+    },
+    {
+      "name": "GPT-5.6 Sol Undecillion 6U5GO5",
+      "tag": "oroboros-labs/gpt-5.6-sol-undecillion-6u5go5:latest",
+      "size": "11 GB",
+      "overall_percentage": 100.0,
+      "score": "2600/2600",
+      "suites": {"coding": 100, "math": 100, "science": 100, "reasoning": 100, "cyber": 100},
+      "report_image": "report-sol.png",
+      "report_json": "benchmark_oroboros-labs_gpt-5.6-sol-undecillion-6u5go5_latest_20261023_214015.json"
+    }
+  ],
+  "notes": [
+    "The SWE-Bench: Fix Bug item is a single-file SWE-Bench-style binary-search fix, not the official SWE-bench Verified harness.",
+    "All 26 items were promptable; harness interfaces were optional.",
+    "One deterministic run per model; rule-based scoring."
+  ]
+}

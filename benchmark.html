@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="en" data-theme="neutral">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PFT-001 — Pristine Field Trial 001 · Lab Standard Benchmark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html[data-theme="white"]{--bg:#FAF9F5;--card:#FFFFFF;--card2:#F3F1EC;--line:#E2DFD8;--ink:#141413;--muted:#5C5A55;--us:#F2A07B}
+html[data-theme="neutral"]{--bg:#8D9199;--card:#A9ADB4;--card2:#B8BCC3;--line:#C4C7CD;--ink:#14161A;--muted:#4A4D53;--us:#F2A07B}
+html[data-theme="dark"]{--bg:#101216;--card:#171A20;--card2:#1E232B;--line:#2A2E36;--ink:#F2F2F0;--muted:rgba(242,242,240,.62);--us:#F2A07B}
+body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-ui,sans-serif;min-height:100vh;padding:26px 22px 44px;transition:background .2s,color .2s}
+.wrap{max-width:1240px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Poppins','Segoe UI',sans-serif}
+.brand svg{width:28px;height:28px}
+.brand b{font-size:12px;letter-spacing:.18em;font-weight:700}
+.brand span{font-size:9.5px;letter-spacing:.18em;color:var(--muted);margin-left:5px}
+.tools{display:flex;gap:6px;flex-wrap:wrap}
+.btn,.tbtn{font-family:'Poppins','Segoe UI',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:99px;padding:6px 12px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover,.tbtn:hover{color:var(--ink);border-color:var(--us)}
+.btn.active{background:var(--us);border-color:var(--us);color:#141413}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 30px;margin-top:18px}
+.k{font-family:'Poppins','Segoe UI',sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:'Poppins','Segoe UI',sans-serif;font-size:54px;letter-spacing:-.035em;line-height:1.02;margin:8px 0 6px}
+h1 b{color:var(--us)}
+.lede{font-size:15px;line-height:1.55;color:var(--muted);max-width:780px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat .v{font-family:'Poppins','Segoe UI',sans-serif;font-size:28px;font-weight:700;line-height:1.1}
+.stat .l{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 30px;margin-top:16px}
+h2{font-family:'Poppins','Segoe UI',sans-serif;font-size:17px;font-weight:650;margin-bottom:10px}
+h2 small{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-left:8px}
+p{font-size:13.5px;line-height:1.6;color:var(--muted)}
+p+p{margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+th{font-family:'Poppins','Segoe UI',sans-serif;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;background:var(--card2)}
+td{padding:7px 10px;border-top:1px solid var(--line)}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td.d{color:var(--ink)}
+.pill{display:inline-block;background:var(--us);color:#141413;font-family:'Poppins','Segoe UI',sans-serif;font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;border-radius:99px;padding:4px 10px}
+.proto{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.pbox{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.pbox .k{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.pbox .v{font-size:12.5px;margin-top:4px;color:var(--ink);line-height:1.45}
+code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;background:var(--card2);border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--ink)}
+pre{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:8px;overflow:auto}
+pre code{background:none;border:0;padding:0;font-size:11.5px;line-height:1.55}
+.links{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+.links a{font-family:'Poppins','Segoe UI',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--us);padding-bottom:3px}
+.note{font-size:11px;color:var(--muted);line-height:1.55}
+@media(max-width:900px){.stats{grid-template-columns:1fr 1fr}.proto{grid-template-columns:1fr 1fr}.hero,.section{padding:20px}h1{font-size:38px}}
+</style></head><body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 4.5 A11.5 11.5 0 0 1 27.5 16" fill="none" stroke="var(--us)" stroke-width="2.2"/><circle cx="16" cy="16" r="4" fill="var(--us)"/><circle cx="27.5" cy="16" r="2.2" fill="currentColor"/></svg>
+      <div><b>OROBOROS</b><span>/ ANTHROPIC · PFT-001</span></div>
+    </div>
+    <div class="tools">
+      <button class="btn" data-set-theme="white">White</button>
+      <button class="btn active" data-set-theme="neutral">Neutral</button>
+      <button class="btn" data-set-theme="dark">Dark</button>
+      <a class="tbtn" href="report.html">Reports</a>
+      <a class="tbtn" href="index.html">Dashboard</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="k">LAB STANDARD · 26 ITEMS · 5 SUITES</div>
+    <h1><b>PFT-001</b><br>Pristine Field Trial 001</h1>
+    <p class="lede">The fixed benchmark the lab runs against a model before it is posted. Same prompts, same order, same deterministic decoding, one model loaded at a time. It measures applied coding, math, science, reasoning, and cyber competence on a compact suite.</p>
+    <div class="stats">
+      <div class="stat"><div class="v">26</div><div class="l">Test items</div></div>
+      <div class="stat"><div class="v">5</div><div class="l">Suites</div></div>
+      <div class="stat"><div class="v">2600</div><div class="l">Max points</div></div>
+      <div class="stat"><div class="v">100%</div><div class="l">Deterministic</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Run protocol <small>reproducible by design</small></h2>
+    <div class="proto">
+      <div class="pbox"><div class="k">Decoding</div><div class="v">temperature 0 · seed 1272 · top_k 1 · top_p 1</div></div>
+      <div class="pbox"><div class="k">Context</div><div class="v">8192 tokens · 2048 max output</div></div>
+      <div class="pbox"><div class="k">Isolation</div><div class="v">GPU cleared · one model loaded · no parallel runs</div></div>
+      <div class="pbox"><div class="k">Interfaces</div><div class="v">Oroboros harness manifest enabled · optional, not required</div></div>
+      <div class="pbox"><div class="k">Scoring</div><div class="v">100 points per item · rule-based checks · pass/fail</div></div>
+      <div class="pbox"><div class="k">Transport</div><div class="v">Ollama HTTP <code>/api/generate</code> · non-streaming</div></div>
+    </div>
+    <p class="note" style="margin-top:10px">Every prompt is self-contained and promptable. No repo checkout, live target, or external lookup is required. The harness interfaces are available to the model but are not needed to pass.</p>
+  </div>
+
+  <div class="section">
+    <h2>Naming <small>industry names vs this suite</small></h2>
+    <p>There is no single industry-standard name for PFT-001; it is a local composite benchmark. Most items are custom tasks in established domains, not official HumanEval, MATH, GPQA, MMLU, or CyberSecEval items.</p>
+    <p><b>SWE-Bench: Fix Bug</b> is a <b>SWE-Bench-style</b> single-file binary-search fix, checked behaviorally against 15 cases. It is <b>not</b> the official SWE-bench Verified harness (2,294 instances) and should not be reported as an official SWE-bench score.</p>
+  </div>
+
+  <div class="section">
+    <h2>Test roster <small>26 items · difficulty · promptability</small></h2>
+    <table><thead><tr><th>#</th><th>Suite</th><th>Test</th><th>Difficulty</th><th>Promptable</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td>Coding</td><td class="d">SWE-Bench: Fix Bug</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">2</td><td>Coding</td><td class="d">Algorithm: Dijkstra</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">3</td><td>Coding</td><td class="d">React Component</td><td>Medium–High</td><td>Yes</td></tr>
+      <tr><td class="num">4</td><td>Coding</td><td class="d">System Design: Rate Limiter</td><td>High</td><td>Yes</td></tr>
+      <tr><td class="num">5</td><td>Coding</td><td class="d">SQL Optimization</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">6</td><td>Math</td><td class="d">Calculus: Integration</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">7</td><td>Math</td><td class="d">Linear Algebra: Eigenvalues</td><td>Low–Medium</td><td>Yes</td></tr>
+      <tr><td class="num">8</td><td>Math</td><td class="d">Probability: Bayes Theorem</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">9</td><td>Math</td><td class="d">Number Theory: Prime Proof</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">10</td><td>Math</td><td class="d">Complex Analysis</td><td>High</td><td>Yes</td></tr>
+      <tr><td class="num">11</td><td>Science</td><td class="d">Physics: Quantum Mechanics</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">12</td><td>Science</td><td class="d">Chemistry: Thermodynamics</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">13</td><td>Science</td><td class="d">Biology: CRISPR</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">14</td><td>Science</td><td class="d">Engineering: Control Systems</td><td>High</td><td>Yes</td></tr>
+      <tr><td class="num">15</td><td>Science</td><td class="d">Materials Science</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">16</td><td>Reasoning</td><td class="d">Logic Puzzle: Knights &amp; Knaves</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">17</td><td>Reasoning</td><td class="d">Ethical Dilemma</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">18</td><td>Reasoning</td><td class="d">Strategic Analysis</td><td>High</td><td>Yes</td></tr>
+      <tr><td class="num">19</td><td>Reasoning</td><td class="d">Research Methodology</td><td>High</td><td>Yes</td></tr>
+      <tr><td class="num">20</td><td>Reasoning</td><td class="d">Multi-Step Problem</td><td>Low</td><td>Yes</td></tr>
+      <tr><td class="num">21</td><td>Cyber</td><td class="d">SQL Injection Exploit</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">22</td><td>Cyber</td><td class="d">XSS Attack Vector</td><td>Medium</td><td>Yes</td></tr>
+      <tr><td class="num">23</td><td>Cyber</td><td class="d">Buffer Overflow</td><td>High</td><td>Yes</td></tr>
+      <tr><td class="num">24</td><td>Cyber</td><td class="d">Privilege Escalation</td><td>High</td><td>Yes</td></tr>
+      <tr><td class="num">25</td><td>Cyber</td><td class="d">WAF Bypass</td><td>High</td><td>Yes</td></tr>
+      <tr><td class="num">26</td><td>Cyber</td><td class="d">Chained Attack</td><td>Very High</td><td>Yes</td></tr>
+    </tbody></table>
+    <p class="note" style="margin-top:10px"><b>Overall difficulty:</b> medium–high. Hardest items: rate limiter, residue theorem, PID control, antitrust/RCT reasoning, chained attack, and the SWE-style fix.</p>
+  </div>
+
+  <div class="section">
+    <h2>Run style <small>how a PFT-001 run is executed</small></h2>
+    <p>One model tag is passed to the runner. The suite loads the model, runs all 26 items in fixed order, scores each item, and writes a timestamped JSON report under <code>results/</code>. No other model is loaded during the run.</p>
+    <pre><code>run-pft001.bat &lt;ollama-model-tag&gt;
+
+:: example
+run-pft001.bat oa-prime:10duo20quiin10</code></pre>
+    <p class="note">Equivalent: <code>python Q:\oroboros-core\official-benchmark-stack\benchmark_runner.py &lt;tag&gt;</code></p>
+  </div>
+
+  <div class="section">
+    <h2>Standard record <small>PFT-001</small></h2>
+    <table><thead><tr><th>Model</th><th class="num">Size</th><th class="num">Overall</th><th>Score</th></tr></thead><tbody>
+      <tr><td class="d">OA Prime 10DUO20QUIN10</td><td class="num">5.0 GB</td><td class="num">100%</td><td>2600 / 2600</td></tr>
+      <tr><td class="d">GPT Astra 7 Undecillion 7U5GO5</td><td class="num">11 GB</td><td class="num">100%</td><td>2600 / 2600</td></tr>
+      <tr><td class="d">GPT-5.6 Sol Undecillion 6U5GO5</td><td class="num">11 GB</td><td class="num">100%</td><td>2600 / 2600</td></tr>
+    </tbody></table>
+    <div class="links"><a href="report.html">Open the reports</a><a href="PFT-001-spec.json">PFT-001 spec JSON</a><a href="index.html">Dashboard</a></div>
+    <p class="note" style="margin-top:12px"><b>Caveats:</b> one deterministic run per model; 26 coarse items; rule-based scoring; single-file SWE-style task; cyber items are dual-use technical prompts, not a safety evaluation. All-100 results indicate saturation of this suite, not a ranking.</p>
+  </div>
+</div>
+<script>
+function setTheme(name){
+  document.documentElement.dataset.theme=name;
+  document.querySelectorAll('[data-set-theme]').forEach(b=>b.classList.toggle('active',b.dataset.setTheme===name));
+  try{localStorage.setItem('oroboros-report-theme',name)}catch(e){}
+}
+document.querySelectorAll('[data-set-theme]').forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.setTheme)));
+try{const s=localStorage.getItem('oroboros-report-theme'); if(s)setTheme(s);}catch(e){}
+</script>
+</body></html>
