@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en" data-theme="neutral">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OA Claude Desktop — Free Local Harness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html[data-theme="white"]{--bg:#FAF9F5;--card:#FFFFFF;--card2:#F3F1EC;--line:#E2DFD8;--ink:#141413;--muted:#5C5A55;--us:#F2A07B}
+html[data-theme="neutral"]{--bg:#8D9199;--card:#A9ADB4;--card2:#B8BCC3;--line:#C4C7CD;--ink:#14161A;--muted:#4A4D53;--us:#F2A07B}
+html[data-theme="dark"]{--bg:#101216;--card:#171A20;--card2:#1E232B;--line:#2A2E36;--ink:#F2F2F0;--muted:rgba(242,242,240,.62);--us:#F2A07B}
+body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-ui,sans-serif;min-height:100vh;padding:26px 22px 44px}
+.wrap{max-width:1240px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Poppins','Segoe UI',sans-serif}
+.brand svg{width:28px;height:28px}
+.brand b{font-size:12px;letter-spacing:.18em;font-weight:700}
+.brand span{font-size:9.5px;letter-spacing:.18em;color:var(--muted);margin-left:5px}
+.tools{display:flex;gap:6px;flex-wrap:wrap}
+.btn,.tbtn{font-family:'Poppins','Segoe UI',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:99px;padding:6px 12px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover,.tbtn:hover{color:var(--ink);border-color:var(--us)}
+.btn.active{background:var(--us);border-color:var(--us);color:#141413}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;margin-top:18px}
+.hero-copy,.hero-shot{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px}
+.hero-copy{display:flex;flex-direction:column;justify-content:center}
+.k{font-family:'Poppins','Segoe UI',sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:'Poppins','Segoe UI',sans-serif;font-size:52px;letter-spacing:-.035em;line-height:1.03;margin:8px 0 8px}
+h1 b{color:var(--us)}
+.lede{font-size:15px;line-height:1.6;color:var(--muted);max-width:600px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:20px}
+.dl{display:inline-flex;align-items:center;gap:10px;background:var(--us);color:#141413;border-radius:99px;padding:13px 22px;font-family:'Poppins','Segoe UI',sans-serif;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
+.free{font-family:'Poppins','Segoe UI',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.hero-shot{padding:14px;display:flex;align-items:center}
+.hero-shot img{width:100%;border-radius:10px;border:1px solid var(--line);display:block}
+.section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 30px;margin-top:16px}
+h2{font-family:'Poppins','Segoe UI',sans-serif;font-size:17px;font-weight:650;margin-bottom:10px}
+h2 small{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-left:8px}
+p{font-size:13.5px;line-height:1.6;color:var(--muted)}
+p+p{margin-top:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.box{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.box .k{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.box .v{font-size:13px;line-height:1.55;margin-top:5px;color:var(--ink)}
+.box .v b{font-weight:700}
+.locked{border-color:color-mix(in srgb,var(--us) 35%,var(--line))}
+.lockrow{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.lockrow a{font-family:'Poppins','Segoe UI',sans-serif;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--us);padding-bottom:3px}
+code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;background:var(--card2);border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--ink)}
+pre{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:8px;overflow:auto}
+pre code{background:none;border:0;padding:0;font-size:11.5px;line-height:1.55}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+th{font-family:'Poppins','Segoe UI',sans-serif;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;background:var(--card2)}
+td{padding:8px 10px;border-top:1px solid var(--line)}
+.yes{color:#3D7A52;font-weight:600}
+.no{color:#B3543E;font-weight:600}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.foot b{color:var(--ink)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}h1{font-size:38px}.hero-copy,.section{padding:20px}}
+</style></head><body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 4.5 A11.5 11.5 0 0 1 27.5 16" fill="none" stroke="var(--us)" stroke-width="2.2"/><circle cx="16" cy="16" r="4" fill="var(--us)"/><circle cx="27.5" cy="16" r="2.2" fill="currentColor"/></svg>
+      <div><b>OROBOROS</b><span>/ ANTHROPIC · DESKTOP</span></div>
+    </div>
+    <div class="tools">
+      <button class="btn" data-set-theme="white">White</button>
+      <button class="btn active" data-set-theme="neutral">Neutral</button>
+      <button class="btn" data-set-theme="dark">Dark</button>
+      <a class="tbtn" href="benchmark.html">PFT-001</a>
+      <a class="tbtn" href="index.html">Dashboard</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-copy">
+      <div class="k">FREE DESKTOP HARNESS · WINDOWS</div>
+      <h1>OA Claude Desktop<br><b>Free. Local. Yours.</b></h1>
+      <p class="lede">The standalone harness for the OA Claude Agent. Add your own Ollama models or static GGUF weights. It launches clean, ties into the native systems — harness, OGM, Aider, Docker pods, Q/strata — and keeps everything on your machine.</p>
+      <div class="cta">
+        <a class="dl" href="https://github.com/oroboroslabs-ai/Ouroboros-Anthropic-AI-Field-Assessment/releases/download/desktop-v1.0.0/OA-Claude-Desktop-Setup-1.0.0.exe">Download for Windows</a>
+        <span class="free">Free · 1.0.0 · 121 MB</span>
+      </div>
+      <p class="note" style="margin-top:10px;font-size:10.5px">Unsigned installer: Windows SmartScreen may ask for confirmation. Code signing is planned for the next build.</p>
+    </div>
+    <div class="hero-shot"><img src="assets/oa-claude-desktop.png" alt="OA Claude Desktop app"></div>
+  </div>
+
+  <div class="section">
+    <h2>What ships free <small>the harness, the agent, the core</small></h2>
+    <div class="grid3">
+      <div class="box"><div class="k">Agent</div><div class="v"><b>OA Claude Agent.</b> Local chat against any Ollama model you already run.</div></div>
+      <div class="box"><div class="k">Weights</div><div class="v"><b>Static GGUF option.</b> Pick a local file, create a model in-place, select it in Chat.</div></div>
+      <div class="box"><div class="k">Core</div><div class="v"><b>TOTALCONTROL Core.</b> Harness tools, OGM, Aider, Docker pods, and Q/strata status in one view.</div></div>
+      <div class="box"><div class="k">Math</div><div class="v"><b>Math core.</b> Crown 1272 Hz and a deterministic lattice key, local only.</div></div>
+      <div class="box"><div class="k">Theme</div><div class="v"><b>White / Neutral / Dark.</b> The same look and feel as the site, clean on launch.</div></div>
+      <div class="box"><div class="k">Install</div><div class="v"><b>One installer.</b> Desktop and Start Menu shortcuts; no account, no cloud.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Paid extensions <small>locked in the free build</small></h2>
+    <div class="grid3">
+      <div class="box locked"><div class="k">Voice Extension</div><div class="v"><b>$39.99.</b> Terse action briefs, fixed end report, plan before action, barge-in and audit fallback.</div></div>
+      <div class="box locked"><div class="k">Claude Communications</div><div class="v"><b>Sold separately.</b> Chat, phone bridge, WhatsApp, translation, and the shared agent session.</div></div>
+      <div class="box"><div class="k">Why locked</div><div class="v"><b>Connect, not bundle.</b> The desktop harness is the free front door; voice and communications are the paid connections into the live system.</div></div>
+    </div>
+    <div class="lockrow"><a href="voice-extension.html">Voice Extension — $39.99</a><a href="benchmark.html">TOTALCONTROL / PFT-001</a></div>
+  </div>
+
+  <div class="section">
+    <h2>Install <small>after download</small></h2>
+    <pre><code>1. Run OA-Claude-Desktop-Setup-1.0.0.exe
+2. Choose the install directory
+3. Launch OA Claude Desktop
+4. Add a model: ollama pull &lt;model&gt; (or choose a local .gguf)
+5. Select the model in Chat</code></pre>
+    <p class="note">The free build includes the agent and harness. Voice and Communications remain locked and are sold separately.</p>
+  </div>
+
+  <div class="section">
+    <h2>Feature matrix</h2>
+    <table><thead><tr><th>Feature</th><th>Free desktop</th></tr></thead><tbody>
+      <tr><td>OA Claude Agent</td><td class="yes">Included</td></tr>
+      <tr><td>Local Ollama models</td><td class="yes">Included</td></tr>
+      <tr><td>Static GGUF weights</td><td class="yes">Included</td></tr>
+      <tr><td>TOTALCONTROL Core / native systems</td><td class="yes">Included</td></tr>
+      <tr><td>Math core</td><td class="yes">Included</td></tr>
+      <tr><td>Voice Extension</td><td class="no">Locked · $39.99</td></tr>
+      <tr><td>Claude Communications</td><td class="no">Sold separately</td></tr>
+    </tbody></table>
+    <p class="note" style="margin-top:10px"><b>Independent OROBOROS / ANTHROPIC release.</b> Not an official Anthropic product. Base model licenses remain in force.</p>
+  </div>
+
+  <div class="foot">
+    <span><b>OA Claude Desktop · Free</b></span>
+    <span>Windows 10/11 · x64</span>
+    <span><a href="voice-extension.html" style="color:inherit">Voice Extension</a></span>
+  </div>
+</div>
+<script>
+function setTheme(name){
+  document.documentElement.dataset.theme=name;
+  document.querySelectorAll('[data-set-theme]').forEach(b=>b.classList.toggle('active',b.dataset.setTheme===name));
+  try{localStorage.setItem('oroboros-report-theme',name)}catch(e){}
+}
+document.querySelectorAll('[data-set-theme]').forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.setTheme)));
+try{const s=localStorage.getItem('oroboros-report-theme'); if(s)setTheme(s);}catch(e){}
+</script>
+</body></html>
