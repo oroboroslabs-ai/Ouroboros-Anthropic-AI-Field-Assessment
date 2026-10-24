@@ -56,7 +56,7 @@
     }
   ],
   "notes": [
-    "The SWE-Bench: Fix Bug item is a single-file SWE-Bench-style binary-search fix, not the official SWE-bench Verified harness.",
+    "The Code Repair: Binary Search item is a single-file SWE-bench-style binary-search fix, not the official SWE-bench Verified harness.",
     "All 26 items were promptable; harness interfaces were optional.",
     "One deterministic run per model; rule-based scoring."
   ]
