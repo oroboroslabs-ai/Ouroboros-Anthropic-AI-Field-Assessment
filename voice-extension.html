@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en" data-theme="neutral">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kilo Prime Voice Extension — Claude Agent · $39.99</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html[data-theme="white"]{--bg:#FAF9F5;--card:#FFFFFF;--card2:#F3F1EC;--line:#E2DFD8;--ink:#141413;--muted:#5C5A55;--us:#F2A07B}
+html[data-theme="neutral"]{--bg:#8D9199;--card:#A9ADB4;--card2:#B8BCC3;--line:#C4C7CD;--ink:#14161A;--muted:#4A4D53;--us:#F2A07B}
+html[data-theme="dark"]{--bg:#101216;--card:#171A20;--card2:#1E232B;--line:#2A2E36;--ink:#F2F2F0;--muted:rgba(242,242,240,.62);--us:#F2A07B}
+body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-ui,sans-serif;min-height:100vh;padding:26px 22px 44px}
+.wrap{max-width:1240px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Poppins','Segoe UI',sans-serif}
+.brand svg{width:28px;height:28px}
+.brand b{font-size:12px;letter-spacing:.18em;font-weight:700}
+.brand span{font-size:9.5px;letter-spacing:.18em;color:var(--muted);margin-left:5px}
+.tools{display:flex;gap:6px;flex-wrap:wrap}
+.btn,.tbtn{font-family:'Poppins','Segoe UI',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:99px;padding:6px 12px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover,.tbtn:hover{color:var(--ink);border-color:var(--us)}
+.btn.active{background:var(--us);border-color:var(--us);color:#141413}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;margin-top:18px}
+.hero-main,.price{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px}
+.k{font-family:'Poppins','Segoe UI',sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:'Poppins','Segoe UI',sans-serif;font-size:54px;letter-spacing:-.035em;line-height:1.02;margin:8px 0 10px}
+h1 b{color:var(--us)}
+.lede{font-size:15px;line-height:1.6;color:var(--muted);max-width:680px}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.badge{font-family:'Poppins','Segoe UI',sans-serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:99px;padding:5px 10px;color:var(--muted)}
+.price{display:flex;flex-direction:column;justify-content:center}
+.price .p{font-family:'Poppins','Segoe UI',sans-serif;font-size:58px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.price .p small{font-size:16px;font-weight:600;letter-spacing:0}
+.price .note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:8px}
+.buy{display:block;text-align:center;margin-top:18px;background:var(--us);color:#141413;border-radius:99px;padding:13px 18px;font-family:'Poppins','Segoe UI',sans-serif;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:not-allowed;opacity:.9}
+.buy small{display:block;font-size:8.5px;letter-spacing:.12em;margin-top:4px;opacity:.75}
+.launch{font-family:'Poppins','Segoe UI',sans-serif;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:10px}
+.section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 30px;margin-top:16px}
+h2{font-family:'Poppins','Segoe UI',sans-serif;font-size:17px;font-weight:650;margin-bottom:10px}
+h2 small{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-left:8px}
+p{font-size:13.5px;line-height:1.6;color:var(--muted)}
+p+p{margin-top:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.box{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.box .k{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.box .v{font-size:13px;line-height:1.55;margin-top:5px;color:var(--ink)}
+.box .v b{font-weight:700}
+.feat{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.feat div{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:var(--card2)}
+.feat b{display:block;font-family:'Poppins','Segoe UI',sans-serif;font-size:11px;letter-spacing:.06em;margin-bottom:3px}
+.feat span{font-size:12px;color:var(--muted);line-height:1.5}
+code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;background:var(--card2);border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--ink)}
+pre{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:8px;overflow:auto}
+pre code{background:none;border:0;padding:0;font-size:11.5px;line-height:1.55}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+th{font-family:'Poppins','Segoe UI',sans-serif;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;background:var(--card2)}
+td{padding:8px 10px;border-top:1px solid var(--line)}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.foot b{color:var(--ink)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.feat{grid-template-columns:1fr}h1{font-size:38px}.price .p{font-size:46px}}
+</style></head><body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 4.5 A11.5 11.5 0 0 1 27.5 16" fill="none" stroke="var(--us)" stroke-width="2.2"/><circle cx="16" cy="16" r="4" fill="var(--us)"/><circle cx="27.5" cy="16" r="2.2" fill="currentColor"/></svg>
+      <div><b>OROBOROS</b><span>/ ANTHROPIC · KILO PRIME</span></div>
+    </div>
+    <div class="tools">
+      <button class="btn" data-set-theme="white">White</button>
+      <button class="btn active" data-set-theme="neutral">Neutral</button>
+      <button class="btn" data-set-theme="dark">Dark</button>
+      <a class="tbtn" href="benchmark.html">PFT-001</a>
+      <a class="tbtn" href="index.html">Dashboard</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-main">
+      <div class="k">CLAUDE AGENT · LOCAL VOICE EXTENSION</div>
+      <h1>Kilo Prime<br><b>Voice Extension.</b></h1>
+      <p class="lede">The narration layer for the Claude Agent. Terse, action-only speech at project start, plan, lookup, retry, decision, milestone, and a fixed three-line end report. Non-blocking, local, and built to install into three harnesses.</p>
+      <div class="badges">
+        <span class="badge">15 words / beat</span>
+        <span class="badge">40 words / end</span>
+        <span class="badge">Plan before side effects</span>
+        <span class="badge">Barge-in policy</span>
+        <span class="badge">Audit fallback</span>
+        <span class="badge">No cloud calls</span>
+      </div>
+    </div>
+    <div class="price">
+      <div class="k">LAUNCH PRICE</div>
+      <div class="p">$39.99<small> USD</small></div>
+      <div class="note">One local license. Voice model, service, installers, and three harness integrations.</div>
+      <a class="buy" href="#" aria-disabled="true" onclick="return false">Buy — $39.99<small>Checkout opens Monday 9:00 AM</small></a>
+      <div class="launch">Monday launch · sales buttons enabled in the morning</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Three harnesses. One install. <small>seamless by design</small></h2>
+    <div class="grid3">
+      <div class="box"><div class="k">Harness 01</div><div class="v"><b>Kilo / Kilo Prime.</b> Adds the voice-brief MCP and the local model. The agent speaks while it works; the text stays available.</div></div>
+      <div class="box"><div class="k">Harness 02</div><div class="v"><b>Prime Agent / Claude Communications.</b> Adds <code>voice.brief</code> to the harness registry and speaks through the same local service.</div></div>
+      <div class="box"><div class="k">Harness 03</div><div class="v"><b>OGM / Aider.</b> Hooks governed actions, approvals, failures, and completions into the same brief engine.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What it does <small>the action vector</small></h2>
+    <div class="feat">
+      <div><b>Project start</b><span>“Project start. PFT-001. 26 items. Model OA Prime.”</span></div>
+      <div><b>Plan before action</b><span>“Restarting service. Port 8080 free.” The narration is the approval prompt.</span></div>
+      <div><b>Lookup</b><span>“separable.py. Found.” State, not activity.</span></div>
+      <div><b>Retry</b><span>“Failed. Docker test. Switching approach.” Failure plus choice.</span></div>
+      <div><b>Decision</b><span>“Choosing. Aider bridge.” One fork, one sentence.</span></div>
+      <div><b>End report</b><span>“Changed. PFT-001 26 of 26. Unchanged. No failures. Next. Report live.”</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Install <small>one command per harness or all three</small></h2>
+    <pre><code>:: all three harnesses
+install.ps1 -Harness all
+
+:: one harness
+install.ps1 -Harness kilo
+install.ps1 -Harness prime
+install.ps1 -Harness ogm</code></pre>
+    <p class="note">The installer creates the local voice model, starts the service, registers the harness tools, backs up every config it touches, and verifies health. Base model weights are pulled separately and remain under their own license.</p>
+  </div>
+
+  <div class="section">
+    <h2>What’s in the box</h2>
+    <table><thead><tr><th>Included</th><th>Purpose</th></tr></thead><tbody>
+      <tr><td>Brief model profile</td><td><code>oroboros-brief:3b</code> on <code>qwen2.5:3b</code>; guard falls back to fixed templates.</td></tr>
+      <tr><td>Voice service</td><td>Local HTTP service, non-blocking queue, playback, cancellation.</td></tr>
+      <tr><td>Kilo MCP</td><td><code>voice_brief</code> tool with event schema.</td></tr>
+      <tr><td>Prime integration</td><td><code>voice.brief</code> registry entry for the Claude harness.</td></tr>
+      <tr><td>OGM / Aider hooks</td><td>Governed actions and coding events speak automatically.</td></tr>
+      <tr><td>Docs and license</td><td>Install, uninstall, checksums, commercial freeware EULA.</td></tr>
+    </tbody></table>
+    <p class="note" style="margin-top:10px"><b>Not an official Anthropic product.</b> OROBOROS / ANTHROPIC is the brand attribution for this independent release. Base model license remains in force.</p>
+  </div>
+
+  <div class="foot">
+    <span><b>Kilo Prime · Voice Extension</b></span>
+    <span>$39.99 · launch Monday 9:00 AM</span>
+    <span><a href="benchmark.html" style="color:inherit">PFT-001 standard</a></span>
+  </div>
+</div>
+<script>
+function setTheme(name){
+  document.documentElement.dataset.theme=name;
+  document.querySelectorAll('[data-set-theme]').forEach(b=>b.classList.toggle('active',b.dataset.setTheme===name));
+  try{localStorage.setItem('oroboros-report-theme',name)}catch(e){}
+}
+document.querySelectorAll('[data-set-theme]').forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.setTheme)));
+try{const s=localStorage.getItem('oroboros-report-theme'); if(s)setTheme(s);}catch(e){}
+</script>
+</body></html>
