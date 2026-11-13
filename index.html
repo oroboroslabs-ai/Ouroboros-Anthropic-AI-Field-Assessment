@@ -428,6 +428,30 @@ function makeChart(){
         });
       });
       ctx.restore();
+    }},{id:'oaCutoff',afterDatasetsDraw(c){
+      const {ctx,chartArea,scales:{x,y}}=c;
+      const mark=CWE_MARKS[0];
+      const yv=y.getPixelForValue(mark.score);
+      const x0=x.getPixelForValue(0.0118);
+      if(!isFinite(yv)||!isFinite(x0))return;
+      const dark=!isLightTheme();
+      ctx.save();
+      ctx.setLineDash([5,5]);
+      ctx.strokeStyle=dark?'#FFFFFF':'#000000';
+      ctx.lineWidth=1.6;
+      ctx.beginPath();ctx.moveTo(chartArea.right,yv);ctx.lineTo(x0,yv);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font='800 10.5px Segoe UI';
+      const badge='/A';
+      const bw=ctx.measureText(badge).width+12;
+      const bx=x0;
+      const by=yv+oursRadius(mark.cases)+26;
+      ctx.fillStyle=dark?'#FFFFFF':'#000000';
+      ctx.beginPath();ctx.roundRect(bx-bw/2,by-11,bw,16,5);ctx.fill();
+      ctx.fillStyle=dark?'#000000':'#FFFFFF';
+      ctx.textAlign='center';
+      ctx.fillText(badge,bx,by+1);
+      ctx.restore();
     }},{id:'tags',afterDatasetsDraw(c){
       const {ctx,scales:{x,y}}=c;
       const pts=allPoints();
@@ -530,6 +554,7 @@ function oursRadius(cases){return Math.max(16,Math.min(44,14+7*Math.log10(Math.m
 const CWE_DATE_2100='2026-11-09';
 const CWE_DATE_2500='2026-11-09';
 const CWE_TOP=96;
+const CUTOFF=82; /* where the /A cutoff line is drawn: just above the 80% gridline */
 const CWE_RUNS=[
   {name:'Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%'},
   {name:'Claude Fable 7', score:90, cases:2100, date:CWE_DATE_2100, note:'450/500'},
@@ -716,10 +741,10 @@ function makeBar(){
       ctx.restore();
     }},{id:'val',afterDatasetsDraw(c){
       const {ctx}=c;
+      const meta=c.getDatasetMeta(0);
       ctx.save();
       ctx.font='700 11px Segoe UI';
       rows.forEach((r,i)=>{
-        const meta=bar.getDatasetMeta(0);
         const el=meta.data[i];
         if(!el)return;
         ctx.fillStyle=cssv('--ink2');
@@ -729,7 +754,7 @@ function makeBar(){
       ctx.restore();
     }},{id:'oaLanding',afterDatasetsDraw(c){
       const {ctx,chartArea,scales:{x}}=c;
-      const px=x.getPixelForValue(CWE_TOP);
+      const px=x.getPixelForValue(CUTOFF);
       if(!isFinite(px)||px<chartArea.left||px>chartArea.right)return;
       const cutDark=!isLightTheme();
       ctx.save();
@@ -1070,7 +1095,7 @@ function makeLine(){
     },
     plugins:[glow,quadrant,labels,{id:'oaLineLanding',afterDatasetsDraw(c){
       const {ctx,chartArea,scales:{x,y}}=c;
-      const py=y.getPixelForValue(CWE_TOP);
+      const py=y.getPixelForValue(CUTOFF);
       if(!isFinite(py)||py<chartArea.top||py>chartArea.bottom)return;
       const gpt=rows.filter(r=>r.vendor==='OpenAI');
       if(!gpt.length)return;
