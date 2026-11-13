@@ -691,6 +691,7 @@ function makeBar(){
       }
     },
     plugins:[{id:'glowBar',beforeDatasetsDraw(c){
+      return; /* halos off: the bars carry their own labels */
       const {ctx}=c;
       const meta=bar.getDatasetMeta(0);
       ctx.save();
@@ -973,6 +974,7 @@ function makeLine(){
     });
   });
   const glow={id:'glowModels',beforeDatasetsDraw(c){
+    return; /* halos off: the orbs carry their own tags */
     const {ctx,scales:{x,y}}=c;
     ctx.save();
     rows.forEach(r=>{
