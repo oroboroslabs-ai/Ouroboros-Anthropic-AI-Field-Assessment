@@ -370,8 +370,8 @@ function makeChart(){
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
       backgroundColor:vendor==='OROBOROS'?col+'EC':col+'99',
-      borderColor:arr.map(p=>p[7]?'#A34A24':((ourGPT||ourPrime)?'#000000':col)),
-      borderWidth:arr.map(p=>p[7]?2.5:(vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?2:(darkRing?2.2:1.2)))),
+      borderColor:arr.map(p=>p[7]?col:((ourGPT||ourPrime)?'#000000':col)),
+      borderWidth:arr.map(p=>p[7]?1.2:(vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?2:(darkRing?2.2:1.2)))),
       hoverBorderWidth:3
     };
   });
