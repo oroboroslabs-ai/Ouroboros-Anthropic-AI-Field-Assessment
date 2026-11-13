@@ -450,7 +450,7 @@ function makeChart(){
       ctx.setLineDash([5,5]);
       ctx.strokeStyle=dark?'rgba(255,255,255,.32)':'rgba(0,0,0,.32)';
       ctx.lineWidth=1.6;
-      ctx.beginPath();ctx.moveTo(right,yv);ctx.lineTo(bx-bw/2-3,yv);ctx.stroke(); /* stops short of the tag: no dash inside the A */
+      ctx.beginPath();ctx.moveTo(right,yv);ctx.lineTo(bx-bw/2-23,yv);ctx.stroke(); /* stops two dashes short of the /A tag */
       ctx.restore();
       ctx.save();
       ctx.fillStyle=dark?'rgba(255,255,255,.16)':'rgba(0,0,0,.12)';
