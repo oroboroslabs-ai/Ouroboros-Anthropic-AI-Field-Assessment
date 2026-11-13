@@ -429,23 +429,26 @@ function makeChart(){
       });
       ctx.restore();
     }},{id:'oaCutoff',afterDatasetsDraw(c){
+      /* cutoff line is pinned inside the plot: it always spans the chart area, never past an edge */
       const {ctx,chartArea,scales:{x,y}}=c;
       const mark=CWE_MARKS[0];
-      const yv=y.getPixelForValue(CUTOFF);
-      const x0=x.getPixelForValue(0.0118);
-      if(!isFinite(yv)||!isFinite(x0))return;
+      const yRaw=y.getPixelForValue(CUTOFF);
+      if(!isFinite(yRaw))return;
+      const yv=Math.min(Math.max(yRaw,chartArea.top+2),chartArea.bottom-2);
+      const xq=x.getPixelForValue(0.0118);
+      const left=chartArea.left, right=chartArea.right;
       const dark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([5,5]);
       ctx.strokeStyle=dark?'rgba(255,255,255,.28)':'rgba(0,0,0,.28)';
       ctx.lineWidth=1.6;
-      ctx.beginPath();ctx.moveTo(chartArea.right,yv);ctx.lineTo(x0,yv);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(right,yv);ctx.lineTo(left,yv);ctx.stroke();
       ctx.setLineDash([]);
+      const bx=Math.min(Math.max(isFinite(xq)?xq:left+40,left+26),right-26);
+      const by=Math.min(yv+oursRadius(mark.cases)+26,chartArea.bottom-6);
       ctx.font='800 10.5px Segoe UI';
       const badge='/A';
       const bw=ctx.measureText(badge).width+12;
-      const bx=x0;
-      const by=yv+oursRadius(mark.cases)+26;
       ctx.fillStyle=dark?'rgba(255,255,255,.16)':'rgba(0,0,0,.12)';
       ctx.beginPath();ctx.roundRect(bx-bw/2,by-11,bw,16,5);ctx.fill();
       ctx.fillStyle=dark?'#FFFFFF':'#000000';
