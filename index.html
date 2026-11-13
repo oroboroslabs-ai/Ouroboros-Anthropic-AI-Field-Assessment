@@ -506,6 +506,23 @@ function makeChart(){
         }
         ctx.restore();
       });
+      /* /A tag redrawn last: it always sits in front of every label and the cutoff line */
+      (function(){
+        const dark=!isLightTheme();
+        const ca=c.chartArea;
+        const yv=Math.min(Math.max(y.getPixelForValue(CUTOFF),ca.top+2),ca.bottom-2);
+        const xq=x.getPixelForValue(0.0118);
+        const bx=Math.min(Math.max(isFinite(xq)?xq:ca.left+40,ca.left+26),ca.right-26);
+        ctx.save();
+        ctx.font='800 10.5px Segoe UI';
+        const bw=ctx.measureText('/A').width+12;
+        ctx.beginPath();ctx.roundRect(bx-bw/2,yv-8,bw,16,5);
+        ctx.fillStyle=cssv('--card2');ctx.fill();
+        ctx.strokeStyle=dark?'rgba(255,255,255,.38)':'rgba(0,0,0,.32)';ctx.lineWidth=1;ctx.stroke();
+        ctx.fillStyle=dark?'#FFFFFF':'#000000';ctx.textAlign='center';
+        ctx.fillText('/A',bx,yv+4);
+        ctx.restore();
+      })();
     }}]
   });
 }
