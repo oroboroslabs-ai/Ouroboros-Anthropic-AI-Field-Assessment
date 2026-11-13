@@ -448,7 +448,7 @@ function makeChart(){
       ctx.rect(left,top,right-left,bottom-top);
       ctx.clip();
       ctx.setLineDash([5,5]);
-      ctx.strokeStyle=dark?'rgba(255,255,255,.28)':'rgba(0,0,0,.28)';
+      ctx.strokeStyle=dark?'rgba(255,255,255,.32)':'rgba(0,0,0,.32)';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(right,yv);ctx.lineTo(bx-bw/2-3,yv);ctx.stroke(); /* stops short of the tag: no dash inside the A */
       ctx.restore();
@@ -512,12 +512,12 @@ function makeChart(){
         const ca=c.chartArea;
         const yv=Math.min(Math.max(y.getPixelForValue(CUTOFF),ca.top+2),ca.bottom-2);
         const xq=x.getPixelForValue(0.0118);
-        const bx=Math.min(Math.max(isFinite(xq)?xq:ca.left+40,ca.left+26),ca.right-26);
+        const bx=Math.min(Math.max((isFinite(xq)?xq:ca.left+40)-6,ca.left+26),ca.right-26);
         ctx.save();
         ctx.font='800 10.5px Segoe UI';
         const bw=ctx.measureText('/A').width+12;
         ctx.beginPath();ctx.roundRect(bx-bw/2,yv-8,bw,16,5);
-        ctx.fillStyle=cssv('--card2');ctx.fill();
+        ctx.fillStyle=cssv('--card2')||'#1E222A';ctx.fill();
         ctx.strokeStyle=dark?'rgba(255,255,255,.38)':'rgba(0,0,0,.32)';ctx.lineWidth=1;ctx.stroke();
         ctx.fillStyle=dark?'#FFFFFF':'#000000';ctx.textAlign='center';
         ctx.fillText('/A',bx,yv+4);
@@ -783,7 +783,7 @@ function makeBar(){
       const cutDark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cutDark?'rgba(255,255,255,.42)':'rgba(0,0,0,.42)';
+      ctx.strokeStyle=cutDark?'rgba(255,255,255,.32)':'rgba(0,0,0,.32)';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom-10);ctx.stroke(); /* stops behind the /A tag at the foot */
       ctx.setLineDash([]);
@@ -1127,7 +1127,7 @@ function makeLine(){
       const cutDark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cutDark?'rgba(255,255,255,.42)':'rgba(0,0,0,.42)';
+      ctx.strokeStyle=cutDark?'rgba(255,255,255,.32)':'rgba(0,0,0,.32)';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(gx-70,py);ctx.lineTo(chartArea.right,py);ctx.stroke();
       ctx.setLineDash([]);
