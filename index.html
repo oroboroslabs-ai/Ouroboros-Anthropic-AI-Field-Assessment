@@ -731,18 +731,19 @@ function makeBar(){
       const {ctx,chartArea,scales:{x}}=c;
       const px=x.getPixelForValue(CWE_TOP);
       if(!isFinite(px)||px<chartArea.left||px>chartArea.right)return;
+      const cutDark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cssv('--us')||cssv('--accent');
+      ctx.strokeStyle=cutDark?'#FFFFFF':'#000000';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom);ctx.stroke();
       ctx.setLineDash([]);
       const badge='/A';
       ctx.font='800 11px Segoe UI';
       const bw=ctx.measureText(badge).width+12;
-      ctx.fillStyle=cssv('--us')||cssv('--accent');
+      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';
       ctx.beginPath();ctx.roundRect(px-bw/2,chartArea.top-17,bw,16,5);ctx.fill();
-      ctx.fillStyle='#fff';ctx.textAlign='center';
+      ctx.fillStyle=cutDark?'#000000':'#FFFFFF';ctx.textAlign='center';
       ctx.fillText(badge,px,chartArea.top-5);
       ctx.restore();
     }}]
@@ -1074,18 +1075,19 @@ function makeLine(){
       const gpt=rows.filter(r=>r.vendor==='OpenAI');
       if(!gpt.length)return;
       const gx=Math.min.apply(null,gpt.map(r=>x.getPixelForValue(r.x)));
+      const cutDark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cssv('--us')||cssv('--accent');
+      ctx.strokeStyle=cutDark?'#FFFFFF':'#000000';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(gx-70,py);ctx.lineTo(chartArea.right,py);ctx.stroke();
       ctx.setLineDash([]);
       ctx.font='800 11px Segoe UI';
       const badge='/A';
       const bw=ctx.measureText(badge).width+12;
-      ctx.fillStyle=cssv('--us')||cssv('--accent');
+      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';
       ctx.beginPath();ctx.roundRect(gx-70-bw-4,py-8,bw,16,5);ctx.fill();
-      ctx.fillStyle='#fff';ctx.textAlign='center';
+      ctx.fillStyle=cutDark?'#000000':'#FFFFFF';ctx.textAlign='center';
       ctx.fillText(badge,gx-70-bw/2-4,py+4);
       ctx.restore();
     }}]
