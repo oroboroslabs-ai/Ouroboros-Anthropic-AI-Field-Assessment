@@ -340,7 +340,7 @@ loadLiveData();
 setInterval(loadLiveData,30*60*1000);
 
 const legendEl=document.getElementById('legend');
-Object.entries(VENDCOL).filter(([name])=>!/openai/i.test(name)).forEach(([name,key])=>{
+Object.entries(VENDCOL).forEach(([name,key])=>{
   const c=document.createElement('span');c.className='chip';
   if(name==='OROBOROS'){c.style.color='var(--ink2)';c.style.fontWeight='700';}
   c.innerHTML=`<i style="background:${key==='US'?'var(--us)':HEX[key]}"></i>${name}`;
@@ -351,8 +351,7 @@ let chart;
 let lineChart;
 var aaReady=false;
 function allPoints(){
-  // bubble chart only: the GPT family lives on the bar and line charts
-  return [...cwePoints(),...FIELD.filter(p=>!/openai/i.test(String(p[5])))];
+  return [...cwePoints(),...FIELD];
 }
 function makeChart(){
   if(chart)chart.destroy();
