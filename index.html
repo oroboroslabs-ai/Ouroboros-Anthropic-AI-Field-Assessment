@@ -437,7 +437,7 @@ function makeChart(){
       const dark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([5,5]);
-      ctx.strokeStyle=dark?'#FFFFFF':'#000000';
+      ctx.strokeStyle=dark?'rgba(255,255,255,.42)':'rgba(0,0,0,.42)';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(chartArea.right,yv);ctx.lineTo(x0,yv);ctx.stroke();
       ctx.setLineDash([]);
@@ -446,9 +446,9 @@ function makeChart(){
       const bw=ctx.measureText(badge).width+12;
       const bx=x0;
       const by=yv+oursRadius(mark.cases)+26;
-      ctx.fillStyle=dark?'#FFFFFF':'#000000';
+      ctx.fillStyle=dark?'rgba(255,255,255,.16)':'rgba(0,0,0,.12)';
       ctx.beginPath();ctx.roundRect(bx-bw/2,by-11,bw,16,5);ctx.fill();
-      ctx.fillStyle=dark?'#000000':'#FFFFFF';
+      ctx.fillStyle=dark?'#FFFFFF':'#000000';
       ctx.textAlign='center';
       ctx.fillText(badge,bx,by+1);
       ctx.restore();
@@ -759,17 +759,17 @@ function makeBar(){
       const cutDark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cutDark?'#FFFFFF':'#000000';
+      ctx.strokeStyle=cutDark?'rgba(255,255,255,.42)':'rgba(0,0,0,.42)';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom);ctx.stroke();
       ctx.setLineDash([]);
       const badge='/A';
       ctx.font='800 11px Segoe UI';
       const bw=ctx.measureText(badge).width+12;
-      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';
-      ctx.beginPath();ctx.roundRect(px-bw/2,chartArea.top-17,bw,16,5);ctx.fill();
-      ctx.fillStyle=cutDark?'#000000':'#FFFFFF';ctx.textAlign='center';
-      ctx.fillText(badge,px,chartArea.top-5);
+      ctx.fillStyle=cutDark?'rgba(255,255,255,.16)':'rgba(0,0,0,.12)';
+      ctx.beginPath();ctx.roundRect(px-bw/2,chartArea.bottom-18,bw,16,5);ctx.fill();
+      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';ctx.textAlign='center';
+      ctx.fillText(badge,px,chartArea.bottom-6);
       ctx.restore();
     }}]
   });
@@ -1103,16 +1103,16 @@ function makeLine(){
       const cutDark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cutDark?'#FFFFFF':'#000000';
+      ctx.strokeStyle=cutDark?'rgba(255,255,255,.42)':'rgba(0,0,0,.42)';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(gx-70,py);ctx.lineTo(chartArea.right,py);ctx.stroke();
       ctx.setLineDash([]);
       ctx.font='800 11px Segoe UI';
       const badge='/A';
       const bw=ctx.measureText(badge).width+12;
-      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';
+      ctx.fillStyle=cutDark?'rgba(255,255,255,.16)':'rgba(0,0,0,.12)';
       ctx.beginPath();ctx.roundRect(gx-70-bw-4,py-8,bw,16,5);ctx.fill();
-      ctx.fillStyle=cutDark?'#000000':'#FFFFFF';ctx.textAlign='center';
+      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';ctx.textAlign='center';
       ctx.fillText(badge,gx-70-bw/2-4,py+4);
       ctx.restore();
     }}]
