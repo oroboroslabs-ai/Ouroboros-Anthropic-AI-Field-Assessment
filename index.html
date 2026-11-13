@@ -939,7 +939,6 @@ function makeIndexBars(){
   const rows=AA_BARS.map(b=>({name:b[0],val:b[1],vendor:b[2]})).sort((a,b)=>b.val-a.val);
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
-    if(b.name==='Muse Wonder Full (max)')return checker('#4FA6F5','#1E6FE0');
     return white;
   });
   indexBars=new Chart(document.getElementById('indexBars'),{
