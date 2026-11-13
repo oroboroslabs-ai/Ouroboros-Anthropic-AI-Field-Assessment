@@ -239,6 +239,9 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
 
 <script>
 /* ================= FIELD DATA [name, cost/task, index, cases, colorKey, vendor] ================= */
+/* snapshot mode: draw every chart fully settled (used by the Snapshot buttons and ?snap=1) */
+if(/[?&]snap=1/.test(location.search)){Chart.defaults.animation=false;Chart.defaults.animations={};}
+
 const HEX={anth:'#C0714F',red:'#1A1A1A',gray:'#6B7280',purple:'#6B5BD2',green:'#34A853',blue:'#2563EB',orange:'#F97316',deep:'#2B4FD8',pink:'#E8418F',zblack:'#2B2B2B',openai:'#1A1A1A',opusred:'#c84a3a',meta:'#1E7BEA',stepfun:'#22C7D9',mistral:'#EF4444',nvidia:'#7CB342',reflect:'#1F4D3A',kimi:'#2563EB',spacex:'#6B5BD2',tm:'#6B7280',xiaomi:'#F26522',alibaba:'#F97316'};
 const FIELD=[
  ['Claude Fable 5.1 (fb)',7.63,53.4,10,'anth','Anthropic'],
@@ -369,9 +372,9 @@ function makeChart(){
     return {
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
-      backgroundColor:vendor==='OROBOROS'?col+'EC':col+'99',
-      borderColor:arr.map(p=>p[7]?col:((ourGPT||ourPrime)?'#000000':col)),
-      borderWidth:arr.map(p=>p[7]?1.2:(vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?2:(darkRing?2.2:1.2)))),
+      backgroundColor:arr.map(p=>p[7]?col+'99':(vendor==='OROBOROS'?col+'CC':col+'99')),
+      borderColor:arr.map(p=>p[7]?col:(ourGPT?'#8B9099':col)),
+      borderWidth:arr.map(p=>p[7]?1.2:(vendor==='OROBOROS'?1.2:((ourGPT||ourPrime)?1.2:(darkRing?2.2:1.2)))),
       hoverBorderWidth:3
     };
   });
