@@ -768,7 +768,7 @@ function makeBar(){
       ctx.setLineDash([4,4]);
       ctx.strokeStyle=cutDark?'rgba(255,255,255,.42)':'rgba(0,0,0,.42)';
       ctx.lineWidth=1.6;
-      ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom-10);ctx.stroke(); /* stops behind the /A tag at the foot */
       ctx.setLineDash([]);
       const badge='/A';
       ctx.font='800 11px Segoe UI';
