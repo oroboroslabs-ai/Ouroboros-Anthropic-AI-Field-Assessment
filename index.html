@@ -340,7 +340,7 @@ loadLiveData();
 setInterval(loadLiveData,30*60*1000);
 
 const legendEl=document.getElementById('legend');
-Object.entries(VENDCOL).forEach(([name,key])=>{
+Object.entries(VENDCOL).filter(([name])=>!/openai/i.test(name)).forEach(([name,key])=>{
   const c=document.createElement('span');c.className='chip';
   if(name==='OROBOROS'){c.style.color='var(--ink2)';c.style.fontWeight='700';}
   c.innerHTML=`<i style="background:${key==='US'?'var(--us)':HEX[key]}"></i>${name}`;
@@ -351,7 +351,8 @@ let chart;
 let lineChart;
 var aaReady=false;
 function allPoints(){
-  return [...cwePoints(),...FIELD];
+  // bubble chart only: the GPT family lives on the bar and line charts
+  return [...cwePoints(),...FIELD.filter(p=>!/openai/i.test(String(p[5])))];
 }
 function makeChart(){
   if(chart)chart.destroy();
@@ -368,7 +369,7 @@ function makeChart(){
     const ourPrime=vendor==='Oroboros DeepSeek';
     return {
       label:vendor,
-      data:arr.map(p=>({x:p[1],y:p[2],r:p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
+      data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
       backgroundColor:vendor==='OROBOROS'?col+'EC':col+'99',
       borderColor:(ourGPT||ourPrime)?'#000000':col,
       borderWidth:vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?2:(darkRing?2.2:1.2)),
@@ -425,7 +426,7 @@ function makeChart(){
       const {ctx,scales:{x,y}}=c;
       const pts=allPoints();
       pts.forEach(p=>{
-        const px=x.getPixelForValue(p[1]),py=y.getPixelForValue(p[2]),r=p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD;
+        const px=x.getPixelForValue(p[1]),py=y.getPixelForValue(p[2]),r=(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD;
         const lbl=p[0].replace('★ ','');
         ctx.save();
         if(p[5]==='OROBOROS'){
