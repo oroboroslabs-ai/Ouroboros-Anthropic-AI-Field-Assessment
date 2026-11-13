@@ -275,7 +275,6 @@ const FIELD=[
  ['GLM-5.3 Flash',0.25,41.8,10,'zblack','Z.ai'],
  ['Qwen3.8 2.4T A95B',2.16,39.9,10,'orange','Alibaba'],
  ['DeepSeek V4 Pro 0813',0.67,36.0,10,'deep','DeepSeek'],
- ['★ GPT-Astra 7 7U5GO5',3.20,86.0,57,'openai','Oroboros OpenAI'],
  ['MiniMax-M3',0.51,29.2,10,'pink','MiniMax']
 ];
 const VENDCOL={OROBOROS:'US','Oroboros DeepSeek':'deep','Oroboros OpenAI':'openai',Anthropic:'anth',OpenAI:'red',xAI:'purple',Xiaomi:'xiaomi',Google:'green',Kimi:'kimi','Z.ai':'zblack',Alibaba:'alibaba',DeepSeek:'deep',MiniMax:'pink'};
@@ -1015,6 +1014,8 @@ function makeLine(){
     label:r[0],x:r[1],y:r[2],cases:r[3],vendor:r[4],
     color:SCATTER_VENDORS[r[4]]||'#444',ours:false
   }));
+  const oursCases=RECORDS[activeModel].suites.reduce((t,[,n])=>t+n,0);
+  rows.push({label:'OROBOROS',x:0.02,y:RECORDS[activeModel].rate,cases:oursCases,vendor:'OROBOROS',color:ac,ours:true});
   CWE_MARKS.forEach((m,i)=>rows.push({label:m.name+' · CWE',x:0.012+i*0.0075,y:m.score,cases:m.cases,
     vendor:'OROBOROS',color:HEX[m.col],ours:true,cwe:m}));
   FIELD.filter(p=>String(p[0]).indexOf('★')===0).forEach(p=>{
