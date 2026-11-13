@@ -138,7 +138,8 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <span style="width:1px;height:20px;background:var(--line);display:inline-block"></span>
       <button class="tbtn" id="viewLineBtn" title="Intelligence Index vs. Cost per Task">Charts ↓</button>
       <a class="tbtn" href="artificial-analysis.html">Field Data</a>
-      <a class="tbtn" href="benchmark.html">Benchmark</a>
+      <a class="tbtn" href="cwe-oracle-100-3d.html" title="CWE 100 Bench - 3D sheet">CWE 100 · 3D</a>
+      <a class="tbtn" href="cwe-oracle-teardown-10.html" title="CWE Oracle teardown - 10 cases">CWE 10 · 3D</a>
       <a class="tbtn" href="report.html" title="Benchmark reports">Report</a>
       <a class="tbtn" href="desktop.html">Desktop</a>
       <button class="tbtn" id="reportBtn">Daily</button>
@@ -150,7 +151,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="kick">INTELLIGENCE × COST — <b>THE WHOLE FIELD</b></div>
     <div class="top-head">
       <h2>AI Assessment Levels — All Categories</h2>
-      <div class="note">X = cost per task (log) · Y = Intelligence Index · <b>orb area = size of the benchmark run</b> — ours is 100% benchmarked models, the largest exact-output run posted; every field model runs a 10-case suite. Landscape, every top model named.</div>
+      <div class="note">Source: <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener" style="color:var(--ink2)">artificialanalysis.ai ↗</a> · X = cost per task (log) · Y = Intelligence Index · <b>orb area = size of the benchmark run</b> — ours is 100% benchmarked models, the largest exact-output run posted; every field model runs a 10-case suite. Landscape, every top model named.</div>
       <button class="snap-btn" data-snap="orbs" data-name="oroboros-orb-field">Snapshot</button>
     </div>
     <div class="legend" id="legend"></div>
@@ -188,7 +189,9 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
   <div class="bottom" id="viewDash">
     <div class="bot-head">
       <div>
-        <div class="kick" style="margin-bottom:6px">THE 100% RECORD — <b>FULL BENCHMARK</b> <span style="color:var(--ink3);letter-spacing:.1em;font-weight:600;text-transform:none">· click bars on chart to see OA model benchmarks</span></div>
+        <div class="kick" style="margin-bottom:6px">CWE RECORD — <b>CASE-FOR-CASE</b> <span
+          style="color:var(--ink3);letter-spacing:.1em;font-weight:600;text-transform:none">· every case exact-output
+          verified</span></div>
         <h2>Sonnet 7 Undecillion 7U5GO5 — All Suites, All Cases</h2>
       </div>
     </div>
@@ -272,8 +275,6 @@ const FIELD=[
  ['GLM-5.3 Flash',0.25,41.8,10,'zblack','Z.ai'],
  ['Qwen3.8 2.4T A95B',2.16,39.9,10,'orange','Alibaba'],
  ['DeepSeek V4 Pro 0813',0.67,36.0,10,'deep','DeepSeek'],
- ['★ OA Prime 10DUO20QUIN10',0.67,98.0,100,'deep','Oroboros DeepSeek'],
- ['★ GPT-5.6 Sol 6U5GO5',2.40,98.2,57,'openai','Oroboros OpenAI'],
  ['★ GPT-Astra 7 7U5GO5',3.20,86.0,57,'openai','Oroboros OpenAI'],
  ['MiniMax-M3',0.51,29.2,10,'pink','MiniMax']
 ];
@@ -375,9 +376,9 @@ function makeChart(){
     return {
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
-      backgroundColor:arr.map(p=>p[7]?displayColor(HEX.anth)+'99':((ourGPT||ourPrime)?col:(vendor==='OROBOROS'?col+'CC':col+'99'))),
-      borderColor:arr.map(p=>p[7]?displayColor(HEX.anth):(ourGPT?'#000000':col)),
-      borderWidth:arr.map(p=>p[7]?1.2:(vendor==='OROBOROS'?1.2:(ourGPT?2:(ourPrime?2:(darkRing?2.2:1.2))))),
+      backgroundColor:arr.map(p=>p[7]?displayColor(HEX[p[4]])+'99':col+'99'),
+      borderColor:arr.map(p=>displayColor(HEX[p[4]])),
+      borderWidth:0,
       hoverBorderWidth:3
     };
   });
@@ -580,10 +581,10 @@ const CWE_DATE_2500='2026-11-09';
 const CWE_TOP=96;
 const CUTOFF=82; /* where the /A cutoff line is drawn: just above the 80% gridline */
 const CWE_RUNS=[
-  {name:'Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%'},
-  {name:'Claude Fable 7', score:90, cases:2100, date:CWE_DATE_2100, note:'450/500'},
-  {name:'Quindecillion', score:96, cases:2500, date:CWE_DATE_2500, note:'96%'},
-  {name:'Claude Fable 7', score:90, cases:2500, date:CWE_DATE_2500, note:'450/500'}
+  {name:'Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%', col:'deep'},
+  {name:'Claude Fable 7', score:90, cases:2100, date:CWE_DATE_2100, note:'450/500', col:'anth'},
+  {name:'Quindecillion', score:96, cases:2500, date:CWE_DATE_2500, note:'96%', col:'deep'},
+  {name:'Claude Fable 7', score:90, cases:2500, date:CWE_DATE_2500, note:'450/500', col:'anth'}
 ];
 const CWE_MARKS=[
   {name:'Quindecillion', score:96, cases:2500, note:'96%', sizes:'2,100 + 2,500 CWE',
@@ -593,11 +594,11 @@ const CWE_MARKS=[
 ];
 function cwePoints(){
   return CWE_MARKS.map(function(r,i){return ['★ '+r.name+' · CWE',
-    0.0118+i*0.0075, r.score, r.cases, 'US', 'OROBOROS', null, r];});
+    0.0118+i*0.0075, r.score, r.cases, r.col, 'OROBOROS', null, r];});
 }
 function cweBars(){
   return CWE_MARKS.map(function(r){return ['★ '+r.name+' · CWE',
-    0, r.score, r.cases, 'US', 'OROBOROS', null, '', r];});
+    0, r.score, r.cases, r.col, 'OROBOROS', null, '', r];});
 }
 function paintRecord(){
   const R=RECORDS[activeModel];
@@ -688,7 +689,7 @@ function makeBar(){
   if(bar)bar.destroy();
   const ac=cssv('--us')||cssv('--accent');
   const recs=Object.keys(RECORDS).sort((a,b)=>(a===activeModel?-1:b===activeModel?1:0)).map(recordPoint);
-  const rows=[...recs,...cweBars(),...FIELD].sort((a,b)=>b[2]-a[2]);
+  const rows=[...cweBars(),...FIELD].sort((a,b)=>b[2]-a[2]);
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
@@ -696,9 +697,9 @@ function makeBar(){
       labels:rows.map(r=>oaName(r[0])),
       datasets:[{
         data:rows.map(r=>r[2]),
-        backgroundColor:rows.map(r=>displayColor(r[4]==='US'?ac:HEX[r[4]])+'cc'),
-        borderColor:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?'#000000':displayColor(r[4]==='US'?ac:HEX[r[4]])),
-        borderWidth:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?2:((r[4]==='red'||r[4]==='zblack')?1.8:1.2)),
+        backgroundColor:rows.map(r=>displayColor(HEX[r[4]])+'cc'),
+        borderColor:rows.map(r=>displayColor(HEX[r[4]])),
+        borderWidth:0,
         borderRadius:6,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -932,10 +933,7 @@ function makeIndexBars(){
     return cx.createPattern(cv,'repeat');
   };
   const R=RECORDS[activeModel];
-  const rows=[
-    {name:oaName(R.tag),val:R.rate,vendor:'OROBOROS'},
-    ...AA_BARS.map(b=>({name:b[0],val:b[1],vendor:b[2]}))
-  ].sort((a,b)=>b.val-a.val);
+  const rows=AA_BARS.map(b=>({name:b[0],val:b[1],vendor:b[2]})).sort((a,b)=>b.val-a.val);
   const cols=rows.map(b=>{
     if(b.name==='Muse Wonder Full (max)')return checker('#4FA6F5','#1E6FE0');
     const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?HEX.anth:(AA_VENDOR_COLORS[b.vendor]||'#888');
@@ -948,8 +946,8 @@ function makeIndexBars(){
       datasets:[{
         data:rows.map(b=>b.val),
         backgroundColor:cols,
-        borderColor:rows.map(()=>isDarkTheme()?'rgba(242,242,240,.16)':'transparent'),
-        borderWidth:rows.map(()=>isDarkTheme()?1:0),
+        borderColor:rows.map(()=>'transparent'),
+        borderWidth:0,
         borderRadius:0,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -1017,9 +1015,8 @@ function makeLine(){
     label:r[0],x:r[1],y:r[2],cases:r[3],vendor:r[4],
     color:SCATTER_VENDORS[r[4]]||'#444',ours:false
   }));
-  rows.push({label:'OROBOROS',x:0.02,y:R.rate,cases:oursCases,vendor:'OROBOROS',color:ac,ours:true});
   CWE_MARKS.forEach((m,i)=>rows.push({label:m.name+' · CWE',x:0.012+i*0.0075,y:m.score,cases:m.cases,
-    vendor:'OROBOROS',color:displayColor(HEX.anth),ours:true,cwe:m}));
+    vendor:'OROBOROS',color:HEX[m.col],ours:true,cwe:m}));
   FIELD.filter(p=>String(p[0]).indexOf('★')===0).forEach(p=>{
     rows.push({
       label:String(p[0]).replace('★ ',''),x:p[1],y:p[2],cases:p[3],vendor:p[5],
@@ -1079,9 +1076,9 @@ function makeLine(){
        borderColor:ac,borderWidth:2,borderDash:[2,5],pointRadius:0,pointHitRadius:0,
        fill:false,tension:0,order:2},
       {label:'Models',data:rows,
-       backgroundColor:rows.map(r=>displayColor(r.color)),
+       backgroundColor:rows.map(r=>displayColor(r.color)+'cc'),
        borderColor:rows.map(r=>displayColor(r.color)),
-       borderWidth:rows.map(r=>r.ours?1.5:(r.fleet?1.5:1)),
+       borderWidth:0,
        pointRadius:rows.map(r=>r.ours?9:(r.fleet?7:5.5)),
        pointHoverRadius:rows.map(r=>r.ours?12:(r.fleet?10:8)),
        order:1}
