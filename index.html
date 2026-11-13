@@ -432,12 +432,19 @@ function makeChart(){
           const cw=p[7];
           if(cw){
             const idx=CWE_MARKS.indexOf(cw);
-            const ly=idx===0?py-r-30:py+r+26;
-            ctx.textAlign='center';
-            ctx.font='700 11px Segoe UI';ctx.fillStyle=cssv('--ink');
-            ctx.fillText(cw.name+' · '+cw.score,px,ly);
-            ctx.font='500 9.5px Segoe UI';ctx.fillStyle=cssv('--ink2');
-            ctx.fillText(cw.sizes+' · '+CWE_DATE_2500,px,ly+12);
+            const lx=px+r+6;
+            const ly=idx===0?py-r-2:py+r+10;
+            ctx.textAlign='left';
+            const tag=function(txt,y){
+              ctx.font='600 10.5px Segoe UI';
+              const tw=ctx.measureText(txt).width;
+              ctx.fillStyle=cssv('--card2');
+              ctx.beginPath();ctx.roundRect(lx-4,y-11,tw+8,15,4);ctx.fill();
+              ctx.fillStyle=cssv('--ink2');
+              ctx.fillText(txt,lx,y);
+            };
+            tag(cw.name+' · '+cw.score,ly);
+            tag(cw.sizes+' · '+CWE_DATE_2500,ly+16);
           }else{
             const R=RECORDS[activeModel];
             const name=oaName(R.tag);
