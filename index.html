@@ -152,6 +152,13 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     </div>
     <div class="legend" id="legend"></div>
     <div class="orb-box"><canvas id="orbs"></canvas></div>
+    <div class="note" style="margin-top:14px;line-height:1.9">
+      <b>CWE BENCHMARK RUNS</b> — 2,100-case and 2,500-case suites, exact scores and dates:
+      <span style="display:block;margin-top:6px">
+        <b>Quindecillion</b> — 96% · 2,100 CWE · 2026-11-09 &nbsp;·&nbsp; 96% · 2,500 CWE · 2026-11-09<br>
+        <b>Claude Fable 7</b> — 450/500 · 2,100 CWE · 2026-11-09 &nbsp;·&nbsp; 450/500 · 2,500 CWE · 2026-11-09
+      </span>
+    </div>
   </div>
 
   <!-- ============ OFFICIAL VERTICAL INDEX BARS — first chart under the orb ============ -->
@@ -240,6 +247,8 @@ const FIELD=[
  ['GPT-6 Astra (high)',2.31,52.4,10,'red','OpenAI'],
  ['GPT-6 Astra (max)',3.26,52.7,10,'red','OpenAI'],
  ['GPT-6 Astra (low)',1.71,45.2,10,'red','OpenAI'],
+ ['GPT-6.1 Astra (max)',3.20,53,10,'red','OpenAI'],
+ ['GPT-6.1 Sol (max)',2.40,52,10,'red','OpenAI'],
  ['GPT-5.6 Sol (high)',0.26,33.5,10,'gray','OpenAI'],
  ['GPT-5.6 Luna (max)',0.18,37.3,10,'gray','OpenAI'],
  ['GPT-5.6 (max)',2.63,38.4,10,'gray','OpenAI'],
@@ -257,9 +266,9 @@ const FIELD=[
  ['GLM-5.3 Flash',0.25,41.8,10,'zblack','Z.ai'],
  ['Qwen3.8 2.4T A95B',2.16,39.9,10,'orange','Alibaba'],
  ['DeepSeek V4 Pro 0813',0.67,36.0,10,'deep','DeepSeek'],
- ['★ OA Prime 10DUO20QUIN10',0.03,98.0,100,'deep','Oroboros DeepSeek'],
- ['★ GPT-5.6 Sol 6U5GO5',0.04,98.2,57,'openai','Oroboros OpenAI'],
- ['★ GPT-Astra 7 7U5GO5',0.05,86.0,57,'openai','Oroboros OpenAI'],
+ ['★ OA Prime 10DUO20QUIN10',0.67,98.0,100,'deep','Oroboros DeepSeek'],
+ ['★ GPT-5.6 Sol 6U5GO5',2.40,98.2,57,'openai','Oroboros OpenAI'],
+ ['★ GPT-Astra 7 7U5GO5',3.20,86.0,57,'openai','Oroboros OpenAI'],
  ['MiniMax-M3',0.51,29.2,10,'pink','MiniMax']
 ];
 const VENDCOL={OROBOROS:'US','Oroboros DeepSeek':'deep','Oroboros OpenAI':'openai',Anthropic:'anth',OpenAI:'red',xAI:'purple',Xiaomi:'xiaomi',Google:'green',Kimi:'kimi','Z.ai':'zblack',Alibaba:'alibaba',DeepSeek:'deep',MiniMax:'pink'};
@@ -342,7 +351,7 @@ let chart;
 let lineChart;
 var aaReady=false;
 function allPoints(){
-  return [oursPoint(),...FIELD];
+  return [...cwePoints(),...FIELD];
 }
 function makeChart(){
   if(chart)chart.destroy();
@@ -359,7 +368,7 @@ function makeChart(){
     const ourPrime=vendor==='Oroboros DeepSeek';
     return {
       label:vendor,
-      data:arr.map(p=>({x:p[1],y:p[2],r:p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3]})),
+      data:arr.map(p=>({x:p[1],y:p[2],r:p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
       backgroundColor:vendor==='OROBOROS'?col+'EC':col+'99',
       borderColor:(ourGPT||ourPrime)?'#000000':col,
       borderWidth:vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?2:(darkRing?2.2:1.2)),
@@ -376,11 +385,16 @@ function makeChart(){
         tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
           titleColor:tipColors().title,bodyColor:tipColors().body,padding:12,
           callbacks:{
-            title:items=>items[0].raw.label.replace('★ ',''),            label:ctx=>ctx.raw.vendor==='OROBOROS'
+            title:items=>items[0].raw.label.replace('★ ',''),
+            label:ctx=>{
+              const cw=ctx.raw.cwe;
+              if(cw)return ['  '+cw.note+' — '+cw.score+'/100','  '+cw.cases.toLocaleString()+' CWE cases · '+cw.date,'  $0.00/task — local crown-locked'];
+              return ctx.raw.vendor==='OROBOROS'
               ?['  Index '+RECORDS[activeModel].rate+' — '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+'/'+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+', all suites','  Benchmark size: '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+' cases','$0.00/task — local crown-locked']
               :String(ctx.raw.vendor||'').indexOf('Oroboros')===0
               ?['  Index: '+ctx.raw.y,'  Benchmark size: '+ctx.raw.cases+' cases','  $0.00/task — local']
-              :['  Index: '+ctx.raw.y,'  Benchmark size: '+ctx.raw.cases+' cases','  Cost/task: $'+ctx.raw.x]
+              :['  Index: '+ctx.raw.y,'  Benchmark size: '+ctx.raw.cases+' cases','  Cost/task: $'+ctx.raw.x];
+            }
           }}
       },
       scales:{
@@ -415,14 +429,25 @@ function makeChart(){
         const lbl=p[0].replace('★ ','');
         ctx.save();
         if(p[5]==='OROBOROS'){
-          const R=RECORDS[activeModel];
-          const name=oaName(R.tag);
-          const cases=R.suites.reduce((s,[,n])=>s+n,0);
-          ctx.font='600 11px Segoe UI';ctx.textAlign='center';
-          ctx.fillStyle=cssv('--ink2');
-          ctx.fillText(name,px,py-r-26);
-          ctx.font='600 10.5px Segoe UI';ctx.fillStyle=cssv('--ink2');
-          ctx.fillText(R.rate+' · '+cases+'/'+cases+' · $0.00',px,py-r-14);
+          const cw=p[7];
+          if(cw){
+            const idx=CWE_MARKS.indexOf(cw);
+            const ly=idx===0?py-r-30:py+r+26;
+            ctx.textAlign='center';
+            ctx.font='700 11px Segoe UI';ctx.fillStyle=cssv('--ink');
+            ctx.fillText(cw.name+' · '+cw.score,px,ly);
+            ctx.font='500 9.5px Segoe UI';ctx.fillStyle=cssv('--ink2');
+            ctx.fillText(cw.sizes+' · '+CWE_DATE_2500,px,ly+12);
+          }else{
+            const R=RECORDS[activeModel];
+            const name=oaName(R.tag);
+            const cases=R.suites.reduce((s,[,n])=>s+n,0);
+            ctx.font='600 11px Segoe UI';ctx.textAlign='center';
+            ctx.fillStyle=cssv('--ink2');
+            ctx.fillText(name,px,py-r-26);
+            ctx.font='600 10.5px Segoe UI';ctx.fillStyle=cssv('--ink2');
+            ctx.fillText(R.rate+' · '+cases+'/'+cases+' · $0.00',px,py-r-14);
+          }
         }else{
           ctx.font='600 10.5px Segoe UI';
           const tw=ctx.measureText(lbl).width;
@@ -483,7 +508,34 @@ function oursPoint(){
   const cases=R.suites.reduce((s,[,n])=>s+n,0);
   return ['★ '+R.tag,0.02,R.rate,cases,'US','OROBOROS'];
 }
-function oursRadius(cases){return 17+(cases-10)/47*17}
+function oursRadius(cases){return Math.max(16,Math.min(44,14+7*Math.log10(Math.max(10,cases))))}
+
+/* ============ OUR CWE RUNS — 2,100-case and 2,500-case suites ============
+   Two benchmark marks, each run twice (2,100 and 2,500 CWE cases). They are the only
+   orbs in the top-left of the field and carry the /A landing line on the bar chart. */
+const CWE_DATE_2100='2026-11-09';
+const CWE_DATE_2500='2026-11-09';
+const CWE_TOP=96;
+const CWE_RUNS=[
+  {name:'Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%'},
+  {name:'Claude Fable 7', score:90, cases:2100, date:CWE_DATE_2100, note:'450/500'},
+  {name:'Quindecillion', score:96, cases:2500, date:CWE_DATE_2500, note:'96%'},
+  {name:'Claude Fable 7', score:90, cases:2500, date:CWE_DATE_2500, note:'450/500'}
+];
+const CWE_MARKS=[
+  {name:'Quindecillion', score:96, cases:2500, note:'96%', sizes:'2,100 + 2,500 CWE',
+   dates:CWE_DATE_2100+' · '+CWE_DATE_2500},
+  {name:'Claude Fable 7', score:90, cases:2500, note:'450/500', sizes:'2,100 + 2,500 CWE',
+   dates:CWE_DATE_2100+' · '+CWE_DATE_2500}
+];
+function cwePoints(){
+  return CWE_MARKS.map(function(r,i){return ['★ '+r.name+' · CWE',
+    0.0118+i*0.0075, r.score, r.cases, 'US', 'OROBOROS', null, r];});
+}
+function cweBars(){
+  return CWE_MARKS.map(function(r){return ['★ '+r.name+' · CWE',
+    0, r.score, r.cases, 'US', 'OROBOROS', null, '', r];});
+}
 function paintRecord(){
   const R=RECORDS[activeModel];
   document.getElementById('suiteGrid').innerHTML=R.suites.map(([name,n])=>`
@@ -573,7 +625,7 @@ function makeBar(){
   if(bar)bar.destroy();
   const ac=cssv('--us')||cssv('--accent');
   const recs=Object.keys(RECORDS).sort((a,b)=>(a===activeModel?-1:b===activeModel?1:0)).map(recordPoint);
-  const rows=[...recs,...FIELD].sort((a,b)=>b[2]-a[2]);
+  const rows=[...recs,...cweBars(),...FIELD].sort((a,b)=>b[2]-a[2]);
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
@@ -609,6 +661,7 @@ function makeBar(){
           callbacks:{
             label:ctx=>{
               const src=rows[ctx.dataIndex];
+              if(src[8])return ['  '+src[8].note+' — '+src[8].score+'/100','  '+src[8].cases.toLocaleString()+' CWE cases · '+src[8].date,'  $0.00/task — local','  /A landing marked'];
               if(src[6]){
                 const R=RECORDS[src[6]];
                 const c=R.suites.reduce((s,[,n])=>s+n,0);
@@ -623,7 +676,7 @@ function makeBar(){
       scales:{
         x:{min:0,max:105,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2'),callback:v=>v+'%'},
            title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
-        y:{grid:{display:false},ticks:{color:cssv('--ink2'),font:{size:11.5,weight:'600'}}}
+        y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:11.5,weight:'600'}}}
       }
     },
     plugins:[{id:'glowBar',beforeDatasetsDraw(c){
@@ -658,6 +711,24 @@ function makeBar(){
         ctx.textAlign='left';
         ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
       });
+      ctx.restore();
+    }},{id:'oaLanding',afterDatasetsDraw(c){
+      const {ctx,chartArea,scales:{x}}=c;
+      const px=x.getPixelForValue(CWE_TOP);
+      if(!isFinite(px)||px<chartArea.left||px>chartArea.right)return;
+      ctx.save();
+      ctx.setLineDash([4,4]);
+      ctx.strokeStyle=cssv('--us')||cssv('--accent');
+      ctx.lineWidth=1.6;
+      ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom);ctx.stroke();
+      ctx.setLineDash([]);
+      const badge='/A';
+      ctx.font='800 11px Segoe UI';
+      const bw=ctx.measureText(badge).width+12;
+      ctx.fillStyle=cssv('--us')||cssv('--accent');
+      ctx.beginPath();ctx.roundRect(px-bw/2,chartArea.top-17,bw,16,5);ctx.fill();
+      ctx.fillStyle='#fff';ctx.textAlign='center';
+      ctx.fillText(badge,px,chartArea.top-5);
       ctx.restore();
     }}]
   });
@@ -881,6 +952,8 @@ function makeLine(){
     color:SCATTER_VENDORS[r[4]]||'#444',ours:false
   }));
   rows.push({label:'OROBOROS',x:0.02,y:R.rate,cases:oursCases,vendor:'OROBOROS',color:ac,ours:true});
+  CWE_MARKS.forEach((m,i)=>rows.push({label:m.name+' · CWE',x:0.012+i*0.0075,y:m.score,cases:m.cases,
+    vendor:'OROBOROS',color:ac,ours:true,cwe:m}));
   FIELD.filter(p=>String(p[0]).indexOf('★')===0).forEach(p=>{
     rows.push({
       label:String(p[0]).replace('★ ',''),x:p[1],y:p[2],cases:p[3],vendor:p[5],
@@ -978,7 +1051,28 @@ function makeLine(){
            title:{display:true,text:'Artificial Analysis Intelligence Index',color:cssv('--ink2'),font:{size:11,weight:'600'}}}
       }
     },
-    plugins:[glow,quadrant,labels]
+    plugins:[glow,quadrant,labels,{id:'oaLineLanding',afterDatasetsDraw(c){
+      const {ctx,chartArea,scales:{x,y}}=c;
+      const py=y.getPixelForValue(CWE_TOP);
+      if(!isFinite(py)||py<chartArea.top||py>chartArea.bottom)return;
+      const gpt=rows.filter(r=>r.vendor==='OpenAI');
+      if(!gpt.length)return;
+      const gx=Math.min.apply(null,gpt.map(r=>x.getPixelForValue(r.x)));
+      ctx.save();
+      ctx.setLineDash([4,4]);
+      ctx.strokeStyle=cssv('--us')||cssv('--accent');
+      ctx.lineWidth=1.6;
+      ctx.beginPath();ctx.moveTo(gx-70,py);ctx.lineTo(chartArea.right,py);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font='800 11px Segoe UI';
+      const badge='/A';
+      const bw=ctx.measureText(badge).width+12;
+      ctx.fillStyle=cssv('--us')||cssv('--accent');
+      ctx.beginPath();ctx.roundRect(gx-70-bw-4,py-8,bw,16,5);ctx.fill();
+      ctx.fillStyle='#fff';ctx.textAlign='center';
+      ctx.fillText(badge,gx-70-bw/2-4,py+4);
+      ctx.restore();
+    }}]
   });
 }
 
@@ -1158,7 +1252,7 @@ function buildDailyReport(){
   const p=PALETTE[htmlLang()]||PALETTE.dark;
   const aa=liveData||{};
   const meta=aaMeta||{};
-  const rows=[oursPoint(),...FIELD].map(p=>{
+  const rows=[...cwePoints(),...FIELD].map(p=>{
     const name=String(p[0]).replace('★ ','');
     const lv=aa[name]||{};
     return {
