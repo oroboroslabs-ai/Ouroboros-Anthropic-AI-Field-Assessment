@@ -790,8 +790,9 @@ function makeBar(){
       const badge='/A';
       ctx.font='800 11px Segoe UI';
       const bw=ctx.measureText(badge).width+12;
-      ctx.fillStyle=cutDark?'rgba(255,255,255,.16)':'rgba(0,0,0,.12)';
-      ctx.beginPath();ctx.roundRect(px-bw/2,chartArea.bottom-18,bw,16,5);ctx.fill();
+      ctx.beginPath();ctx.roundRect(px-bw/2,chartArea.bottom-18,bw,16,5);
+      ctx.fillStyle=cssv('--card2')||'#1E222A';ctx.fill();
+      ctx.strokeStyle=cutDark?'rgba(255,255,255,.38)':'rgba(0,0,0,.32)';ctx.lineWidth=1;ctx.stroke();
       ctx.fillStyle=cutDark?'#FFFFFF':'#000000';ctx.textAlign='center';
       ctx.fillText(badge,px,chartArea.bottom-6);
       ctx.restore();
