@@ -431,13 +431,13 @@ function makeChart(){
     }},{id:'oaCutoff',afterDatasetsDraw(c){
       const {ctx,chartArea,scales:{x,y}}=c;
       const mark=CWE_MARKS[0];
-      const yv=y.getPixelForValue(mark.score);
+      const yv=y.getPixelForValue(CUTOFF);
       const x0=x.getPixelForValue(0.0118);
       if(!isFinite(yv)||!isFinite(x0))return;
       const dark=!isLightTheme();
       ctx.save();
       ctx.setLineDash([5,5]);
-      ctx.strokeStyle=dark?'rgba(255,255,255,.42)':'rgba(0,0,0,.42)';
+      ctx.strokeStyle=dark?'rgba(255,255,255,.28)':'rgba(0,0,0,.28)';
       ctx.lineWidth=1.6;
       ctx.beginPath();ctx.moveTo(chartArea.right,yv);ctx.lineTo(x0,yv);ctx.stroke();
       ctx.setLineDash([]);
