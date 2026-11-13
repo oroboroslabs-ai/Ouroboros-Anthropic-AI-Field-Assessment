@@ -372,9 +372,9 @@ function makeChart(){
     return {
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
-      backgroundColor:arr.map(p=>p[7]?displayColor(HEX.anth)+'99':(vendor==='OROBOROS'?col+'CC':col+'99')),
-      borderColor:arr.map(p=>p[7]?displayColor(HEX.anth):(ourGPT?'#8B9099':col)),
-      borderWidth:arr.map(p=>p[7]?1.2:(vendor==='OROBOROS'?1.2:((ourGPT||ourPrime)?1.2:(darkRing?2.2:1.2)))),
+      backgroundColor:arr.map(p=>p[7]?displayColor(HEX.anth)+'99':((ourGPT||ourPrime)?col+'CC':(vendor==='OROBOROS'?col+'CC':col+'99'))),
+      borderColor:arr.map(p=>p[7]?displayColor(HEX.anth):(ourGPT?'#000000':col)),
+      borderWidth:arr.map(p=>p[7]?1.2:(vendor==='OROBOROS'?1.2:(ourGPT?2:(ourPrime?1.2:(darkRing?2.2:1.2))))),
       hoverBorderWidth:3
     };
   });
