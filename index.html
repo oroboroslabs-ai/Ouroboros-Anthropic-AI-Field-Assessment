@@ -937,7 +937,7 @@ function makeIndexBars(){
   ].sort((a,b)=>b.val-a.val);
   const cols=rows.map(b=>{
     if(b.name==='Muse Wonder Full (max)')return checker('#4FA6F5','#1E6FE0');
-    const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?cssv('--us'):(AA_VENDOR_COLORS[b.vendor]||'#888');
+    const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?HEX.anth:(AA_VENDOR_COLORS[b.vendor]||'#888');
     return displayColor(c);
   });
   indexBars=new Chart(document.getElementById('indexBars'),{
@@ -947,8 +947,8 @@ function makeIndexBars(){
       datasets:[{
         data:rows.map(b=>b.val),
         backgroundColor:cols,
-        borderColor:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?'#000000':(isDarkTheme()?'rgba(242,242,240,.18)':'transparent')),
-        borderWidth:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?2:(isDarkTheme()?1:0)),
+        borderColor:rows.map(()=>isDarkTheme()?'rgba(242,242,240,.16)':'transparent'),
+        borderWidth:rows.map(()=>isDarkTheme()?1:0),
         borderRadius:0,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -1018,7 +1018,7 @@ function makeLine(){
   }));
   rows.push({label:'OROBOROS',x:0.02,y:R.rate,cases:oursCases,vendor:'OROBOROS',color:ac,ours:true});
   CWE_MARKS.forEach((m,i)=>rows.push({label:m.name+' · CWE',x:0.012+i*0.0075,y:m.score,cases:m.cases,
-    vendor:'OROBOROS',color:ac,ours:true,cwe:m}));
+    vendor:'OROBOROS',color:displayColor(HEX.anth),ours:true,cwe:m}));
   FIELD.filter(p=>String(p[0]).indexOf('★')===0).forEach(p=>{
     rows.push({
       label:String(p[0]).replace('★ ',''),x:p[1],y:p[2],cases:p[3],vendor:p[5],
@@ -1079,8 +1079,8 @@ function makeLine(){
        fill:false,tension:0,order:2},
       {label:'Models',data:rows,
        backgroundColor:rows.map(r=>displayColor(r.color)),
-       borderColor:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?'#000000':displayColor(r.color)),
-       borderWidth:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?2:(r.ours?2:(r.fleet?1.5:1))),
+       borderColor:rows.map(r=>displayColor(r.color)),
+       borderWidth:rows.map(r=>r.ours?1.5:(r.fleet?1.5:1)),
        pointRadius:rows.map(r=>r.ours?9:(r.fleet?7:5.5)),
        pointHoverRadius:rows.map(r=>r.ours?12:(r.fleet?10:8)),
        order:1}
