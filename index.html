@@ -1151,21 +1151,23 @@ function makeCodingLine(){
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:s.color,pointBorderWidth:0};
       });
-      /* two white curves in the same style as the field lines:
+      /* two white curves in the same wavy style as the field lines:
          Quindecillion 100 on 10 Nov -> 96, Fable 7 100 on 11 Nov -> 90 */
       const oursColor=isLightTheme()?'#141413':'#FFFFFF';
       const smooth=function(t){return t*t*(3-2*t);};
       [{label:'_Quindecillion 100→96',score:CWE_MARKS[0].score,from:'2026-11-10'},
        {label:'_Fable 7 100→90',score:CWE_MARKS[1].score,from:'2026-11-11'}].forEach(function(o){
         const i0=dates.indexOf(o.from), i1=dates.length-1;
+        const drop=100-o.score, ripple=drop*0.09;
         ds.push({label:o.label,
           data:dates.map(function(d,i){
             if(i0<0||i<i0||i>i1)return null;
             const t=(i1===i0)?1:(i-i0)/(i1-i0);
-            return +(100-(100-o.score)*smooth(Math.min(1,Math.max(0,t)))).toFixed(2);
+            const v=100-drop*smooth(Math.min(1,Math.max(0,t)))+ripple*Math.sin(Math.PI*2*t);
+            return +v.toFixed(2);
           }),
           borderColor:oursColor,backgroundColor:'transparent',borderWidth:2.2,
-          tension:.38,spanGaps:true,pointRadius:2,pointHoverRadius:5,
+          tension:.45,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:oursColor,pointBorderWidth:0,order:0});
       });
 
