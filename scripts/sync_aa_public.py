@@ -88,14 +88,35 @@ def main():
     if not models:
         print("no models found in the page payload - leaving field_data.json untouched")
         return 1
-    feed = {
+
+    # merge into the curated list the page is built around: never add hundreds of rows
+    try:
+        feed = json.loads(OUT.read_text(encoding="utf-8"))
+        curated = feed.get("models") or {}
+    except Exception:
+        curated = {}
+    norm = lambda t: re.sub(r"[^a-z0-9.]", "", re.sub(r"\(.*?\)", "", str(t).lower()))
+    index = {norm(k): v for k, v in models.items()}
+    merged = 0
+    for name, rec in curated.items():
+        n = norm(name)
+        hit = index.get(n) or next((v for k, v in index.items() if k.startswith(n) or n.startswith(k)), None)
+        if not hit:
+            continue
+        for field in ("reasoning_index", "coding_index", "cost_per_task", "tps"):
+            if hit.get(field) is not None:
+                rec[field] = hit[field]
+                merged += 1
+    models = curated or models
+    feed.update({
         "source": "Artificial Analysis public leaderboard (free, no key)",
         "endpoint": PAGE,
         "fetched_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "intelligence_index_version": "public",
         "pages_cached": ["models"],
         "models": models,
-    }
+    })
+    print(f"merged {merged} field values into {len(models)} models")
     OUT.write_text(json.dumps(feed, indent=1), encoding="utf-8")
     print(f"wrote {len(models)} models from the public page")
     return 0
