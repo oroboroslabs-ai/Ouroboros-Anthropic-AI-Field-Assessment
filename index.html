@@ -764,20 +764,15 @@ function makeBar(){
     }).filter(Boolean)
   ].sort(function(a,b){return (b[2]-a[2])||((a[8]?-1:0)-(b[8]?-1:0));});
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
-  /* the near-black vendor bars (OpenAI charcoal, Z.ai off-black) read as empty at
-     this scale, so they take the same orange the vertical chart uses for its bars */
-  const rowColor=function(r){
-    if(r[4]==='red'||r[4]==='zblack'||r[4]==='openai'||r[4]==='anth')return HEX.anth;
-    return HEX[r[4]]||'#888';
-  };
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
     data:{
       labels:rows.map(r=>oaName(r[0])),
       datasets:[{
         data:rows.map(r=>r[2]),
-        backgroundColor:rows.map(r=>r[8]?(cssv('--us')+'d9'):displayColor(rowColor(r))+'cc'),
-        borderColor:rows.map(r=>r[8]?cssv('--us'):displayColor(rowColor(r))),
+        /* ours wear the vertical chart's orange; every field bar keeps its vendor colour */
+        backgroundColor:rows.map(r=>r[8]?HEX.anth:displayColor(r[4]==='anth'?HEX.anth:HEX[r[4]])+'cc'),
+        borderColor:rows.map(r=>r[8]?HEX.anth:displayColor(r[4]==='anth'?HEX.anth:HEX[r[4]])),
         borderWidth:0,
         borderRadius:6,
         borderSkipped:false,
