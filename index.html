@@ -953,8 +953,8 @@ function modelRows(){
     var k=norm(name); if(!k||seen[k])return; if(/OA Prime/i.test(name))return; if(/^(GPT-6 Luna|GPT-5\.6 Luna|GPT-5\.6 Sol \(high\))/i.test(name))return; if(/Opus|Undecillion/i.test(name))return; seen[k]=1;
     out.push({name:name,index:(index!=null?index:null),reasoning:reasoning,vendor:vendor||vendorOfName(name)});
   };
-  try{ AA_BARS.forEach(function(b){push(b[0],b[1],b[2]);}); }catch(e){}          /* before the snapshot const exists */
   try{ Object.keys(liveData||{}).forEach(function(n){var d=liveData[n]||{};push(n,d.index,vendorOfName(n),d.reasoning_index);}); }catch(e){}
+  try{ AA_BARS.forEach(function(b){push(b[0],b[1],b[2]);}); }catch(e){}          /* snapshot only fills what the feed has not */
   try{ FIELD.forEach(function(r){push(String(r[0]).replace('\u2605 ',''),r[2],r[5]);}); }catch(e){}
   return out;
 }
@@ -1048,8 +1048,10 @@ function makeIndexBars(){
       ctx.font='600 11px Segoe UI';
       ctx.textAlign='center';
       meta.data.forEach((el,i)=>{
-        ctx.fillStyle=(rows[i].vendor==='CWE'&&isLightTheme())?'#000000':'#fff';
-        ctx.fillText(String(rows[i].val),el.x,el.base-14);
+        const isCWE=rows[i].vendor==='CWE';
+        ctx.fillStyle=(isCWE&&isLightTheme())?'#000000':'#fff';
+        const y=isCWE?(el.y-8):(el.base-14);
+        ctx.fillText(String(rows[i].val),el.x,y);
       });
       ctx.restore();
     }}]
