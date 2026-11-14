@@ -1108,16 +1108,19 @@ function makeIndexBars(){
 
 /* ============ CODING LINE — daily coding history from aistupidlevel.info ============ */
 let codingChart=null;
+let codingSeq=0;
 function makeCodingLine(){
   const el=document.getElementById('codingLine');
   if(!el)return Promise.resolve();
-  if(codingChart){codingChart.destroy();codingChart=null;}
+  const seq=++codingSeq;
   const host=el.parentElement;
   let empty=host.querySelector('.aa-empty');
   return fetch('coding_history.json',{cache:'no-store'})
     .then(function(r){return r.ok?r.json():null;})
     .catch(function(){return null;})
     .then(function(data){
+      if(seq!==codingSeq)return;            /* a newer call owns the canvas */
+      if(codingChart){codingChart.destroy();codingChart=null;}
       const models=(data&&data.models)?Object.keys(data.models):[];
       if(!models.length){
         if(!empty){
