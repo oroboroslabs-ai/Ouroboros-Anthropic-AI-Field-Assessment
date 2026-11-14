@@ -713,7 +713,7 @@ function makeBar(){
       labels:rows.map(r=>oaName(r[0])),
       datasets:[{
         data:rows.map(r=>r[2]),
-        backgroundColor:rows.map(r=>r[8]?'#141413':displayColor(r[4]==='anth'?HEX.anth:HEX[r[4]])+'cc'),
+        backgroundColor:rows.map(r=>r[8]?'#2B2B2B':displayColor(r[4]==='anth'?HEX.anth:HEX[r[4]])+'cc'),
         borderColor:rows.map(r=>displayColor(HEX[r[4]])),
         borderWidth:0,
         borderRadius:6,
@@ -985,7 +985,7 @@ function makeIndexBars(){
   ].sort(function(a,b){return b.val-a.val;});
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
-    if(b.vendor==='CWE')return '#141413';
+    if(b.vendor==='CWE')return '#2B2B2B';
     if(b.vendor==='Anthropic')return displayColor(HEX.anth);
     const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?HEX.anth:(AA_VENDOR_COLORS[b.vendor]||'#888');
     return displayColor(c);
