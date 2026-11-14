@@ -950,7 +950,7 @@ function modelRows(){
   var out=[], seen={};
   var norm=function(t){return String(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9.]/g,'');};
   var push=function(name,index,vendor,reasoning){
-    var k=norm(name); if(!k||seen[k])return; if(/OA Prime/i.test(name))return; if(/^(GPT-6 Luna|GPT-5\.6 Luna|GPT-5\.6 Sol \(high\))/i.test(name))return; if(/Opus/i.test(name))return; seen[k]=1;
+    var k=norm(name); if(!k||seen[k])return; if(/OA Prime/i.test(name))return; if(/^(GPT-6 Luna|GPT-5\.6 Luna|GPT-5\.6 Sol \(high\))/i.test(name))return; if(/Opus|Undecillion/i.test(name))return; seen[k]=1;
     out.push({name:name,index:(index!=null?index:null),reasoning:reasoning,vendor:vendor||vendorOfName(name)});
   };
   try{ AA_BARS.forEach(function(b){push(b[0],b[1],b[2]);}); }catch(e){}          /* before the snapshot const exists */
