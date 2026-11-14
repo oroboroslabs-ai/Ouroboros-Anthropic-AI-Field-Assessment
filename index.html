@@ -159,6 +159,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <a class="tbtn" href="cwe-sheet-quindecillion.html" title="Quindecillion CWE sheet">CWE · Quindecillion</a>
       <a class="tbtn" href="cwe-sheet-fable7.html" title="Claude Fable 7 CWE sheet">CWE · Fable 7</a>
             <a class="tbtn" href="desktop.html">Desktop</a>
+      <a class="tbtn" id="reportBtn" href="daily-report.html" target="_blank" rel="noopener" title="Build the live report from this page">Data Report</a>
           </div>
   </div>
 
@@ -258,9 +259,9 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <div class="aa-head">
         <div>
           <div class="aa-title">Coding Index — Daily History <span class="arw">↗</span></div>
-          <div class="aa-sub">Daily coding benchmark scores for the field, straight from the
-            <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a> history feed.
-            The dashed lines are our own CWE runs — Quindecillion at 96 and Fable 7 at 90 — drawn for comparison, not as feed data.</div>
+          <div class="aa-sub">Daily coding scores for the field from the
+            <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a> history feed (last 7 days).
+            The dashed lines are our own record: <b style="color:var(--hl);font-weight:600">100 from April 2026</b> until the 9 Nov CWE run, then Quindecillion 96 and Fable 7 90. Not feed data.</div>
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <button class="snap-btn" data-snap="codingLine" data-name="coding-history">Snapshot</button>
@@ -1130,70 +1131,73 @@ function makeCodingLine(){
       }
       if(empty)empty.remove();
 
-      const dates=Array.from(new Set(models.flatMap(function(m){
+      const fieldDates=Array.from(new Set(models.flatMap(function(m){
         return (data.models[m]||[]).map(function(p){return p.date;});
       }))).sort();
+
+      /* the OROBOROS record starts in April 2026: 100 all the way to the 9 Nov
+         CWE run, then the published 96 / 90. The field series keeps its 7 days. */
+      const OURS_START='2026-04-01';
+      const OURS_DROP='2026-11-09';
+      const today=fieldDates.length?fieldDates[fieldDates.length-1]:new Date().toISOString().slice(0,10);
+      const dates=(function(a,b){var out=[],d=new Date(a+'T00:00:00Z'),end=new Date(b+'T00:00:00Z');while(d<=end){out.push(d.toISOString().slice(0,10));d.setUTCDate(d.getUTCDate()+1);}return out;})(OURS_START,today);
 
       const series=models.map(function(m){
         return {name:m,pts:data.models[m]||[],color:displayColor(HEX[colorKeyFor(vendorOfName(m))]||'#8C9199')};
       });
       const ds=series.map(function(s){
+        var byDate={};
+        s.pts.forEach(function(p){byDate[p.date]=p.score;});
         return {label:s.name,
-          data:dates.map(function(d){var hit=s.pts.find(function(p){return p.date===d;});return hit?hit.score:null;}),
+          data:dates.map(function(d){return (d in byDate)?byDate[d]:null;}),
           borderColor:s.color,backgroundColor:'transparent',borderWidth:2.2,
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:s.color,pointBorderWidth:0};
+      });
+      /* our two runs, drawn as steps so the April plateau is visible */
+      [{label:'Claude Quindecillion · CWE',score:CWE_MARKS[0].score,color:'#F2A07B',dash:[7,4]},
+       {label:'Claude Fable 7 · CWE',score:CWE_MARKS[1].score,color:'#C0714F',dash:[2,3]}].forEach(function(o){
+        ds.push({label:o.label,
+          data:dates.map(function(d){return d<OURS_DROP?100:o.score;}),
+          borderColor:o.color,backgroundColor:'transparent',borderWidth:1.8,
+          borderDash:o.dash,tension:0,pointRadius:0,pointHoverRadius:0,spanGaps:true,order:0});
       });
 
       var all=series.reduce(function(a,s){return a.concat(s.pts.map(function(p){return p.score;}));},[]);
       const lo=all.length?Math.min.apply(null,all):80;
       const yMin=Math.max(0,Math.floor(lo)-3);
 
-      const cweRef={id:'cweRef',beforeDatasetsDraw(c){
-        const {ctx,chartArea,scales:{y}}=c;
-        [{v:CWE_MARKS[0].score,n:'Claude Quindecillion · CWE '+CWE_MARKS[0].score},
-         {v:CWE_MARKS[1].score,n:'Claude Fable 7 · CWE '+CWE_MARKS[1].score}].forEach(function(r){
-          const py=y.getPixelForValue(r.v);
-          if(!isFinite(py)||py<chartArea.top||py>chartArea.bottom)return;
-          ctx.save();
-          ctx.setLineDash([5,4]);
-          ctx.strokeStyle=cssv('--hl');
-          ctx.globalAlpha=.6;
-          ctx.lineWidth=1.4;
-          ctx.beginPath();ctx.moveTo(chartArea.left,py);ctx.lineTo(chartArea.right,py);ctx.stroke();
-          ctx.restore();
-          ctx.save();
-          ctx.font=valFont(10);
-          const tw=ctx.measureText(r.n).width;
-          ctx.fillStyle=cssv('--card2');
-          ctx.globalAlpha=.92;
-          ctx.beginPath();ctx.roundRect(chartArea.right-10-tw,py-14,tw+10,14,3);ctx.fill();
-          ctx.restore();
-          ctx.save();
-          ctx.font=valFont(10);
-          ctx.fillStyle=cssv('--hl');
-          ctx.textAlign='right';
-          ctx.fillText(r.n,chartArea.right-6,py-4);
-          ctx.restore();
-        });
+      /* mark the 7-day window the field feed actually covers */
+      const fieldWindow={id:'fieldWindow',beforeDatasetsDraw(c){
+        const {ctx,chartArea,scales:{x}}=c;
+        if(!fieldDates.length)return;
+        const a=x.getPixelForValue(dates.indexOf(fieldDates[0]));
+        const b=x.getPixelForValue(dates.length-1);
+        if(!isFinite(a)||!isFinite(b))return;
+        ctx.save();
+        ctx.fillStyle=isLightTheme()?'rgba(20,20,19,.05)':'rgba(242,242,240,.05)';
+        ctx.fillRect(Math.min(a,b),chartArea.top,Math.abs(b-a),chartArea.bottom-chartArea.top);
+        ctx.restore();
       }};
 
       codingChart=new Chart(el,{type:'line',data:{labels:dates,datasets:ds},options:{
         responsive:true,maintainAspectRatio:false,
+        layout:{padding:{top:6}},
         interaction:{mode:'index',intersect:false},
         plugins:{
-          legend:{display:true,position:'bottom',labels:{color:cssv('--ink2'),boxWidth:10,boxHeight:2,font:{size:10,weight:isLightTheme()?'400':'500'},padding:12}},
+          legend:{display:true,position:'bottom',labels:{color:cssv('--ink2'),boxWidth:10,boxHeight:2,font:{size:10,weight:isLightTheme()?'400':'500'},padding:10}},
           tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
             titleColor:tipColors().title,bodyColor:tipColors().body,padding:10,
             callbacks:{label:function(ctx){return '  '+ctx.dataset.label+': '+ctx.parsed.y;}}}
         },
         scales:{
-          x:{ticks:{color:cssv('--ink2'),font:{size:10},maxTicksLimit:8},grid:{color:cssv('--grid')},
-             title:{display:true,text:'DAY',color:cssv('--ink3'),font:{size:9,weight:'600'}}},
+          x:{ticks:{color:cssv('--ink2'),font:{size:10},maxTicksLimit:9,autoSkip:true,maxRotation:0},
+             grid:{color:cssv('--grid')},
+             title:{display:true,text:'2026 · APRIL → TODAY',color:cssv('--ink3'),font:{size:9,weight:'600'}}},
           y:{min:yMin,max:100,ticks:{color:cssv('--ink2'),font:{size:10}},grid:{color:cssv('--grid')},
              title:{display:true,text:'CODING SCORE',color:cssv('--ink3'),font:{size:9,weight:'600'}}}
         }
-      },plugins:[cweRef]});
+      },plugins:[fieldWindow]});
     });
 }
 
@@ -1614,12 +1618,22 @@ figcaption{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var
 </div></body></html>`;
   const blob=new Blob([html],{type:'text/html'});
   const url=URL.createObjectURL(blob);
-  downloadURL(url,`oroboros-daily-report-${day}.html`);
-  setTimeout(()=>URL.revokeObjectURL(url),5000);
+  if(buildDailyReport.openInTab){
+    /* the Data Report link opens the live report built from this page */
+    window.open(url,'_blank','noopener');
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+  }else{
+    downloadURL(url,`oroboros-daily-report-${day}.html`);
+    setTimeout(()=>URL.revokeObjectURL(url),5000);
+  }
 }
 function htmlLang(){return document.documentElement.dataset.theme||'dark'}
 const reportBtn=document.getElementById('reportBtn');
-if(reportBtn)reportBtn.onclick=buildDailyReport;
+if(reportBtn)reportBtn.onclick=e=>{
+  e.preventDefault();
+  buildDailyReport.openInTab=true;
+  buildDailyReport();
+};
 </script>
 </body>
 </html>
