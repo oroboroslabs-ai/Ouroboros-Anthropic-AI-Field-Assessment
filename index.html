@@ -1055,7 +1055,9 @@ function makeIndexBars(){
       ctx.textAlign='center';
       meta.data.forEach((el,i)=>{
         ctx.fillStyle='#fff';
-        ctx.fillText(String(rows[i].val),el.x,el.base-14);
+        /* white CWE bars: number above the bar end so it stays white and readable */
+        const y=(rows[i].vendor==='CWE')?(el.y-8):(el.base-14);
+        ctx.fillText(String(rows[i].val),el.x,y);
       });
       ctx.restore();
     }}]
