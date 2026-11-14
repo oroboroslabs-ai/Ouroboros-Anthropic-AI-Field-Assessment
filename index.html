@@ -1151,16 +1151,16 @@ function makeCodingLine(){
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:s.color,pointBorderWidth:0};
       });
-      /* our two runs, drawn like the field lines: same weight, same spline, a
-         natural wobble out of 100, then down onto 96 / 90 */
+      /* our two runs stay above the field through the whole wave, both touch 98
+         on 9 Nov, hold high, then bend down onto 96 / 90 at the very end */
       const oursColor=isLightTheme()?'#141413':'#FFFFFF';
       const DESC=[
         {label:'_Quindecillion 100→96',vals:{
-          '2026-11-07':100,'2026-11-08':99.3,'2026-11-09':98.0,'2026-11-10':99.7,
-          '2026-11-11':99.1,'2026-11-12':98.2,'2026-11-13':97.1,'2026-11-14':CWE_MARKS[0].score}},
+          '2026-11-07':100,'2026-11-08':99.4,'2026-11-09':98.0,'2026-11-10':99.6,
+          '2026-11-11':99.5,'2026-11-12':98.9,'2026-11-13':97.6,'2026-11-14':CWE_MARKS[0].score}},
         {label:'_Fable 7 100→90',vals:{
-          '2026-11-07':100,'2026-11-08':98.8,'2026-11-09':98.2,'2026-11-10':99.6,
-          '2026-11-11':99.8,'2026-11-12':97.5,'2026-11-13':93.9,'2026-11-14':CWE_MARKS[1].score}}
+          '2026-11-07':100,'2026-11-08':99.1,'2026-11-09':98.0,'2026-11-10':99.7,
+          '2026-11-11':99.6,'2026-11-12':98.8,'2026-11-13':93.8,'2026-11-14':CWE_MARKS[1].score}}
       ];
       DESC.forEach(function(o){
         ds.push({label:o.label,
