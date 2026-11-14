@@ -927,15 +927,22 @@ function makeIndexBars(){
   };
   const R=RECORDS[activeModel];
   const aa=liveData||{};
+  const norm=function(t){return String(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9.]/g,'');};
+  const feed=Object.entries(aa);
+  const codingFor=function(name){
+    const n=norm(name);
+    let hit=feed.find(function(e){return norm(e[0])===n;});
+    if(!hit)hit=feed.find(function(e){var k=norm(e[0]);return k.indexOf(n)===0||n.indexOf(k)===0;});
+    return hit&&hit[1]&&hit[1].coding_index!=null?hit[1].coding_index:null;
+  };
   const rows=[
     {name:'Claude Quindecillion · CWE',val:96,vendor:'CWE'},
     {name:'Claude Fable 7 · CWE',val:90,vendor:'CWE'},
-    ...AA_BARS.filter(b=>!/OA Prime/i.test(String(b[0]))).map(b=>{
-      const lv=aa[b[0]]||{};
-      const v=(lv.coding_index!=null)?lv.coding_index:b[1];
-      return {name:b[0],val:v,vendor:b[2]};
+    ...AA_BARS.filter(function(b){return !/OA Prime/i.test(String(b[0]));}).map(function(b){
+      var c=codingFor(b[0]);
+      return {name:b[0],val:(c!=null?c:b[1]),vendor:b[2]};
     })
-  ].sort((a,b)=>b.val-a.val);
+  ].sort(function(a,b){return b.val-a.val;});
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
     if(b.vendor==='CWE')return white;
