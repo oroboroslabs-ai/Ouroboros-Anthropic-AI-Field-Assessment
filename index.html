@@ -673,11 +673,38 @@ function recordPoint(key){
   const cases=R.suites.reduce((s,[,n])=>s+n,0);
   return ['★ '+R.tag,0.02,R.rate,cases,'US','OROBOROS',key];
 }
+const VKEY={'Oroboros DeepSeek':'deep','Oroboros OpenAI':'openai','OROBOROS':'US','Anthropic':'anth','OpenAI':'red',
+  'Google':'green','xAI':'purple','Kimi':'kimi','Z.ai':'zblack','Alibaba':'alibaba','DeepSeek':'deep',
+  'MiniMax':'pink','Xiaomi':'xiaomi','Mistral':'mistral','StepFun':'stepfun','NVIDIA':'nvidia','Meta':'meta',
+  'Reflection':'reflect','Thinking Machines':'tm'};
+function vendorOfName(n){
+  var t=String(n);
+  if(/^Claude/.test(t))return 'Anthropic';
+  if(/^(GPT|OpenAI)/.test(t))return 'OpenAI';
+  if(/^Gemini/.test(t))return 'Google';
+  if(/^(Grok|Muse)/.test(t))return 'xAI';
+  if(/^Kimi|^K2/.test(t))return 'Kimi';
+  if(/^GLM/.test(t))return 'Z.ai';
+  if(/^Qwen/.test(t))return 'Alibaba';
+  if(/^DeepSeek/.test(t))return 'DeepSeek';
+  if(/^MiniMax/.test(t))return 'MiniMax';
+  if(/^MiMo/.test(t))return 'Xiaomi';
+  if(/^Mistral/.test(t))return 'Mistral';
+  if(/^Step/.test(t))return 'StepFun';
+  if(/^(NVIDIA|Nemotron)/.test(t))return 'NVIDIA';
+  if(/^Beam/.test(t))return 'Reflection';
+  if(/^Inking/.test(t))return 'Thinking Machines';
+  return 'Reflection';
+}
+
+function colorKeyFor(v){ try{ return VKEY[v]||'gray'; }catch(e){ return 'gray'; } }
 function makeBar(){
   if(bar)bar.destroy();
   const ac=cssv('--us')||cssv('--accent');
   const rows=[...cweBars(),
-    ...FIELD].filter(r=>!/OA Prime|10DUO20QUIN10/i.test(String(r[0]))).sort((a,b)=>b[2]-a[2]);
+    ...modelRows().filter(function(m){return m.index!=null;}).map(function(m){
+      return [m.name, 0, m.index, 10, colorKeyFor(m.vendor), m.vendor];
+    })].sort((a,b)=>b[2]-a[2]);
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
@@ -829,6 +856,8 @@ const AA_BARS=[
  ['Inking (xhigh)',25,'Thinking Machines']
 ];
 
+
+
 /* ============ SCATTER — Intelligence Index vs. Cost per Task ============ */
 const SCATTER_VENDORS={
   StepFun:'#22C7D9','Z.ai':'#2B2B2B',Xiaomi:'#F26522',OpenAI:'#1A1A1A',
@@ -915,6 +944,19 @@ function displayColor(c){
   }catch(err){}
   return c;
 }
+/* every model the feed, the AA snapshot and the field table know about - one row each */
+function modelRows(){
+  var out=[], seen={};
+  var norm=function(t){return String(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9.]/g,'');};
+  var push=function(name,index,vendor){
+    var k=norm(name); if(!k||seen[k])return; if(/OA Prime/i.test(name))return; seen[k]=1;
+    out.push({name:name,index:(index!=null?index:null),vendor:vendor||vendorOfName(name)});
+  };
+  try{ AA_BARS.forEach(function(b){push(b[0],b[1],b[2]);}); }catch(e){}          /* before the snapshot const exists */
+  try{ Object.keys(liveData||{}).forEach(function(n){var d=liveData[n]||{};push(n,d.index,vendorOfName(n));}); }catch(e){}
+  try{ FIELD.forEach(function(r){push(String(r[0]).replace('\u2605 ',''),r[2],r[5]);}); }catch(e){}
+  return out;
+}
 let indexBars;
 function makeIndexBars(){
   if(indexBars)indexBars.destroy();
@@ -938,7 +980,7 @@ function makeIndexBars(){
   const rows=[
     {name:'Claude Quindecillion · CWE',val:96,vendor:'CWE'},
     {name:'Claude Fable 7 · CWE',val:90,vendor:'CWE'},
-    ...AA_BARS.map(function(b){return {name:b[0],val:b[1],vendor:b[2]};})
+    ...modelRows().map(function(m){return {name:m.name,val:(m.index!=null?m.index:0),vendor:m.vendor};})
   ].sort(function(a,b){return b.val-a.val;});
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
