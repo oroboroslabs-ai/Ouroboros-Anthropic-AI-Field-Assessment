@@ -936,13 +936,15 @@ function makeIndexBars(){
   };
   const R=RECORDS[activeModel];
   const rows=[
-    {name:'Quindecillion · CWE',val:96,vendor:'OROBOROS'},
-    {name:'Claude Fable 7 · CWE',val:90,vendor:'OROBOROS'},
-    ...AA_BARS.map(b=>({name:b[0],val:b[1],vendor:b[2]}))
+    {name:'Quindecillion · CWE',val:96,vendor:'CWE'},
+    {name:'Claude Fable 7 · CWE',val:90,vendor:'CWE'},
+    ...AA_BARS.filter(b=>!/OA Prime/i.test(String(b[0]))).map(b=>({name:b[0],val:b[1],vendor:b[2]}))
   ].sort((a,b)=>b.val-a.val);
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
-    return white;
+    if(b.vendor==='CWE')return white;
+    const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?HEX.anth:(AA_VENDOR_COLORS[b.vendor]||'#888');
+    return displayColor(c);
   });
   indexBars=new Chart(document.getElementById('indexBars'),{
     type:'bar',
