@@ -713,7 +713,7 @@ function makeBar(){
       labels:rows.map(r=>oaName(r[0])),
       datasets:[{
         data:rows.map(r=>r[2]),
-        backgroundColor:rows.map(r=>r[8]?'#8C9199':displayColor(HEX[r[4]])+'cc'),
+        backgroundColor:rows.map(r=>r[8]?'#141413':displayColor(r[4]==='anth'?HEX.anth:HEX[r[4]])+'cc'),
         borderColor:rows.map(r=>displayColor(HEX[r[4]])),
         borderWidth:0,
         borderRadius:6,
@@ -788,7 +788,7 @@ function makeBar(){
       rows.forEach((r,i)=>{
         const el=meta.data[i];
         if(!el)return;
-        ctx.fillStyle=cssv('--ink2');
+        ctx.fillStyle=r[8]?'#FFFFFF':cssv('--ink2');
         ctx.textAlign='left';
         ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
       });
@@ -985,7 +985,8 @@ function makeIndexBars(){
   ].sort(function(a,b){return b.val-a.val;});
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
-    if(b.vendor==='CWE')return '#8C9199';
+    if(b.vendor==='CWE')return '#141413';
+    if(b.vendor==='Anthropic')return displayColor(HEX.anth);
     const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?HEX.anth:(AA_VENDOR_COLORS[b.vendor]||'#888');
     return displayColor(c);
   });
