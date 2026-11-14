@@ -935,35 +935,10 @@ function makeIndexBars(){
     if(!hit)hit=feed.find(function(e){var k=norm(e[0]);return k.indexOf(n)===0||n.indexOf(k)===0;});
     return hit&&hit[1]&&hit[1].coding_index!=null?hit[1].coding_index:null;
   };
-  const vendorOf=function(n){
-    var t=String(n);
-    if(/^Claude/.test(t))return 'Anthropic';
-    if(/^(GPT|OpenAI)/.test(t))return 'OpenAI';
-    if(/^Gemini/.test(t))return 'Google';
-    if(/^(Grok|Muse)/.test(t))return 'xAI';
-    if(/^Kimi/.test(t))return 'Kimi';
-    if(/^GLM/.test(t))return 'Z.ai';
-    if(/^Qwen/.test(t))return 'Alibaba';
-    if(/^DeepSeek/.test(t))return 'DeepSeek';
-    if(/^MiniMax/.test(t))return 'MiniMax';
-    if(/^MiMo/.test(t))return 'Xiaomi';
-    if(/^Mistral/.test(t))return 'Mistral';
-    if(/^Step/.test(t))return 'StepFun';
-    if(/^(NVIDIA|Nemotron)/.test(t))return 'NVIDIA';
-    return 'Reflection';
-  };
-  const feedRows=Object.keys(aa).map(function(name){
-    var d=aa[name]||{};
-    var v=(d.coding_index!=null)?d.coding_index:d.index;
-    return {name:name,val:(v!=null?v:0),vendor:vendorOf(name)};
-  });
   const rows=[
     {name:'Claude Quindecillion · CWE',val:96,vendor:'CWE'},
     {name:'Claude Fable 7 · CWE',val:90,vendor:'CWE'},
-    ...(feedRows.length?feedRows:AA_BARS.filter(function(b){return !/OA Prime/i.test(String(b[0]));}).map(function(b){
-      var c=codingFor(b[0]);
-      return {name:b[0],val:(c!=null?c:b[1]),vendor:b[2]};
-    }))
+    ...AA_BARS.map(function(b){return {name:b[0],val:b[1],vendor:b[2]};})
   ].sort(function(a,b){return b.val-a.val;});
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
