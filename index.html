@@ -810,13 +810,11 @@ function makeBar(){
       rows.forEach((r,i)=>{
         const el=meta.data[i];
         if(!el)return;
+        ctx.fillStyle=cssv('--ink2');
         if(r[8]){
-          /* our 96 and 90 sit on the bar itself */
-          ctx.fillStyle=isLightTheme()?'#000000':'#FFFFFF';
           ctx.textAlign='right';
           ctx.fillText(String(r[2]),el.x-8,el.y+3.5);
         }else{
-          ctx.fillStyle=cssv('--ink2');
           ctx.textAlign='left';
           ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
         }
@@ -1077,9 +1075,8 @@ function makeIndexBars(){
       ctx.font='600 11px Segoe UI';
       ctx.textAlign='center';
       meta.data.forEach((el,i)=>{
-        const isCWE=rows[i].vendor==='CWE';
-        ctx.fillStyle=(isCWE&&isLightTheme())?'#000000':'#fff';
-        const y=isCWE?(el.y-8):(el.base-14);
+        ctx.fillStyle='#fff';
+        const y=(rows[i].vendor==='CWE')?(el.y-8):(el.base-14);
         ctx.fillText(String(rows[i].val),el.x,y);
       });
       ctx.restore();
