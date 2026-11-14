@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>OROBOROS — FIELD DASHBOARD · Intelligence × Cost</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
@@ -128,7 +125,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
   <div class="postcard" id="panel">
   <!-- ============ TOP BAR ============ -->
   <div class="bar">
-    <div class="brand">OROBOROS / ANTHROPIC <small>· FIELD DASHBOARD</small> <span id="buildStamp" title="page build" style="margin-left:8px;font-size:9.5px;letter-spacing:.12em;color:var(--ink3);border:1px solid var(--line);border-radius:10px;padding:1px 8px;vertical-align:middle">BUILD 2026-11-13c</span> <span id="liveBadge" style="display:none;margin-left:10px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--win);border:1px solid color-mix(in srgb,var(--win) 45%,transparent);border-radius:12px;padding:2px 10px;vertical-align:middle">LIVE</span></div>
+    <div class="brand">OROBOROS / ANTHROPIC <small>· FIELD DASHBOARD</small> <span id="liveBadge" style="display:none;margin-left:10px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--win);border:1px solid color-mix(in srgb,var(--win) 45%,transparent);border-radius:12px;padding:2px 10px;vertical-align:middle">LIVE</span></div>
     <div class="themes">
       <button class="tbtn active" data-t="dark">Dark</button>
       <button class="tbtn" data-t="white">White</button>
@@ -138,8 +135,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <span style="width:1px;height:20px;background:var(--line);display:inline-block"></span>
       <button class="tbtn" id="viewLineBtn" title="Intelligence Index vs. Cost per Task">Charts ↓</button>
       <a class="tbtn" href="artificial-analysis.html">Field Data</a>
-      <a class="tbtn" href="cwe-oracle-100-3d.html" title="CWE 100 Bench - 3D sheet">CWE 100 · 3D</a>
-      <a class="tbtn" href="cwe-oracle-teardown-10.html" title="CWE Oracle teardown - 10 cases">CWE 10 · 3D</a>
+      <a class="tbtn" href="benchmark.html">Benchmark</a>
       <a class="tbtn" href="report.html" title="Benchmark reports">Report</a>
       <a class="tbtn" href="desktop.html">Desktop</a>
       <button class="tbtn" id="reportBtn">Daily</button>
@@ -151,7 +147,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="kick">INTELLIGENCE × COST — <b>THE WHOLE FIELD</b></div>
     <div class="top-head">
       <h2>AI Assessment Levels — All Categories</h2>
-      <div class="note">Source: <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener" style="color:var(--ink2)">artificialanalysis.ai ↗</a> · X = cost per task (log) · Y = Intelligence Index · <b>orb area = size of the benchmark run</b> — ours is 100% benchmarked models, the largest exact-output run posted; every field model runs a 10-case suite. Landscape, every top model named.</div>
+      <div class="note">X = cost per task (log) · Y = Intelligence Index · <b>orb area = size of the benchmark run</b> — ours is 100% benchmarked models, the largest exact-output run posted; every field model runs a 10-case suite. Landscape, every top model named.</div>
       <button class="snap-btn" data-snap="orbs" data-name="oroboros-orb-field">Snapshot</button>
     </div>
     <div class="legend" id="legend"></div>
@@ -182,9 +178,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
   <div class="bottom" id="viewDash">
     <div class="bot-head">
       <div>
-        <div class="kick" style="margin-bottom:6px">CWE RECORD — <b>CASE-FOR-CASE</b> <span
-          style="color:var(--ink3);letter-spacing:.1em;font-weight:600;text-transform:none">· every case exact-output
-          verified</span></div>
+        <div class="kick" style="margin-bottom:6px">THE 100% RECORD — <b>FULL BENCHMARK</b> <span style="color:var(--ink3);letter-spacing:.1em;font-weight:600;text-transform:none">· click bars on chart to see OA model benchmarks</span></div>
         <h2>Sonnet 7 Undecillion 7U5GO5 — All Suites, All Cases</h2>
       </div>
     </div>
@@ -196,7 +190,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
     </div>
-    <div class="orb-box" style="height:540px"><canvas id="rankBar"></canvas></div>
+    <div class="orb-box" style="height:620px"><canvas id="rankBar"></canvas></div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
       <span>100% benchmarked models · 100.0</span>
@@ -238,9 +232,6 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
 
 <script>
 /* ================= FIELD DATA [name, cost/task, index, cases, colorKey, vendor] ================= */
-/* snapshot mode: draw every chart fully settled (used by the Snapshot buttons and ?snap=1) */
-if(/[?&]snap=1/.test(location.search)){Chart.defaults.animation=false;Chart.defaults.animations={};}
-
 const HEX={anth:'#C0714F',red:'#1A1A1A',gray:'#6B7280',purple:'#6B5BD2',green:'#34A853',blue:'#2563EB',orange:'#F97316',deep:'#2B4FD8',pink:'#E8418F',zblack:'#2B2B2B',openai:'#1A1A1A',opusred:'#c84a3a',meta:'#1E7BEA',stepfun:'#22C7D9',mistral:'#EF4444',nvidia:'#7CB342',reflect:'#1F4D3A',kimi:'#2563EB',spacex:'#6B5BD2',tm:'#6B7280',xiaomi:'#F26522',alibaba:'#F97316'};
 const FIELD=[
  ['Claude Fable 5.1 (fb)',7.63,53.4,10,'anth','Anthropic'],
@@ -249,8 +240,6 @@ const FIELD=[
  ['GPT-6 Astra (high)',2.31,52.4,10,'red','OpenAI'],
  ['GPT-6 Astra (max)',3.26,52.7,10,'red','OpenAI'],
  ['GPT-6 Astra (low)',1.71,45.2,10,'red','OpenAI'],
- ['GPT-6.1 Astra (max)',3.20,53,10,'red','OpenAI'],
- ['GPT-6.1 Sol (max)',2.40,52,10,'red','OpenAI'],
  ['GPT-5.6 Sol (high)',0.26,33.5,10,'gray','OpenAI'],
  ['GPT-5.6 Luna (max)',0.18,37.3,10,'gray','OpenAI'],
  ['GPT-5.6 (max)',2.63,38.4,10,'gray','OpenAI'],
@@ -268,6 +257,9 @@ const FIELD=[
  ['GLM-5.3 Flash',0.25,41.8,10,'zblack','Z.ai'],
  ['Qwen3.8 2.4T A95B',2.16,39.9,10,'orange','Alibaba'],
  ['DeepSeek V4 Pro 0813',0.67,36.0,10,'deep','DeepSeek'],
+ ['★ OA Prime 10DUO20QUIN10',0.03,98.0,100,'deep','Oroboros DeepSeek'],
+ ['★ GPT-5.6 Sol 6U5GO5',0.04,98.2,57,'openai','Oroboros OpenAI'],
+ ['★ GPT-Astra 7 7U5GO5',0.05,86.0,57,'openai','Oroboros OpenAI'],
  ['MiniMax-M3',0.51,29.2,10,'pink','MiniMax']
 ];
 const VENDCOL={OROBOROS:'US','Oroboros DeepSeek':'deep','Oroboros OpenAI':'openai',Anthropic:'anth',OpenAI:'red',xAI:'purple',Xiaomi:'xiaomi',Google:'green',Kimi:'kimi','Z.ai':'zblack',Alibaba:'alibaba',DeepSeek:'deep',MiniMax:'pink'};
@@ -350,7 +342,7 @@ let chart;
 let lineChart;
 var aaReady=false;
 function allPoints(){
-  return [...cwePoints(),...FIELD];
+  return [oursPoint(),...FIELD];
 }
 function makeChart(){
   if(chart)chart.destroy();
@@ -367,10 +359,10 @@ function makeChart(){
     const ourPrime=vendor==='Oroboros DeepSeek';
     return {
       label:vendor,
-      data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
-      backgroundColor:arr.map(p=>p[7]?(isDarkTheme()?'rgba(242,242,240,.50)':'rgba(20,20,19,.45)'):col+'99'),
-      borderColor:arr.map(p=>p[7]?(isDarkTheme()?'#FFFFFF':'#000000'):col),
-      borderWidth:arr.map(p=>p[7]?2.2:1.2),
+      data:arr.map(p=>({x:p[1],y:p[2],r:p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3]})),
+      backgroundColor:vendor==='OROBOROS'?col+'EC':col+'99',
+      borderColor:(ourGPT||ourPrime)?'#000000':col,
+      borderWidth:vendor==='OROBOROS'?2.5:((ourGPT||ourPrime)?2:(darkRing?2.2:1.2)),
       hoverBorderWidth:3
     };
   });
@@ -384,16 +376,11 @@ function makeChart(){
         tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
           titleColor:tipColors().title,bodyColor:tipColors().body,padding:12,
           callbacks:{
-            title:items=>items[0].raw.label.replace('★ ',''),
-            label:ctx=>{
-              const cw=ctx.raw.cwe;
-              if(cw)return ['  '+cw.note+' — '+cw.score+'/100','  '+cw.cases.toLocaleString()+' CWE cases · '+cw.date,'  $0.00/task — local crown-locked'];
-              return ctx.raw.vendor==='OROBOROS'
+            title:items=>items[0].raw.label.replace('★ ',''),            label:ctx=>ctx.raw.vendor==='OROBOROS'
               ?['  Index '+RECORDS[activeModel].rate+' — '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+'/'+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+', all suites','  Benchmark size: '+RECORDS[activeModel].suites.reduce((s,[,n])=>s+n,0)+' cases','$0.00/task — local crown-locked']
               :String(ctx.raw.vendor||'').indexOf('Oroboros')===0
               ?['  Index: '+ctx.raw.y,'  Benchmark size: '+ctx.raw.cases+' cases','  $0.00/task — local']
-              :['  Index: '+ctx.raw.y,'  Benchmark size: '+ctx.raw.cases+' cases','  Cost/task: $'+ctx.raw.x];
-            }
+              :['  Index: '+ctx.raw.y,'  Benchmark size: '+ctx.raw.cases+' cases','  Cost/task: $'+ctx.raw.x]
           }}
       },
       scales:{
@@ -405,7 +392,6 @@ function makeChart(){
       }
     },
     plugins:[{id:'glowOrbs',beforeDatasetsDraw(c){
-      return; /* the orange halo is off: the fleet shows its real colours (black GPT, blue DeepSeek) */
       const {ctx,scales:{x,y}}=c;
       ctx.save();
       c.data.datasets.forEach(ds=>{
@@ -421,97 +407,35 @@ function makeChart(){
         });
       });
       ctx.restore();
-    }},{id:'oaCutoff',afterDatasetsDraw(c){
-      /* cutoff line: clipped to the plot, stops at the /A tag, and the tag sits on the line */
-      const {ctx,chartArea,scales:{x,y}}=c;
-      const mark=CWE_MARKS[0];
-      const yRaw=y.getPixelForValue(CUTOFF);
-      if(!isFinite(yRaw))return;
-      const left=chartArea.left, right=chartArea.right;
-      const top=chartArea.top, bottom=chartArea.bottom;
-      const yv=Math.min(Math.max(yRaw,top+2),bottom-2);
-      const xq=x.getPixelForValue(0.0118);
-      const bx=Math.min(Math.max(isFinite(xq)?xq:left+40,left+26),right-26);
-      const dark=!isLightTheme();
-      ctx.save();
-      ctx.font='800 10.5px Segoe UI';
-      const badge='/A';
-      const bw=ctx.measureText(badge).width+12;
-      ctx.beginPath();
-      ctx.rect(left,top,right-left,bottom-top);
-      ctx.clip();
-      ctx.setLineDash([5,5]);
-      ctx.strokeStyle=dark?'rgba(255,255,255,.32)':'rgba(0,0,0,.32)';
-      ctx.lineWidth=1.6;
-      ctx.beginPath();ctx.moveTo(right,yv);ctx.lineTo(bx,yv);ctx.stroke();
-      ctx.restore();
-      ctx.fillStyle=dark?'#FFFFFF':'#000000';
-      ctx.textAlign='center';
-      ctx.fillText(badge,bx,yv+4);
     }},{id:'tags',afterDatasetsDraw(c){
       const {ctx,scales:{x,y}}=c;
       const pts=allPoints();
       pts.forEach(p=>{
-        const px=x.getPixelForValue(p[1]),py=y.getPixelForValue(p[2]),r=(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD;
+        const px=x.getPixelForValue(p[1]),py=y.getPixelForValue(p[2]),r=p[5]==='OROBOROS'?oursRadius(p[3]):R_FIELD;
         const lbl=p[0].replace('★ ','');
         ctx.save();
         if(p[5]==='OROBOROS'){
-          const cw=p[7];
-          if(cw){
-            const idx=CWE_MARKS.indexOf(cw);
-            const lx=px+r+6;
-            const ly=idx===0?py-r-2:py+r+10;
-            ctx.textAlign='left';
-            const tag=function(txt,y){
-              ctx.font='600 10.5px Segoe UI';
-              const tw=ctx.measureText(txt).width;
-              ctx.fillStyle='rgba(48,52,60,.94)';
-              ctx.beginPath();ctx.roundRect(lx-4,y-11,tw+8,15,4);ctx.fill();
-              ctx.fillStyle='#FFFFFF';
-              ctx.fillText(txt,lx,y);
-            };
-            tag(cw.name+' · '+cw.score,ly);
-            tag(cw.sizes+' · '+CWE_DATE_2500,ly+16);
-          }else{
-            const R=RECORDS[activeModel];
-            const name=oaName(R.tag);
-            const cases=R.suites.reduce((s,[,n])=>s+n,0);
-            ctx.font='600 11px Segoe UI';ctx.textAlign='center';
-            ctx.fillStyle=cssv('--ink2');
-            ctx.fillText(name,px,py-r-26);
-            ctx.font='600 10.5px Segoe UI';ctx.fillStyle=cssv('--ink2');
-            ctx.fillText(R.rate+' · '+cases+'/'+cases+' · $0.00',px,py-r-14);
-          }
+          const R=RECORDS[activeModel];
+          const name=oaName(R.tag);
+          const cases=R.suites.reduce((s,[,n])=>s+n,0);
+          ctx.font='600 11px Segoe UI';ctx.textAlign='center';
+          ctx.fillStyle=cssv('--ink2');
+          ctx.fillText(name,px,py-r-26);
+          ctx.font='600 10.5px Segoe UI';ctx.fillStyle=cssv('--ink2');
+          ctx.fillText(R.rate+' · '+cases+'/'+cases+' · $0.00',px,py-r-14);
         }else{
-          ctx.font='700 10.5px Segoe UI';
+          ctx.font='600 10.5px Segoe UI';
           const tw=ctx.measureText(lbl).width;
           let lx=px+r+6, ly=py+4;
           if(p[5]==='Oroboros DeepSeek'){ly=py+r+16;}
           else if(p[5]==='Oroboros OpenAI'){ly=p[0].indexOf('GPT-5.6')>=0?py-r-10:py+r+16;}
-          ctx.fillStyle='rgba(48,52,60,.94)';
+          ctx.fillStyle=cssv('--card2');
           ctx.beginPath();ctx.roundRect(lx-4,ly-11,tw+8,15,4);ctx.fill();
-          ctx.fillStyle='#FFFFFF';
+          ctx.fillStyle=cssv('--ink2');
           ctx.fillText(lbl,lx,ly);
         }
         ctx.restore();
       });
-      /* /A tag redrawn last: it always sits in front of every label and the cutoff line */
-      (function(){
-        const dark=!isLightTheme();
-        const ca=c.chartArea;
-        const yv=Math.min(Math.max(y.getPixelForValue(CUTOFF),ca.top+2),ca.bottom-2);
-        const xq=x.getPixelForValue(0.0118);
-        const bx=Math.min(Math.max((isFinite(xq)?xq:ca.left+40)-6,ca.left+26),ca.right-26);
-        ctx.save();
-        ctx.font='800 10.5px Segoe UI';
-        const bw=ctx.measureText('/A').width+12;
-        ctx.beginPath();ctx.roundRect(bx-bw/2,yv-8,bw,16,5);
-        ctx.fillStyle=cssv('--card2')||'#1E222A';ctx.fill();
-        ctx.strokeStyle=dark?'rgba(255,255,255,.38)':'rgba(0,0,0,.32)';ctx.lineWidth=1;ctx.stroke();
-        ctx.fillStyle=dark?'#FFFFFF':'#000000';ctx.textAlign='center';
-        ctx.fillText('/A',bx,yv+4);
-        ctx.restore();
-      })();
     }}]
   });
 }
@@ -519,14 +443,6 @@ function makeChart(){
 /* ============ BOTTOM HALF — 57-case record ============ */
 let bar;
 const RECORDS={
-  'Quindecillion CWE':{
-    name:'Quindecillion — CWE Benchmark',
-    tag:'Quindecillion CWE',
-    short:'OROBOROS / ANTHROPIC',
-    rate:96,
-    suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
-    meta:'2,100 + 2,500 CWE · 96% · 2026-11-09 · case-for-case exact output'
-  },
   'Sonnet 7U':{
     name:'Sonnet 7 Undecillion 7U5GO5',
     tag:'Claude Sonnet 7 Undecillion 7U5GO5',
@@ -561,41 +477,13 @@ const RECORDS={
     meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · 2026-09-09'
   }
 };
-let activeModel='Quindecillion CWE';
+let activeModel='Opus 9U';
 function oursPoint(){
   const R=RECORDS[activeModel];
   const cases=R.suites.reduce((s,[,n])=>s+n,0);
   return ['★ '+R.tag,0.02,R.rate,cases,'US','OROBOROS'];
 }
-function oursRadius(cases){return Math.max(16,Math.min(44,14+7*Math.log10(Math.max(10,cases))))}
-
-/* ============ OUR CWE RUNS — 2,100-case and 2,500-case suites ============
-   Two benchmark marks, each run twice (2,100 and 2,500 CWE cases). They are the only
-   orbs in the top-left of the field and carry the /A landing line on the bar chart. */
-const CWE_DATE_2100='2026-11-09';
-const CWE_DATE_2500='2026-11-09';
-const CWE_TOP=96;
-const CUTOFF=82; /* where the /A cutoff line is drawn: just above the 80% gridline */
-const CWE_RUNS=[
-  {name:'Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%', col:'deep'},
-  {name:'Claude Fable 7', score:90, cases:2100, date:CWE_DATE_2100, note:'450/500', col:'anth'},
-  {name:'Quindecillion', score:96, cases:2500, date:CWE_DATE_2500, note:'96%', col:'deep'},
-  {name:'Claude Fable 7', score:90, cases:2500, date:CWE_DATE_2500, note:'450/500', col:'anth'}
-];
-const CWE_MARKS=[
-  {name:'Quindecillion', score:96, cases:2500, note:'96%', sizes:'2,100 + 2,500 CWE',
-   dates:CWE_DATE_2100+' · '+CWE_DATE_2500},
-  {name:'Claude Fable 7', score:90, cases:2500, note:'450/500', sizes:'2,100 + 2,500 CWE',
-   dates:CWE_DATE_2100+' · '+CWE_DATE_2500}
-];
-function cwePoints(){
-  return CWE_MARKS.map(function(r,i){return ['★ '+r.name+' · CWE',
-    0.0118+i*0.0075, r.score, r.cases, r.col, 'OROBOROS', null, r];});
-}
-function cweBars(){
-  return CWE_MARKS.map(function(r){return ['★ '+r.name+' · CWE',
-    0, r.score, r.cases, r.col, 'OROBOROS', null, '', r];});
-}
+function oursRadius(cases){return 17+(cases-10)/47*17}
 function paintRecord(){
   const R=RECORDS[activeModel];
   document.getElementById('suiteGrid').innerHTML=R.suites.map(([name,n])=>`
@@ -684,10 +572,8 @@ function recordPoint(key){
 function makeBar(){
   if(bar)bar.destroy();
   const ac=cssv('--us')||cssv('--accent');
-  const rows=[...cweBars(),
-    ['★ GPT-5.6 Sol 6U5GO5',2.40,98.2,57,'openai','Oroboros OpenAI'],
-    ['★ GPT-Astra 7 7U5GO5',3.20,86.0,57,'openai','Oroboros OpenAI'],
-    ...FIELD].filter(r=>!/OA Prime|10DUO20QUIN10/i.test(String(r[0]))).sort((a,b)=>b[2]-a[2]);
+  const recs=Object.keys(RECORDS).sort((a,b)=>(a===activeModel?-1:b===activeModel?1:0)).map(recordPoint);
+  const rows=[...recs,...FIELD].sort((a,b)=>b[2]-a[2]);
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
@@ -695,9 +581,9 @@ function makeBar(){
       labels:rows.map(r=>oaName(r[0])),
       datasets:[{
         data:rows.map(r=>r[2]),
-        backgroundColor:rows.map(r=>r[8]?(r[4]==='deep'?'#3F6FE8':'#D97757'):displayColor(HEX[r[4]])+'cc'),
-        borderColor:rows.map(r=>displayColor(HEX[r[4]])),
-        borderWidth:0,
+        backgroundColor:rows.map(r=>displayColor(r[4]==='US'?ac:HEX[r[4]])+'cc'),
+        borderColor:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?'#000000':displayColor(r[4]==='US'?ac:HEX[r[4]])),
+        borderWidth:rows.map(r=>(r[5]==='Oroboros OpenAI'||r[5]==='Oroboros DeepSeek')?2:((r[4]==='red'||r[4]==='zblack')?1.8:1.2)),
         borderRadius:6,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -723,7 +609,6 @@ function makeBar(){
           callbacks:{
             label:ctx=>{
               const src=rows[ctx.dataIndex];
-              if(src[8])return ['  '+src[8].note+' — '+src[8].score+'/100','  '+src[8].cases.toLocaleString()+' CWE cases · '+src[8].date,'  $0.00/task — local','  /A landing marked'];
               if(src[6]){
                 const R=RECORDS[src[6]];
                 const c=R.suites.reduce((s,[,n])=>s+n,0);
@@ -738,11 +623,10 @@ function makeBar(){
       scales:{
         x:{min:0,max:105,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2'),callback:v=>v+'%'},
            title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
-        y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:10,weight:'600'},padding:2}}
+        y:{grid:{display:false},ticks:{color:cssv('--ink2'),font:{size:11.5,weight:'600'}}}
       }
     },
     plugins:[{id:'glowBar',beforeDatasetsDraw(c){
-      return; /* halos off: the bars carry their own labels */
       const {ctx}=c;
       const meta=bar.getDatasetMeta(0);
       ctx.save();
@@ -764,36 +648,16 @@ function makeBar(){
       ctx.restore();
     }},{id:'val',afterDatasetsDraw(c){
       const {ctx}=c;
-      const meta=c.getDatasetMeta(0);
       ctx.save();
       ctx.font='700 11px Segoe UI';
       rows.forEach((r,i)=>{
+        const meta=bar.getDatasetMeta(0);
         const el=meta.data[i];
         if(!el)return;
         ctx.fillStyle=cssv('--ink2');
         ctx.textAlign='left';
         ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
       });
-      ctx.restore();
-    }},{id:'oaLanding',afterDatasetsDraw(c){
-      const {ctx,chartArea,scales:{x}}=c;
-      const px=x.getPixelForValue(CUTOFF);
-      if(!isFinite(px)||px<chartArea.left||px>chartArea.right)return;
-      const cutDark=!isLightTheme();
-      ctx.save();
-      ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cutDark?'rgba(255,255,255,.32)':'rgba(0,0,0,.32)';
-      ctx.lineWidth=1.6;
-      ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom-10);ctx.stroke(); /* stops behind the /A tag at the foot */
-      ctx.setLineDash([]);
-      const badge='/A';
-      ctx.font='800 11px Segoe UI';
-      const bw=ctx.measureText(badge).width+12;
-      ctx.beginPath();ctx.roundRect(px-bw/2,chartArea.bottom-18,bw,16,5);
-      ctx.fillStyle=cssv('--card2')||'#1E222A';ctx.fill();
-      ctx.strokeStyle=cutDark?'rgba(255,255,255,.38)':'rgba(0,0,0,.32)';ctx.lineWidth=1;ctx.stroke();
-      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';ctx.textAlign='center';
-      ctx.fillText(badge,px,chartArea.bottom-6);
       ctx.restore();
     }}]
   });
@@ -810,6 +674,8 @@ const AA_VENDOR_COLORS={
 };
 const AA_BARS=[
  ['OA Prime 10DUO20QUIN10',98,'Oroboros DeepSeek'],
+ ['GPT-5.6 Sol 6U5GO5',98.2,'Oroboros OpenAI'],
+ ['GPT-Astra 7 7U5GO5',86,'Oroboros OpenAI'],
  ['Claude Opus 5.5 (max with fallback)',58,'Anthropic'],
  ['Claude Sonnet 5.5 (max with fallback)',56,'Anthropic'],
  ['Muse Wonder Full (max)',56,'Meta'],
@@ -913,17 +779,9 @@ function isDarkTheme(){
 }
 function displayColor(c){
   if(!isDarkTheme())return c;
-  if(c==='#1A1A1A')return '#565656';
-  if(c==='#2B2B2B')return '#6B6B6B';
+  if(c==='#1A1A1A')return '#4A4A4A';
+  if(c==='#2B2B2B')return '#616161';
   if(c==='#3A3A3A')return '#555555';
-  /* anything darker than charcoal is lifted, so no orb reads as a black hole */
-  try{
-    const h=String(c).replace('#','');
-    if(h.length!==6)return c;
-    const rgb=[0,2,4].map(i=>parseInt(h.slice(i,i+2),16)/255);
-    const lum=0.2126*rgb[0]+0.7152*rgb[1]+0.0722*rgb[2];
-    if(lum<0.3)return h.split('').map((_,k)=>{const v=parseInt(h.slice(k,k+2),16);const t=Math.round(v+(106-v)*.55);return ('0'+t.toString(16)).slice(-2);}).join('') && '#'+[0,2,4].map(k=>{const v=parseInt(h.slice(k,k+2),16);const w=Math.round(v+(106-v)*.55);return ('0'+w.toString(16)).slice(-2);}).join('');
-  }catch(err){}
   return c;
 }
 let indexBars;
@@ -938,13 +796,13 @@ function makeIndexBars(){
   };
   const R=RECORDS[activeModel];
   const rows=[
-    {name:'Quindecillion · CWE',val:96,vendor:'OROBOROS'},
-    {name:'Claude Fable 7 · CWE',val:90,vendor:'OROBOROS'},
+    {name:oaName(R.tag),val:R.rate,vendor:'OROBOROS'},
     ...AA_BARS.map(b=>({name:b[0],val:b[1],vendor:b[2]}))
   ].sort((a,b)=>b.val-a.val);
-  const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
-    return white;
+    if(b.name==='Muse Wonder Full (max)')return checker('#4FA6F5','#1E6FE0');
+    const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?cssv('--us'):(AA_VENDOR_COLORS[b.vendor]||'#888');
+    return displayColor(c);
   });
   indexBars=new Chart(document.getElementById('indexBars'),{
     type:'bar',
@@ -953,8 +811,8 @@ function makeIndexBars(){
       datasets:[{
         data:rows.map(b=>b.val),
         backgroundColor:cols,
-        borderColor:rows.map(()=>'transparent'),
-        borderWidth:0,
+        borderColor:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?'#000000':(isDarkTheme()?'rgba(242,242,240,.18)':'transparent')),
+        borderWidth:rows.map(b=>(b.vendor==='Oroboros OpenAI'||b.vendor==='Oroboros DeepSeek')?2:(isDarkTheme()?1:0)),
         borderRadius:0,
         borderSkipped:false,
         categoryPercentage:.98,
@@ -1016,15 +874,13 @@ function makeIndexBars(){
 function makeLine(){
   if(lineChart)lineChart.destroy();
   const ac=cssv('--us')||'#F2A07B';
-  const white=isDarkTheme()?'#F2F2F0':'#141413';
   const R=RECORDS[activeModel];
   const oursCases=R.suites.reduce((s,[,n])=>s+n,0);
   const rows=SCATTER.map(r=>({
     label:r[0],x:r[1],y:r[2],cases:r[3],vendor:r[4],
     color:SCATTER_VENDORS[r[4]]||'#444',ours:false
   }));
-    CWE_MARKS.forEach((m,i)=>rows.push({label:m.name+' · CWE',x:0.012+i*0.0075,y:m.score,cases:m.cases,
-    vendor:'OROBOROS',color:white,ours:true,cwe:m}));
+  rows.push({label:'OROBOROS',x:0.02,y:R.rate,cases:oursCases,vendor:'OROBOROS',color:ac,ours:true});
   FIELD.filter(p=>String(p[0]).indexOf('★')===0).forEach(p=>{
     rows.push({
       label:String(p[0]).replace('★ ',''),x:p[1],y:p[2],cases:p[3],vendor:p[5],
@@ -1033,7 +889,6 @@ function makeLine(){
     });
   });
   const glow={id:'glowModels',beforeDatasetsDraw(c){
-    return; /* halos off: the orbs carry their own tags */
     const {ctx,scales:{x,y}}=c;
     ctx.save();
     rows.forEach(r=>{
@@ -1084,9 +939,9 @@ function makeLine(){
        borderColor:ac,borderWidth:2,borderDash:[2,5],pointRadius:0,pointHitRadius:0,
        fill:false,tension:0,order:2},
       {label:'Models',data:rows,
-       backgroundColor:rows.map(r=>displayColor(r.color)+'cc'),
-       borderColor:rows.map(r=>displayColor(r.color)),
-       borderWidth:0,
+       backgroundColor:rows.map(r=>displayColor(r.color)),
+       borderColor:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?'#000000':displayColor(r.color)),
+       borderWidth:rows.map(r=>(r.vendor==='Oroboros OpenAI'||r.vendor==='Oroboros DeepSeek')?2:(r.ours?2:(r.fleet?1.5:1))),
        pointRadius:rows.map(r=>r.ours?9:(r.fleet?7:5.5)),
        pointHoverRadius:rows.map(r=>r.ours?12:(r.fleet?10:8)),
        order:1}
@@ -1123,29 +978,7 @@ function makeLine(){
            title:{display:true,text:'Artificial Analysis Intelligence Index',color:cssv('--ink2'),font:{size:11,weight:'600'}}}
       }
     },
-    plugins:[glow,quadrant,labels,{id:'oaLineLanding',afterDatasetsDraw(c){
-      const {ctx,chartArea,scales:{x,y}}=c;
-      const py=y.getPixelForValue(CUTOFF);
-      if(!isFinite(py)||py<chartArea.top||py>chartArea.bottom)return;
-      const gpt=rows.filter(r=>r.vendor==='OpenAI');
-      if(!gpt.length)return;
-      const gx=Math.min.apply(null,gpt.map(r=>x.getPixelForValue(r.x)));
-      const cutDark=!isLightTheme();
-      ctx.save();
-      ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cutDark?'rgba(255,255,255,.32)':'rgba(0,0,0,.32)';
-      ctx.lineWidth=1.6;
-      ctx.beginPath();ctx.moveTo(gx-70,py);ctx.lineTo(chartArea.right,py);ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.font='800 11px Segoe UI';
-      const badge='/A';
-      const bw=ctx.measureText(badge).width+12;
-      ctx.fillStyle=cutDark?'rgba(255,255,255,.16)':'rgba(0,0,0,.12)';
-      ctx.beginPath();ctx.roundRect(gx-70-bw-4,py-8,bw,16,5);ctx.fill();
-      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';ctx.textAlign='center';
-      ctx.fillText(badge,gx-70-bw/2-4,py+4);
-      ctx.restore();
-    }}]
+    plugins:[glow,quadrant,labels]
   });
 }
 
@@ -1325,7 +1158,7 @@ function buildDailyReport(){
   const p=PALETTE[htmlLang()]||PALETTE.dark;
   const aa=liveData||{};
   const meta=aaMeta||{};
-  const rows=[...cwePoints(),...FIELD].map(p=>{
+  const rows=[oursPoint(),...FIELD].map(p=>{
     const name=String(p[0]).replace('★ ','');
     const lv=aa[name]||{};
     return {
