@@ -35,6 +35,24 @@ html[data-theme="brand"]{
   --accent:#D97757; --accent-soft:rgba(217,119,87,.18); --accent-line:rgba(217,119,87,.42);
   --win:#00ffa3; --us:#F2A07B; --grid:rgba(250,249,245,.08);
 }
+/* highlight text: orange on the dark themes, graphite grey on white / neutral */
+:root,html[data-theme="dark"],html[data-theme="brand"]{--hl:var(--accent)}
+html[data-theme="white"],html[data-theme="neutral"]{--hl:#55524C}
+/* white + neutral: the top bar is solid black with grey text */
+html[data-theme="white"] .bar,html[data-theme="neutral"] .bar{background:#000;border-bottom-color:#000}
+html[data-theme="white"] .bar .brand,html[data-theme="neutral"] .bar .brand{color:#F2F2F0}
+html[data-theme="white"] .bar .brand small,html[data-theme="neutral"] .bar .brand small{color:rgba(242,242,240,.55)}
+html[data-theme="white"] .bar .tbtn,html[data-theme="neutral"] .bar .tbtn{color:rgba(242,242,240,.58)}
+html[data-theme="white"] .bar .tbtn:hover,html[data-theme="neutral"] .bar .tbtn:hover{color:#F2F2F0}
+html[data-theme="white"] .bar .tbtn.active,html[data-theme="neutral"] .bar .tbtn.active{color:#FFFFFF}
+html[data-theme="white"] .bar #buildStamp,html[data-theme="neutral"] .bar #buildStamp{color:rgba(242,242,240,.5)!important;border-color:rgba(242,242,240,.22)!important}
+html[data-theme="white"] .bar #liveBadge,html[data-theme="neutral"] .bar #liveBadge{color:#C7CBD1!important;border-color:rgba(242,242,240,.3)!important}
+html[data-theme="white"] .bar .themes>span,html[data-theme="neutral"] .bar .themes>span{background:rgba(242,242,240,.22)!important}
+/* numbers read as numbers, not headlines, on the light pages */
+html[data-theme="white"] .suite .rate,html[data-theme="neutral"] .suite .rate,
+html[data-theme="white"] .cell,html[data-theme="neutral"] .cell,
+html[data-theme="white"] .bot-head .big,html[data-theme="neutral"] .bot-head .big,
+html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{font-weight:500}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-ui,sans-serif;min-height:100vh;padding:30px 26px}
 .wrap{max-width:1240px;margin:0 auto}
@@ -56,11 +74,11 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 /* ============ TOP HALF — landscape orb field ============ */
 .top{padding:30px 30px 26px;border-bottom:1px solid var(--line)}
 .kick{font-size:10px;letter-spacing:.42em;color:var(--ink3);text-transform:uppercase}
-.kick b{color:var(--accent);font-weight:700}
+.kick b{color:var(--hl);font-weight:700}
 .top-head{display:flex;justify-content:space-between;align-items:baseline;margin:10px 0 18px;gap:20px;flex-wrap:wrap}
 .top-head h2{font-size:26px;font-weight:750;letter-spacing:.02em}
 .top-head .note{font-size:11px;color:var(--ink2);max-width:560px;line-height:1.7}
-.top-head .note b{color:var(--accent)}
+.top-head .note b{color:var(--hl)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10.5px;color:var(--ink2);margin-bottom:12px}
 .chip{display:inline-flex;align-items:center;gap:6px}
 .chip i{width:10px;height:10px;border-radius:99px}
@@ -85,8 +103,8 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 .cell .tip{position:absolute;top:135%;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--line);color:var(--ink);font-size:9.5px;padding:5px 9px;border-radius:7px;white-space:nowrap;opacity:0;pointer-events:none;transition:.12s;z-index:30}
 .cell:hover .tip{opacity:1}
 .foot{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:10px;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase;flex-wrap:wrap;gap:6px}
-.foot b{color:var(--accent)}
-.foot a{color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.1em}
+.foot b{color:var(--hl)}
+.foot a{color:var(--hl);text-decoration:none;font-weight:700;letter-spacing:.1em}
 .foot a:hover{text-decoration:underline}
 
 /* ============ OFFICIAL CHART PANELS — AA structure, theme-aware ============ */
@@ -189,8 +207,9 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="suite-grid" id="suiteGrid"></div>
     <div class="bot-head" style="margin-top:20px">
       <div>
-        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>INTELLIGENCE INDEX</b> <a href="https://artificialanalysis.ai/evaluations/reasoning" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LiveBench reasoning ↗</a> <a href="https://llm-stats.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LLM-Stats ↗</a> <a href="https://www.benchleader.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· BenchLeader ↗</a> <a href="cwe-sheet-quindecillion.html" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· our reasoning runs ↗</a></div>
-        <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
+        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>REASONING INDEX</b> <a href="https://artificialanalysis.ai/evaluations/reasoning" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· reasoning source ↗</a> <a href="https://llm-stats.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LLM-Stats ↗</a> <a href="https://www.benchleader.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· BenchLeader ↗</a> <a href="cwe-sheet-quindecillion.html" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· our reasoning runs ↗</a></div>
+        <h2 style="font-size:19px">Every Model, Ranked by Reasoning</h2>
+        <div style="font-size:11px;color:var(--ink2);margin-top:5px;max-width:720px;line-height:1.5">Ranked high to low. Field score = published GPQA-Diamond reasoning (×100). OROBOROS runs are <b style="color:var(--hl);font-weight:600">unlimited (strata)</b> and cap at 100 — that ceiling is why they also lead the CWE run. Models with no published reasoning score are not plotted.</div>
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
     </div>
@@ -201,7 +220,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <span>CROWN 8718 HZ</span>
       <span>TEMP 0.0 · SEED 1272</span>
       <span>2026-09-09</span>
-      <a href="artificial-analysis.html" style="color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.1em">FIELD DATA →</a>
+      <a href="artificial-analysis.html" style="color:var(--hl);text-decoration:none;font-weight:700;letter-spacing:.1em">FIELD DATA →</a>
     </div>
   </div>
 
@@ -239,10 +258,9 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <div class="aa-head">
         <div>
           <div class="aa-title">Coding Index — Daily History <span class="arw">↗</span></div>
-          <div class="aa-sub">Time series of coding benchmark scores.
-            <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a>
-            · <a href="https://llm-stats.com/" target="_blank" rel="noopener" style="color:var(--ink2)">LLM-Stats ↗</a>
-            · refreshed by <code>scripts/sync_coding.py</code> in the daily workflow.</div>
+          <div class="aa-sub">Daily coding benchmark scores for the field, straight from the
+            <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a> history feed.
+            The dashed lines are our own CWE runs — Quindecillion at 96 and Fable 7 at 90 — drawn for comparison, not as feed data.</div>
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <button class="snap-btn" data-snap="codingLine" data-name="coding-history">Snapshot</button>
@@ -310,6 +328,10 @@ async function loadLiveData(){
     liveData=d.models||{};
     liveStamp=d.fetched_at||'';
     applyLiveData();
+    /* the reasoning chart is built from the feed itself, so rebuild it once the
+       feed has landed even when index/cost happen to match the snapshot */
+    try{makeBar();}catch(e){}
+    try{makeCodingLine();}catch(e){}
     const badge=document.getElementById('liveBadge');
     if(badge){
       badge.textContent='LIVE · AA v'+d.intelligence_index_version;
@@ -609,6 +631,15 @@ function cweBars(){
   return CWE_MARKS.map(function(r){return ['★ '+r.name+' · CWE',
     0, r.score, r.cases, r.col, 'OROBOROS', null, '', r];});
 }
+/* theme helpers + the reasoning cap - declared before the first render call */
+function isLightTheme(){
+  const t=document.documentElement.dataset.theme||'dark';
+  return t==='white'||t==='neutral';
+}
+/* number label weight: light themes stay regular, dark keeps the semibold read */
+function valFont(size){return (isLightTheme()?'500 ':'600 ')+size+'px Segoe UI';}
+/* ours are unlimited (strata): reasoning is capped at 100 */
+const OUR_REASONING=100;
 function paintRecord(){
   const R=RECORDS[activeModel];
   document.getElementById('suiteGrid').innerHTML=R.suites.map(([name,n])=>`
@@ -664,10 +695,6 @@ function paintCells(){
   });
 }
 
-function isLightTheme(){
-  const t=document.documentElement.dataset.theme||'dark';
-  return t==='white'||t==='neutral';
-}
 /* ============ HORIZONTAL RANKING BAR — all models, their colors ============ */
 function oaName(name){
   const s=String(name).replace('★ ','');
@@ -722,12 +749,20 @@ function vendorOfName(n){
 function colorKeyFor(v){ try{ return VKEY[v]||'gray'; }catch(e){ return 'gray'; } }
 function makeBar(){
   if(bar)bar.destroy();
-  const ac=cssv('--us')||cssv('--accent');
-  const rows=[...cweBars(),
-    ...modelRows().filter(function(m){return ((m.reasoning!=null)||(m.index!=null)) && !/^GPT-5\.6 Sol \(high\)$/.test(m.name) && !/^GPT-5\.6 \(max\)$/.test(m.name);}).map(function(m){
-      var v=(m.reasoning!=null)?m.reasoning:m.index;
-      return [m.name, 0, v, 10, colorKeyFor(m.vendor), m.vendor];
-    })].sort((a,b)=>b[2]-a[2]);
+  /* chart 2 is the reasoning ranking: ours are unlimited (strata) at 100, the
+     field carries its published GPQA-Diamond reasoning score. No second
+     benchmark, no index fallback - a model without reasoning is not plotted. */
+  const rows=[
+    ...CWE_MARKS.map(function(m){
+      return ['★ '+m.name+' · CWE',0,OUR_REASONING,m.cases,m.col,'OROBOROS',null,'',m];
+    }),
+    ...Object.keys(liveData||{}).map(function(n){
+      var d=liveData[n]||{};
+      if(d.reasoning_index==null)return null;
+      var v=vendorOfName(n);
+      return [n,0,d.reasoning_index,10,colorKeyFor(v),v];
+    }).filter(Boolean)
+  ].sort(function(a,b){return (b[2]-a[2])||((a[8]?-1:0)-(b[8]?-1:0));});
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
@@ -735,8 +770,8 @@ function makeBar(){
       labels:rows.map(r=>oaName(r[0])),
       datasets:[{
         data:rows.map(r=>r[2]),
-        backgroundColor:rows.map(r=>r[8]?'#2B2B2B':displayColor(r[4]==='anth'?HEX.anth:HEX[r[4]])+'cc'),
-        borderColor:rows.map(r=>displayColor(HEX[r[4]])),
+        backgroundColor:rows.map(r=>r[8]?(cssv('--us')+'d9'):displayColor(r[4]==='anth'?HEX.anth:HEX[r[4]])+'cc'),
+        borderColor:rows.map(r=>r[8]?cssv('--us'):displayColor(HEX[r[4]])),
         borderWidth:0,
         borderRadius:6,
         borderSkipped:false,
@@ -763,22 +798,17 @@ function makeBar(){
           callbacks:{
             label:ctx=>{
               const src=rows[ctx.dataIndex];
-              if(src[8])return ['  '+src[8].note+' — '+src[8].score+'/100','  '+src[8].cases.toLocaleString()+' CWE cases · '+src[8].date,'  $0.00/task — local','  /A landing marked'];
-              if(src[6]){
-                const R=RECORDS[src[6]];
-                const c=R.suites.reduce((s,[,n])=>s+n,0);
-                return ['  '+R.rate+' — '+c+'/'+c+' · all suites','  '+R.name,'  Click to load benchmark'];
-              }
+              if(src[8])return ['  Reasoning: 100 — unlimited (strata)','  CWE '+src[8].score+'/100 · '+src[8].cases.toLocaleString()+' cases · '+src[8].date,'  The capped strata is why the CWE run lands this high','  $0.00/task — local'];
               if(String(src[5]).indexOf('Oroboros')===0)
-                return ['  Index: '+src[2],'  Benchmark size: '+src[3]+' cases','  $0.00/task — local',src[7]?'  Open benchmark on Hugging Face ↗':''].filter(Boolean);
-              return '  Index: '+ctx.raw+'  ·  10-case suite';
+                return ['  Reasoning: '+src[2],'  Benchmark size: '+src[3]+' cases','  $0.00/task — local',src[7]?'  Open benchmark on Hugging Face ↗':''].filter(Boolean);
+              return ['  Reasoning: '+ctx.raw+' · GPQA-Diamond','  Vendor: '+src[5],'  AA reasoning evaluation'];
             }
           }}
       },
       scales:{
-        x:{min:0,max:105,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2'),callback:v=>v+'%'},
-           title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
-        y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:10,weight:'600'},padding:2}}
+        x:{min:0,max:108,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2')},
+           title:{display:true,text:'REASONING INDEX',color:cssv('--ink2'),font:{size:10,weight:'600'}}},
+        y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:10,weight:isLightTheme()?'500':'600'},padding:2}}
       }
     },
     plugins:[{id:'glowBar',beforeDatasetsDraw(c){
@@ -806,39 +836,29 @@ function makeBar(){
       const {ctx}=c;
       const meta=c.getDatasetMeta(0);
       ctx.save();
-      ctx.font='700 11px Segoe UI';
+      ctx.font=valFont(11);
+      ctx.textAlign='left';
+      ctx.fillStyle=cssv('--ink2');
       rows.forEach((r,i)=>{
         const el=meta.data[i];
         if(!el)return;
-        ctx.fillStyle=cssv('--ink2');
-        if(r[8]){
-          ctx.textAlign='right';
-          ctx.fillText(String(r[2]),el.x-8,el.y+3.5);
-        }else{
-          ctx.textAlign='left';
-          ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
-        }
+        /* every number sits at the end of its bar */
+        ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
       });
       ctx.restore();
-    }},{id:'oaLanding',afterDatasetsDraw(c){
+    }},{id:'reasonCeiling',afterDatasetsDraw(c){
+      /* the field ceiling: highest published field reasoning score */
       const {ctx,chartArea,scales:{x}}=c;
-      const px=x.getPixelForValue(CUTOFF);
+      const field=rows.filter(r=>!r[8]);
+      if(!field.length)return;
+      const top=field.reduce((a,b)=>b[2]>a[2]?b:a,field[0]);
+      const px=x.getPixelForValue(top[2]);
       if(!isFinite(px)||px<chartArea.left||px>chartArea.right)return;
-      const cutDark=!isLightTheme();
       ctx.save();
-      ctx.setLineDash([4,4]);
-      ctx.strokeStyle=cutDark?'rgba(255,255,255,.32)':'rgba(0,0,0,.32)';
-      ctx.lineWidth=1.6;
-      ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom-10);ctx.stroke(); /* stops behind the /A tag at the foot */
-      ctx.setLineDash([]);
-      const badge='/A';
-      ctx.font='800 11px Segoe UI';
-      const bw=ctx.measureText(badge).width+12;
-      ctx.beginPath();ctx.roundRect(px-bw/2,chartArea.bottom-18,bw,16,5);
-      ctx.fillStyle=cssv('--card2')||'#1E222A';ctx.fill();
-      ctx.strokeStyle=cutDark?'rgba(255,255,255,.38)':'rgba(0,0,0,.32)';ctx.lineWidth=1;ctx.stroke();
-      ctx.fillStyle=cutDark?'#FFFFFF':'#000000';ctx.textAlign='center';
-      ctx.fillText(badge,px,chartArea.bottom-6);
+      ctx.setLineDash([3,5]);
+      ctx.strokeStyle=isLightTheme()?'rgba(0,0,0,.18)':'rgba(255,255,255,.18)';
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(px,chartArea.top);ctx.lineTo(px,chartArea.bottom);ctx.stroke();
       ctx.restore();
     }}]
   });
@@ -1072,45 +1092,108 @@ function makeIndexBars(){
       const {ctx}=c;
       const meta=indexBars.getDatasetMeta(0);
       ctx.save();
-      ctx.font='600 11px Segoe UI';
+      ctx.font=valFont(11);
       ctx.textAlign='center';
       meta.data.forEach((el,i)=>{
         ctx.fillStyle='#fff';
-        const y=(rows[i].vendor==='CWE')?(el.y-8):(el.base-14);
-        ctx.fillText(String(rows[i].val),el.x,y);
+        /* every score sits on its own bar, at the foot, like the AA reference chart */
+        ctx.fillText(String(rows[i].val),el.x,el.base-14);
       });
       ctx.restore();
     }}]
   });
 }
 
-/* ============ LINE VIEW — official intelligence × cost scatter + Pareto ============ */
+/* ============ CODING LINE — daily coding history from aistupidlevel.info ============ */
 let codingChart=null;
-async function makeCodingLine(){
+function makeCodingLine(){
   const el=document.getElementById('codingLine');
-  if(!el)return;
+  if(!el)return Promise.resolve();
   if(codingChart){codingChart.destroy();codingChart=null;}
-  let data=null;
-  try{ data=await (await fetch('coding_history.json',{cache:'no-store'})).json(); }catch(e){}
-  const models=(data&&data.models)?Object.keys(data.models):[];
-  if(!models.length){
-    el.parentElement.innerHTML='<div class="note" style="padding:26px;color:var(--ink2)">Coding history: no data yet. The daily workflow writes coding_history.json once an AISTUPIDLEVEL_KEY or TENSORFEED_KEY secret is set.</div>';
-    return;
-  }
-  const colours=['#D97757','#5B8AF5','#4FA6F5','#7BC96F','#C9A227','#B77BE8','#E05C7B','#8C9199'];
-  const dates=Array.from(new Set(models.flatMap(function(m){return (data.models[m]||[]).map(function(p){return p.date;});}))).sort();
-  const ds=models.slice(0,8).map(function(m,i){
-    return {label:m,
-      data:dates.map(function(d){var hit=(data.models[m]||[]).find(function(p){return p.date===d;});return hit?hit.score:null;}),
-      borderColor:colours[i%colours.length],backgroundColor:'transparent',borderWidth:2,
-      tension:.25,spanGaps:true,pointRadius:0};
-  });
-  codingChart=new Chart(el,{type:'line',data:{labels:dates,datasets:ds},options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:true,labels:{color:cssv('--ink2'),boxWidth:10,font:{size:10}}}},
-    scales:{x:{ticks:{color:cssv('--ink2'),font:{size:10},maxTicksLimit:8},grid:{color:cssv('--grid')}},
-            y:{min:0,max:100,ticks:{color:cssv('--ink2'),font:{size:10}},grid:{color:cssv('--grid')}}}
-  }});
+  const host=el.parentElement;
+  let empty=host.querySelector('.aa-empty');
+  return fetch('coding_history.json',{cache:'no-store'})
+    .then(function(r){return r.ok?r.json():null;})
+    .catch(function(){return null;})
+    .then(function(data){
+      const models=(data&&data.models)?Object.keys(data.models):[];
+      if(!models.length){
+        if(!empty){
+          empty=document.createElement('div');
+          empty.className='aa-empty';
+          empty.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--ink2);font-size:12px;line-height:1.7';
+          host.appendChild(empty);
+        }
+        empty.textContent='Coding history: waiting on the daily sync (scripts/sync_coding.py → coding_history.json).';
+        return;
+      }
+      if(empty)empty.remove();
+
+      const dates=Array.from(new Set(models.flatMap(function(m){
+        return (data.models[m]||[]).map(function(p){return p.date;});
+      }))).sort();
+
+      const series=models.map(function(m){
+        return {name:m,pts:data.models[m]||[],color:displayColor(HEX[colorKeyFor(vendorOfName(m))]||'#8C9199')};
+      });
+      const ds=series.map(function(s){
+        return {label:s.name,
+          data:dates.map(function(d){var hit=s.pts.find(function(p){return p.date===d;});return hit?hit.score:null;}),
+          borderColor:s.color,backgroundColor:'transparent',borderWidth:2.2,
+          tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
+          pointBackgroundColor:s.color,pointBorderWidth:0};
+      });
+
+      var all=series.reduce(function(a,s){return a.concat(s.pts.map(function(p){return p.score;}));},[]);
+      const lo=all.length?Math.min.apply(null,all):80;
+      const yMin=Math.max(0,Math.floor(lo)-3);
+
+      const cweRef={id:'cweRef',beforeDatasetsDraw(c){
+        const {ctx,chartArea,scales:{y}}=c;
+        [{v:CWE_MARKS[0].score,n:'Claude Quindecillion · CWE '+CWE_MARKS[0].score},
+         {v:CWE_MARKS[1].score,n:'Claude Fable 7 · CWE '+CWE_MARKS[1].score}].forEach(function(r){
+          const py=y.getPixelForValue(r.v);
+          if(!isFinite(py)||py<chartArea.top||py>chartArea.bottom)return;
+          ctx.save();
+          ctx.setLineDash([5,4]);
+          ctx.strokeStyle=cssv('--hl');
+          ctx.globalAlpha=.6;
+          ctx.lineWidth=1.4;
+          ctx.beginPath();ctx.moveTo(chartArea.left,py);ctx.lineTo(chartArea.right,py);ctx.stroke();
+          ctx.restore();
+          ctx.save();
+          ctx.font=valFont(10);
+          const tw=ctx.measureText(r.n).width;
+          ctx.fillStyle=cssv('--card2');
+          ctx.globalAlpha=.92;
+          ctx.beginPath();ctx.roundRect(chartArea.right-10-tw,py-14,tw+10,14,3);ctx.fill();
+          ctx.restore();
+          ctx.save();
+          ctx.font=valFont(10);
+          ctx.fillStyle=cssv('--hl');
+          ctx.textAlign='right';
+          ctx.fillText(r.n,chartArea.right-6,py-4);
+          ctx.restore();
+        });
+      }};
+
+      codingChart=new Chart(el,{type:'line',data:{labels:dates,datasets:ds},options:{
+        responsive:true,maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{
+          legend:{display:true,position:'bottom',labels:{color:cssv('--ink2'),boxWidth:10,boxHeight:2,font:{size:10,weight:isLightTheme()?'400':'500'},padding:12}},
+          tooltip:{backgroundColor:tipColors().bg,borderColor:tipColors().border,borderWidth:1,
+            titleColor:tipColors().title,bodyColor:tipColors().body,padding:10,
+            callbacks:{label:function(ctx){return '  '+ctx.dataset.label+': '+ctx.parsed.y;}}}
+        },
+        scales:{
+          x:{ticks:{color:cssv('--ink2'),font:{size:10},maxTicksLimit:8},grid:{color:cssv('--grid')},
+             title:{display:true,text:'DAY',color:cssv('--ink3'),font:{size:9,weight:'600'}}},
+          y:{min:yMin,max:100,ticks:{color:cssv('--ink2'),font:{size:10}},grid:{color:cssv('--grid')},
+             title:{display:true,text:'CODING SCORE',color:cssv('--ink3'),font:{size:9,weight:'600'}}}
+        }
+      },plugins:[cweRef]});
+    });
 }
 
 function makeLine(){

@@ -1,74 +1,108 @@
-"""Refresh coding score history for the Field Assessment coding line chart.
+"""Refresh the coding score history for the Field Assessment coding line chart.
 
-Source: aistupidlevel.info history API (free, keyed) - the board= coding series.
-Falls back to TensorFeed's benchmark series API when TENSORFEED_KEY is set.
+Source: aistupidlevel.info history API (keyed, 10 requests/day).
 
-    AISTUPIDLEVEL_KEY=... python scripts/sync_coding.py
+    X-API-Key: $ASL_DATA_KEY  ->  /api/v1/models/:id/history?period=7d
 
-Writes coding_history.json in the shape the page reads:
+The page reads coding_history.json in this shape:
 
-    {"generated": "...", "source": "...", "models": {"<slug>": [{"date": "YYYY-MM-DD", "score": 62.1}]}}
+    {"generated": "...", "source": "aistupidlevel.info", "period": "7d",
+     "models": {"<display name>": [{"date": "YYYY-MM-DD", "score": 94}, ...]}}
 
-Without a key it exits 0 and leaves the file untouched, so the daily job never
-breaks the site.
+Only the models already published on the dashboard are requested - the chart
+never introduces a model that is not on the list. The daily quota is 10, so the
+request set is deliberately small; raw responses are cached for 6 hours under
+.cache/asl/ so a re-run does not burn quota.
+
+Without ASL_DATA_KEY the file is left untouched and the command exits 0.
 """
 import datetime
 import json
 import os
 import pathlib
 import sys
-import urllib.parse
+import time
+import urllib.error
 import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "coding_history.json"
-SLUGS = ["claude-opus-5", "claude-sonnet-5-5", "gpt-6-astra", "gemini-4-argon",
-         "grok-4-7", "kimi-k3", "deepseek-v4-1", "glm-5-3", "qwen3-8", "minimax-m3"]
+CACHE = ROOT / ".cache" / "asl"
+BASE = "https://aistupidlevel.info/api/v1/models"
+PERIOD = "7d"
+PAUSE = 62          # seconds between calls - the feed rate-limits at ~60s
+CACHE_HOURS = 6
+
+# (aistupidlevel model id, display name used on the dashboard)
+MODELS = [
+    ("281", "Claude Opus 5"),
+    ("286", "Claude Fable 5.1"),
+    ("289", "GPT-6 Astra"),
+    ("297", "GPT-6.1 Sol"),
+    ("287", "Gemini 3.8 Flash"),
+]
 
 
-def get(url, headers):
-    req = urllib.request.Request(url, headers=headers)
+def fetch(url, key):
+    req = urllib.request.Request(url, headers={"X-API-Key": key, "accept": "application/json"})
     with urllib.request.urlopen(req, timeout=45) as r:
         return json.loads(r.read().decode("utf-8"))
 
 
-def aistupidlevel(slug, key, period="1m"):
-    url = ("https://aistupidlevel.info/api/v1/models/"
-           + urllib.parse.quote(slug) + "/history?period=" + period + "&sortBy=coding")
-    body = get(url, {"x-api-key": key, "accept": "application/json"})
-    points = body.get("history") or body.get("points") or body.get("data") or []
-    out = []
+def cached(mid):
+    p = CACHE / f"{mid}.json"
+    if not p.exists():
+        return None
+    age = time.time() - p.stat().st_mtime
+    if age > CACHE_HOURS * 3600:
+        return None
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def daily(points):
+    """Collapse the 4-hourly series to one score per calendar day (last wins)."""
+    by_day = {}
     for p in points:
-        d, sc = p.get("date") or p.get("day") or p.get("timestamp"), p.get("score") or p.get("value")
-        if d and sc is not None:
-            out.append({"date": str(d)[:10], "score": sc})
-    return sorted(out, key=lambda p: p["date"])
+        ts = str(p.get("timestamp") or "")
+        score = p.get("score")
+        if len(ts) < 10 or score is None:
+            continue
+        by_day[ts[:10]] = score
+    return [{"date": d, "score": by_day[d]} for d in sorted(by_day)]
 
 
 def main():
-    key = os.environ.get("AISTUPIDLEVEL_KEY", "").strip()
-    tf = os.environ.get("TENSORFEED_KEY", "").strip()
-    if not key and not tf:
-        print("no coding-history API key set - leaving coding_history.json untouched")
+    key = (os.environ.get("ASL_DATA_KEY") or os.environ.get("AISTUPIDLEVEL_KEY") or "").strip()
+    if not key:
+        print("ASL_DATA_KEY not set - leaving coding_history.json untouched")
         return 0
 
-    models, source = {}, None
-    for slug in SLUGS:
-        try:
-            if key:
-                pts = aistupidlevel(slug, key)
-                source = source or "aistupidlevel.info"
-            else:
-                url = ("https://api.tensorfeed.io/api/premium/history/benchmarks/series?swe_bench="
-                       + urllib.parse.quote(slug) + "&from=2026-01-01")
-                body = get(url, {"Authorization": "Bearer " + tf, "accept": "application/json"})
-                pts = [{"date": str(p.get("date"))[:10], "score": p.get("score")}
-                       for p in (body.get("points") or []) if p.get("date") and p.get("score") is not None]
-                source = source or "tensorfeed"
-            if pts:
-                models[slug] = pts
-        except Exception as exc:
-            print(f"  {slug}: {exc}")
+    CACHE.mkdir(parents=True, exist_ok=True)
+    models, calls, attempts = {}, 0, 0
+    for mid, name in MODELS:
+        body = cached(mid)
+        if body is None:
+            # the feed rate-limits at roughly one request per minute and counts
+            # every attempt, so pause before each call, including after a 429
+            if attempts:
+                time.sleep(PAUSE)
+            attempts += 1
+            try:
+                body = fetch(f"{BASE}/{mid}/history?period={PERIOD}", key)
+                calls += 1
+                (CACHE / f"{mid}.json").write_text(json.dumps(body), encoding="utf-8")
+            except urllib.error.HTTPError as exc:
+                print(f"  {name} ({mid}): HTTP {exc.code}")
+                continue
+            except Exception as exc:
+                print(f"  {name} ({mid}): {exc}")
+                continue
+        pts = daily(body.get("data") or [])
+        if pts:
+            models[name] = pts
 
     if not models:
         print("no coding history returned - keeping the old file")
@@ -76,10 +110,11 @@ def main():
 
     OUT.write_text(json.dumps({
         "generated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "source": source,
+        "source": "aistupidlevel.info",
+        "period": PERIOD,
         "models": models,
     }, indent=1), encoding="utf-8")
-    print(f"wrote coding history for {len(models)} models from {source}")
+    print(f"wrote {len(models)} coding series ({calls} live calls, {len(MODELS) - calls} cached)")
     return 0
 
 

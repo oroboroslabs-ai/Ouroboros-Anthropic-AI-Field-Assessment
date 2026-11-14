@@ -1,7 +1,7 @@
 {
  "source": "Artificial Analysis public leaderboard (free, no key)",
  "endpoint": "https://artificialanalysis.ai/leaderboards/models",
- "fetched_at": "2026-11-14T02:43:55.386374+00:00",
+ "fetched_at": "2026-11-14T03:01:28.877611+00:00",
  "intelligence_index_version": "public",
  "pages_cached": [
   "models"
@@ -13,7 +13,8 @@
    "index": 53.4,
    "coding_index": 81.6,
    "cost_per_task": 7.6297,
-   "tps": 67.27
+   "tps": 67.27,
+   "reasoning_index": 88.1
   },
   "Claude Fable 5 (fb)": {
    "aa_name": "Claude Fable 5.1 (Adaptive Reasoning, Medium Effort, Default Fallback)",
@@ -21,7 +22,8 @@
    "index": 48.9,
    "coding_index": 77.1,
    "cost_per_task": 9.078414777860381,
-   "tps": 100.24642405980241
+   "tps": 100.24642405980241,
+   "reasoning_index": 88.6
   },
   "Claude Opus 5": {
    "aa_name": "Claude Opus 5 (Adaptive Reasoning, Xhigh Effort)",
@@ -29,7 +31,8 @@
    "index": 49.7,
    "coding_index": 77,
    "cost_per_task": 3.4646622820973185,
-   "tps": 105.92759897213904
+   "tps": 105.92759897213904,
+   "reasoning_index": 93.7
   },
   "GPT-6 Astra (high)": {
    "aa_name": "GPT-6 Astra (xhigh)",
@@ -38,7 +41,7 @@
    "coding_index": 75.9,
    "cost_per_task": 2.732438933013427,
    "tps": 38.93070577582699,
-   "reasoning_index": 93.9
+   "reasoning_index": 96.3
   },
   "GPT-6 Astra (max)": {
    "aa_name": "GPT-6 Astra (max)",
@@ -47,7 +50,7 @@
    "coding_index": 76.9,
    "cost_per_task": 2.732438933013427,
    "tps": 38.93070577582699,
-   "reasoning_index": 93.9
+   "reasoning_index": 96.3
   },
   "GPT-6 Astra (low)": {
    "aa_name": "GPT-6 Astra (Non-reasoning)",
@@ -56,7 +59,7 @@
    "coding_index": 76.2,
    "cost_per_task": 2.732438933013427,
    "tps": 38.93070577582699,
-   "reasoning_index": 93.9
+   "reasoning_index": 96.3
   },
   "GPT-5.6 Sol (high)": {
    "aa_name": "GPT-5.6 Sol (low)",
@@ -64,7 +67,8 @@
    "index": 33.5,
    "coding_index": 69.7,
    "cost_per_task": 0.2606,
-   "tps": 67.07
+   "tps": 67.07,
+   "reasoning_index": 89.8
   },
   "GPT-5.6 Luna (max)": {
    "aa_name": "GPT-5.6 Luna (max)",
@@ -72,7 +76,8 @@
    "index": 37.3,
    "coding_index": 71.4,
    "cost_per_task": 0.1783,
-   "tps": 161.77
+   "tps": 161.77,
+   "reasoning_index": 83.5
   },
   "GPT-5.6 (max)": {
    "aa_name": "GPT-5.5 (xhigh)",
@@ -80,7 +85,8 @@
    "index": 38.4,
    "coding_index": 74.9,
    "cost_per_task": 2.634,
-   "tps": 111.24
+   "tps": 111.24,
+   "reasoning_index": 93.5
   },
   "Muse Spark 1.3 (max)": {
    "aa_name": "Muse Spark 1.3 (max)",
@@ -88,7 +94,8 @@
    "index": 48.1,
    "coding_index": 75.8,
    "cost_per_task": 1.6049,
-   "tps": 225.11
+   "tps": 225.11,
+   "reasoning_index": 93.5
   },
   "Muse Spark 1.2 (xhigh)": {
    "aa_name": "Muse Spark 1.2 (xhigh)",
@@ -96,7 +103,8 @@
    "index": 39.6,
    "coding_index": 72.2,
    "cost_per_task": 0.9747,
-   "tps": 187.52
+   "tps": 187.52,
+   "reasoning_index": 90.4
   },
   "Grok 4.6 (high)": {
    "aa_name": "Grok 4.6 (high)",
@@ -104,7 +112,8 @@
    "index": 44.3,
    "coding_index": 76.8,
    "cost_per_task": 1.8589,
-   "tps": 62.96
+   "tps": 62.96,
+   "reasoning_index": 93.5
   },
   "Gemini 3.8 Flash (high)": {
    "aa_name": "Gemini 3.5 Flash (high)",
@@ -113,7 +122,7 @@
    "coding_index": 70.1,
    "cost_per_task": 1.5625,
    "tps": 101.78205888443325,
-   "reasoning_index": 92.0
+   "reasoning_index": 92.2
   },
   "Gemini 3.8 Flash (low)": {
    "aa_name": "Gemini 3.5 Flash-Lite",
@@ -122,7 +131,7 @@
    "coding_index": 49.3,
    "cost_per_task": 0.1235,
    "tps": 101.78205888443325,
-   "reasoning_index": 92.0
+   "reasoning_index": 83.8
   },
   "Kimi K3 (max)": {
    "aa_name": "Kimi K3 (max)",
@@ -130,7 +139,8 @@
    "index": 43.6,
    "coding_index": 76.2,
    "cost_per_task": 3.6812002895742055,
-   "tps": 30.223549683975975
+   "tps": 30.223549683975975,
+   "reasoning_index": 84.2
   },
   "GLM-5.3": {
    "aa_name": "GLM 5.3 Flash",
@@ -139,7 +149,7 @@
    "coding_index": 71.5,
    "cost_per_task": 5.009264601719954,
    "tps": 74.76833337166948,
-   "reasoning_index": 91.7
+   "reasoning_index": 91.2
   },
   "GLM-5.3 Flash": {
    "aa_name": "GLM 5.3 Flash",
@@ -165,7 +175,8 @@
    "index": 36,
    "coding_index": 68.8,
    "cost_per_task": 0.8485312855493328,
-   "tps": 76.3454990594041
+   "tps": 76.3454990594041,
+   "reasoning_index": 92.8
   },
   "MiniMax-M3": {
    "aa_name": "MiniMax-M3",
@@ -198,7 +209,8 @@
    "index": 44.2,
    "coding_index": 75.9,
    "cost_per_task": 2.3237,
-   "tps": 59.97
+   "tps": 59.97,
+   "reasoning_index": 93.5
   },
   "MiMo-V2.6-Pro": {
    "aa_name": "MiMo-V2.6-Pro",
@@ -208,5 +220,11 @@
    "cost_per_task": 0.25718036275876155,
    "tps": 56.067536980527926
   }
+ },
+ "reasoning_source": {
+  "source": "Artificial Analysis model pages",
+  "evaluation": "GPQA-Diamond (x100)",
+  "endpoint": "https://artificialanalysis.ai/models/claude-opus-5",
+  "fetched_at": "2026-11-14T03:03:33.955697+00:00"
  }
 }

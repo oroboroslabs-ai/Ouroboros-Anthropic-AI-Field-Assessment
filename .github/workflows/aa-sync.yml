@@ -1,4 +1,4 @@
-name: Refresh AA field data
+name: Refresh field data
 
 on:
   schedule:
@@ -21,15 +21,17 @@ jobs:
       - name: Pull the Artificial Analysis feed (public page, no key)
         run: python scripts/sync_aa_public.py
 
-      - name: Pull the keyed feed when a key is present
+      - name: Reasoning column (GPQA-Diamond per model)
+        run: python scripts/sync_reasoning.py
+
+      - name: Merge the keyed feed into the curated list (no new models)
         env:
           AA_API_KEY: ${{ secrets.AA_API_KEY }}
         run: python scripts/sync_aa.py
 
       - name: Pull the coding history feed
         env:
-          AISTUPIDLEVEL_KEY: ${{ secrets.AISTUPIDLEVEL_KEY }}
-          TENSORFEED_KEY: ${{ secrets.TENSORFEED_KEY }}
+          ASL_DATA_KEY: ${{ secrets.AISTUPIDLEVEL_KEY }}
         run: python scripts/sync_coding.py
 
       - name: Commit the refreshed data
@@ -37,5 +39,5 @@ jobs:
           git config user.name "oroboros-aa-sync"
           git config user.email "sync@oroboros.ai"
           git add field_data.json aa_cache.json coding_history.json
-          git diff --staged --quiet || git commit -m "data: refresh AA field feed"
+          git diff --staged --quiet || git commit -m "data: refresh field feed"
           git push

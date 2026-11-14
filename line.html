@@ -38,9 +38,9 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 .bar .brand{font-size:14px;font-weight:700;letter-spacing:.06em}
 .bar .brand small{color:var(--ink3);font-weight:500;margin-left:8px}
 .themes{display:flex;gap:6px;flex-wrap:wrap}
-.tbtn{padding:5px 13px;border-radius:16px;border:1px solid var(--line);background:transparent;color:var(--ink2);font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.05em;transition:.15s;text-decoration:none;display:inline-block}
-.tbtn:hover{color:var(--ink);border-color:var(--accent-line)}
-.tbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tbtn{padding:4px 2px;border:0;background:transparent;color:var(--ink2);font-size:11px;letter-spacing:.05em;font-weight:600;cursor:pointer;transition:.15s;text-decoration:none;display:inline-block}
+.tbtn:hover{color:var(--ink)}
+.tbtn.active{background:transparent;color:var(--ink);border:0;font-weight:700}
 .top{padding:30px 30px 26px}
 .kick{font-size:10px;letter-spacing:.42em;color:var(--ink3);text-transform:uppercase}
 .kick b{color:var(--accent);font-weight:700}
@@ -57,6 +57,14 @@ body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',Inter,system-u
 .foot b{color:var(--accent)}
 .foot a{color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.1em}
 .foot a:hover{text-decoration:underline}
+
+/* white + neutral: black top bar, grey text - same as the dashboard */
+html[data-theme="white"] .bar,html[data-theme="neutral"] .bar{background:#000;border-bottom-color:#000}
+html[data-theme="white"] .bar .brand,html[data-theme="neutral"] .bar .brand{color:#F2F2F0}
+html[data-theme="white"] .bar .brand small,html[data-theme="neutral"] .bar .brand small{color:rgba(242,242,240,.55)}
+html[data-theme="white"] .bar .tbtn,html[data-theme="neutral"] .bar .tbtn{color:rgba(242,242,240,.6)}
+html[data-theme="white"] .bar .tbtn:hover,html[data-theme="neutral"] .bar .tbtn:hover{color:#FFFFFF}
+html[data-theme="white"] .bar .tbtn.active,html[data-theme="neutral"] .bar .tbtn.active{color:#FFFFFF}
 </style>
 </head>
 <body>

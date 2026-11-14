@@ -59,6 +59,14 @@ td b{color:var(--ink)}
 .foot b{color:var(--accent)}
 .foot a{color:var(--accent);text-decoration:none;font-weight:700;letter-spacing:.1em}
 .foot a:hover{text-decoration:underline}
+
+/* white + neutral: black top bar, grey text - same as the dashboard */
+html[data-theme="white"] .bar,html[data-theme="neutral"] .bar{background:#000;border-bottom-color:#000}
+html[data-theme="white"] .bar .brand,html[data-theme="neutral"] .bar .brand{color:#F2F2F0}
+html[data-theme="white"] .bar .brand small,html[data-theme="neutral"] .bar .brand small{color:rgba(242,242,240,.55)}
+html[data-theme="white"] .bar .tbtn,html[data-theme="neutral"] .bar .tbtn{color:rgba(242,242,240,.6)}
+html[data-theme="white"] .bar .tbtn:hover,html[data-theme="neutral"] .bar .tbtn:hover{color:#FFFFFF}
+html[data-theme="white"] .bar .tbtn.active,html[data-theme="neutral"] .bar .tbtn.active{color:#FFFFFF}
 </style>
 </head>
 <body>
