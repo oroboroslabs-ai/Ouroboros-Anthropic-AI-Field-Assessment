@@ -788,9 +788,16 @@ function makeBar(){
       rows.forEach((r,i)=>{
         const el=meta.data[i];
         if(!el)return;
-        ctx.fillStyle=cssv('--ink2');
-        ctx.textAlign='left';
-        ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
+        if(r[8]){
+          /* white bars: off-black number inside the bar, never lost on the dark page */
+          ctx.fillStyle='#141413';
+          ctx.textAlign='right';
+          ctx.fillText(String(r[2]),el.x-8,el.y+3.5);
+        }else{
+          ctx.fillStyle=cssv('--ink2');
+          ctx.textAlign='left';
+          ctx.fillText(String(r[2]),el.x+6,el.y+3.5);
+        }
       });
       ctx.restore();
     }},{id:'oaLanding',afterDatasetsDraw(c){
