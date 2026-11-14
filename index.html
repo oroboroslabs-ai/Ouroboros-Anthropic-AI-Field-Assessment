@@ -1033,7 +1033,7 @@ function makeIndexBars(){
   ].sort(function(a,b){return b.val-a.val;});
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
-    if(b.vendor==='CWE')return '#2B2B2B';
+    if(b.vendor==='CWE')return HEX.anth;   /* same as the OROBOROS bars in the reasoning chart */
     if(b.vendor==='Anthropic')return displayColor(HEX.anth);
     const c=AA_VENDOR_COLORS[b.vendor]==='ACCENT'?HEX.anth:(AA_VENDOR_COLORS[b.vendor]||'#888');
     return displayColor(c);
