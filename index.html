@@ -161,7 +161,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="aa-panel">
       <div class="aa-head">
         <div>
-          <div class="aa-title">Artificial Analysis Intelligence Index <span class="arw">↗</span></div>
+          <div class="aa-title"><a href="https://artificialanalysis.ai/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Artificial Analysis Intelligence Index <span class="arw">↗</span></a> <a href="https://artificialanalysis.ai/evaluations" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;font-size:12px;letter-spacing:.08em">· benchmarks ↗</a></div>
           <div class="aa-sub">Artificial Analysis Intelligence Index v4.3.2 incorporates 10 evaluations: AA-Briefcase v1.1, GDPval-AA v2.1, AutomationBench-AA, Terminal-Bench 4.0, SciCode, Humanity's Last Exam, GDP.pdf, CritPt, AA-Omniscience, AA-LCR v1.1</div>
         </div>
         <div class="aa-mark">◈ Artificial Analysis</div>
@@ -189,7 +189,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="suite-grid" id="suiteGrid"></div>
     <div class="bot-head" style="margin-top:20px">
       <div>
-        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>AGENTIC INDEX</b> <a href="https://artificialanalysis.ai/evaluations/reasoning" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· reasoning scores ↗</a> <a href="cwe-sheet-quindecillion.html" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· our reasoning runs ↗</a></div>
+        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>AGENTIC INDEX</b> <a href="https://artificialanalysis.ai/evaluations/reasoning" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LiveBench reasoning ↗</a> <a href="https://llm-stats.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LLM-Stats ↗</a> <a href="https://www.benchleader.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· BenchLeader ↗</a> <a href="cwe-sheet-quindecillion.html" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· our reasoning runs ↗</a></div>
         <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
@@ -230,6 +230,26 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <span>100% benchmarked models · 100.0</span>
       <span>CROWN 8718 HZ</span>
       <span>2026-09-09</span>
+    </div>
+  </div>
+
+  <!-- ============ CODING LINE — daily coding-score history from the live sync ============ -->
+  <div class="bottom" id="viewCoding">
+    <div class="aa-panel">
+      <div class="aa-head">
+        <div>
+          <div class="aa-title">Coding Index — Daily History <span class="arw">↗</span></div>
+          <div class="aa-sub">Time series of coding benchmark scores.
+            <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a>
+            · <a href="https://llm-stats.com/" target="_blank" rel="noopener" style="color:var(--ink2)">LLM-Stats ↗</a>
+            · refreshed by <code>scripts/sync_coding.py</code> in the daily workflow.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <button class="snap-btn" data-snap="codingLine" data-name="coding-history">Snapshot</button>
+        </div>
+      </div>
+      <div class="aa-canvas"><canvas id="codingLine"></canvas></div>
+      <div class="aa-cap">Source: coding history feed · daily sync</div>
     </div>
   </div>
 </div>
@@ -324,6 +344,7 @@ function applyLiveData(){
     makeBar();
     if(aaReady)makeIndexBars();
     if(lineChart)makeLine();
+    try{makeCodingLine();}catch(e){}
   }
 }
 /* refresh on load + every 30 min so charts adjust on the fly */
@@ -629,6 +650,7 @@ document.querySelectorAll('.tbtn[data-t]').forEach(b=>{
     makeBar();
     makeIndexBars();
     if(lineChart)makeLine();
+    try{makeCodingLine();}catch(e){}
     paintVendorRows();
     paintCells();
   };
@@ -1059,6 +1081,34 @@ function makeIndexBars(){
 }
 
 /* ============ LINE VIEW — official intelligence × cost scatter + Pareto ============ */
+let codingChart=null;
+async function makeCodingLine(){
+  const el=document.getElementById('codingLine');
+  if(!el)return;
+  if(codingChart){codingChart.destroy();codingChart=null;}
+  let data=null;
+  try{ data=await (await fetch('coding_history.json',{cache:'no-store'})).json(); }catch(e){}
+  const models=(data&&data.models)?Object.keys(data.models):[];
+  if(!models.length){
+    el.parentElement.innerHTML='<div class="note" style="padding:26px;color:var(--ink2)">Coding history: no data yet. The daily workflow writes coding_history.json once an AISTUPIDLEVEL_KEY or TENSORFEED_KEY secret is set.</div>';
+    return;
+  }
+  const colours=['#D97757','#5B8AF5','#4FA6F5','#7BC96F','#C9A227','#B77BE8','#E05C7B','#8C9199'];
+  const dates=Array.from(new Set(models.flatMap(function(m){return (data.models[m]||[]).map(function(p){return p.date;});}))).sort();
+  const ds=models.slice(0,8).map(function(m,i){
+    return {label:m,
+      data:dates.map(function(d){var hit=(data.models[m]||[]).find(function(p){return p.date===d;});return hit?hit.score:null;}),
+      borderColor:colours[i%colours.length],backgroundColor:'transparent',borderWidth:2,
+      tension:.25,spanGaps:true,pointRadius:0};
+  });
+  codingChart=new Chart(el,{type:'line',data:{labels:dates,datasets:ds},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,labels:{color:cssv('--ink2'),boxWidth:10,font:{size:10}}}},
+    scales:{x:{ticks:{color:cssv('--ink2'),font:{size:10},maxTicksLimit:8},grid:{color:cssv('--grid')}},
+            y:{min:0,max:100,ticks:{color:cssv('--ink2'),font:{size:10}},grid:{color:cssv('--grid')}}}
+  }});
+}
+
 function makeLine(){
   if(lineChart)lineChart.destroy();
   const ac=cssv('--us')||'#F2A07B';
@@ -1200,6 +1250,7 @@ makeChart();
 makeBar();
 makeIndexBars();
 makeLine();
+try{makeCodingLine();}catch(e){}
 aaReady=true;
 
 /* ============ LINE CHART BUTTON — scroll down to it ============ */
@@ -1214,6 +1265,7 @@ function refreshOrbs(){
   makeBar();
   if(aaReady)makeIndexBars();
   if(lineChart)makeLine();
+    try{makeCodingLine();}catch(e){}
 }
 
 /* ============ ZOOM — isolated at the very end, nothing at load touches it ============ */
