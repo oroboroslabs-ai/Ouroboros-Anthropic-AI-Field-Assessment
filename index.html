@@ -519,6 +519,14 @@ function makeChart(){
 /* ============ BOTTOM HALF — 57-case record ============ */
 let bar;
 const RECORDS={
+  'Quindecillion CWE':{
+    name:'Quindecillion — CWE Benchmark',
+    tag:'Quindecillion CWE',
+    short:'OROBOROS / ANTHROPIC',
+    rate:96,
+    suites:[['Coding',12],['Math',15],['Knowledge',15],['Reasoning',10],['Sovereignty',5]],
+    meta:'2,100 + 2,500 CWE · 96% · 2026-11-09 · case-for-case exact output'
+  },
   'Sonnet 7U':{
     name:'Sonnet 7 Undecillion 7U5GO5',
     tag:'Claude Sonnet 7 Undecillion 7U5GO5',
@@ -553,7 +561,7 @@ const RECORDS={
     meta:'100% benchmarked models · 100.0 · CROWN 8718 HZ · 2026-09-09'
   }
 };
-let activeModel='Opus 9U';
+let activeModel='Quindecillion CWE';
 function oursPoint(){
   const R=RECORDS[activeModel];
   const cases=R.suites.reduce((s,[,n])=>s+n,0);
