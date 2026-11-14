@@ -156,13 +156,6 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     </div>
     <div class="legend" id="legend"></div>
     <div class="orb-box"><canvas id="orbs"></canvas></div>
-    <div class="note" style="margin-top:14px;line-height:1.9">
-      <b>CWE BENCHMARK RUNS</b> — 2,100-case and 2,500-case suites, exact scores and dates:
-      <span style="display:block;margin-top:6px">
-        <b>Quindecillion</b> — 96% · 2,100 CWE · 2026-11-09 &nbsp;·&nbsp; 96% · 2,500 CWE · 2026-11-09<br>
-        <b>Claude Fable 7</b> — 450/500 · 2,100 CWE · 2026-11-09 &nbsp;·&nbsp; 450/500 · 2,500 CWE · 2026-11-09
-      </span>
-    </div>
   </div>
 
   <!-- ============ OFFICIAL VERTICAL INDEX BARS — first chart under the orb ============ -->
@@ -375,9 +368,9 @@ function makeChart(){
     return {
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
-      backgroundColor:arr.map(p=>p[7]?displayColor(HEX[p[4]])+'B4':col+'99'),
-      borderColor:arr.map(p=>p[7]?displayColor(HEX[p[4]])+'66':col),
-      borderWidth:arr.map(()=>1.2),
+      backgroundColor:arr.map(p=>p[7]?((p[4]==='deep'?(isDarkTheme()?'#3F6FE8':'#2B4FD8'):(isDarkTheme()?'#D97757':'#C0714F'))+'99'):col+'99'),
+      borderColor:arr.map(p=>p[7]?(p[4]==='deep'?'#3F6FE8':'#D97757'):col),
+      borderWidth:arr.map(p=>p[7]?2.2:1.2),
       hoverBorderWidth:3
     };
   });
@@ -472,9 +465,9 @@ function makeChart(){
             const tag=function(txt,y){
               ctx.font='600 10.5px Segoe UI';
               const tw=ctx.measureText(txt).width;
-              ctx.fillStyle=cssv('--card2');
+              ctx.fillStyle='rgba(48,52,60,.94)';
               ctx.beginPath();ctx.roundRect(lx-4,y-11,tw+8,15,4);ctx.fill();
-              ctx.fillStyle=cssv('--ink2');
+              ctx.fillStyle='#FFFFFF';
               ctx.fillText(txt,lx,y);
             };
             tag(cw.name+' · '+cw.score,ly);
@@ -490,14 +483,14 @@ function makeChart(){
             ctx.fillText(R.rate+' · '+cases+'/'+cases+' · $0.00',px,py-r-14);
           }
         }else{
-          ctx.font='600 10.5px Segoe UI';
+          ctx.font='700 10.5px Segoe UI';
           const tw=ctx.measureText(lbl).width;
           let lx=px+r+6, ly=py+4;
           if(p[5]==='Oroboros DeepSeek'){ly=py+r+16;}
           else if(p[5]==='Oroboros OpenAI'){ly=p[0].indexOf('GPT-5.6')>=0?py-r-10:py+r+16;}
-          ctx.fillStyle=cssv('--card2');
+          ctx.fillStyle='rgba(48,52,60,.94)';
           ctx.beginPath();ctx.roundRect(lx-4,ly-11,tw+8,15,4);ctx.fill();
-          ctx.fillStyle=cssv('--ink2');
+          ctx.fillStyle='#FFFFFF';
           ctx.fillText(lbl,lx,ly);
         }
         ctx.restore();
@@ -576,10 +569,10 @@ const CWE_DATE_2500='2026-11-09';
 const CWE_TOP=96;
 const CUTOFF=82; /* where the /A cutoff line is drawn: just above the 80% gridline */
 const CWE_RUNS=[
-  {name:'Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%', col:'openai'},
-  {name:'Claude Fable 7', score:90, cases:2100, date:CWE_DATE_2100, note:'450/500', col:'zblack'},
-  {name:'Quindecillion', score:96, cases:2500, date:CWE_DATE_2500, note:'96%', col:'openai'},
-  {name:'Claude Fable 7', score:90, cases:2500, date:CWE_DATE_2500, note:'450/500', col:'zblack'}
+  {name:'Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%', col:'deep'},
+  {name:'Claude Fable 7', score:90, cases:2100, date:CWE_DATE_2100, note:'450/500', col:'anth'},
+  {name:'Quindecillion', score:96, cases:2500, date:CWE_DATE_2500, note:'96%', col:'deep'},
+  {name:'Claude Fable 7', score:90, cases:2500, date:CWE_DATE_2500, note:'450/500', col:'anth'}
 ];
 const CWE_MARKS=[
   {name:'Quindecillion', score:96, cases:2500, note:'96%', sizes:'2,100 + 2,500 CWE',
