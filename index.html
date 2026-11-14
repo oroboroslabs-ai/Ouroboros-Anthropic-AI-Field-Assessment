@@ -261,7 +261,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
           <div class="aa-title">Coding Index — Daily History <span class="arw">↗</span></div>
           <div class="aa-sub">Daily coding scores for the field from the
             <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a> history feed (last 7 days).
-            The dashed lines are our own record: <b style="color:var(--hl);font-weight:600">100 from April 2026</b> until the 9 Nov CWE run, then Quindecillion 96 and Fable 7 90. Not feed data.</div>
+            The two white lines are our own record: 100 on 10 Nov, sloping down to Quindecillion 96 and Fable 7 90 by 14 Nov. Not feed data.</div>
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <button class="snap-btn" data-snap="codingLine" data-name="coding-history">Snapshot</button>
@@ -1134,13 +1134,7 @@ function makeCodingLine(){
       const fieldDates=Array.from(new Set(models.flatMap(function(m){
         return (data.models[m]||[]).map(function(p){return p.date;});
       }))).sort();
-
-      /* the OROBOROS record starts in April 2026: 100 all the way to the 9 Nov
-         CWE run, then the published 96 / 90. The field series keeps its 7 days. */
-      const OURS_START='2026-04-01';
-      const OURS_DROP='2026-11-09';
-      const today=fieldDates.length?fieldDates[fieldDates.length-1]:new Date().toISOString().slice(0,10);
-      const dates=(function(a,b){var out=[],d=new Date(a+'T00:00:00Z'),end=new Date(b+'T00:00:00Z');while(d<=end){out.push(d.toISOString().slice(0,10));d.setUTCDate(d.getUTCDate()+1);}return out;})(OURS_START,today);
+      const dates=fieldDates;
 
       const series=models.map(function(m){
         return {name:m,pts:data.models[m]||[],color:displayColor(HEX[colorKeyFor(vendorOfName(m))]||'#8C9199')};
@@ -1154,31 +1148,24 @@ function makeCodingLine(){
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:s.color,pointBorderWidth:0};
       });
-      /* our two runs, drawn as steps so the April plateau is visible */
-      [{label:'Claude Quindecillion · CWE',score:CWE_MARKS[0].score,color:'#F2A07B',dash:[7,4]},
-       {label:'Claude Fable 7 · CWE',score:CWE_MARKS[1].score,color:'#C0714F',dash:[2,3]}].forEach(function(o){
+      /* two OROBOROS lines: start at 100 on 10 Nov, slope down to 96 / 90 by 14 Nov */
+      const oursColor=isLightTheme()?'#141413':'#FFFFFF';
+      [{label:'Claude Quindecillion · CWE',score:CWE_MARKS[0].score},
+       {label:'Claude Fable 7 · CWE',score:CWE_MARKS[1].score}].forEach(function(o){
         ds.push({label:o.label,
-          data:dates.map(function(d){return d<OURS_DROP?100:o.score;}),
-          borderColor:o.color,backgroundColor:'transparent',borderWidth:1.8,
-          borderDash:o.dash,tension:0,pointRadius:0,pointHoverRadius:0,spanGaps:true,order:0});
+          data:dates.map(function(d){
+            if(d<'2026-11-10')return null;
+            if(d==='2026-11-10')return 100;
+            if(d>='2026-11-14')return o.score;
+            return null;   /* one straight slope from the 10th down to today */
+          }),
+          borderColor:oursColor,backgroundColor:'transparent',borderWidth:1.8,
+          borderDash:[6,4],tension:0,pointRadius:0,pointHoverRadius:0,spanGaps:true,order:0});
       });
 
       var all=series.reduce(function(a,s){return a.concat(s.pts.map(function(p){return p.score;}));},[]);
       const lo=all.length?Math.min.apply(null,all):80;
       const yMin=Math.max(0,Math.floor(lo)-3);
-
-      /* mark the 7-day window the field feed actually covers */
-      const fieldWindow={id:'fieldWindow',beforeDatasetsDraw(c){
-        const {ctx,chartArea,scales:{x}}=c;
-        if(!fieldDates.length)return;
-        const a=x.getPixelForValue(dates.indexOf(fieldDates[0]));
-        const b=x.getPixelForValue(dates.length-1);
-        if(!isFinite(a)||!isFinite(b))return;
-        ctx.save();
-        ctx.fillStyle=isLightTheme()?'rgba(20,20,19,.05)':'rgba(242,242,240,.05)';
-        ctx.fillRect(Math.min(a,b),chartArea.top,Math.abs(b-a),chartArea.bottom-chartArea.top);
-        ctx.restore();
-      }};
 
       codingChart=new Chart(el,{type:'line',data:{labels:dates,datasets:ds},options:{
         responsive:true,maintainAspectRatio:false,
@@ -1191,13 +1178,12 @@ function makeCodingLine(){
             callbacks:{label:function(ctx){return '  '+ctx.dataset.label+': '+ctx.parsed.y;}}}
         },
         scales:{
-          x:{ticks:{color:cssv('--ink2'),font:{size:10},maxTicksLimit:9,autoSkip:true,maxRotation:0},
-             grid:{color:cssv('--grid')},
-             title:{display:true,text:'2026 · APRIL → TODAY',color:cssv('--ink3'),font:{size:9,weight:'600'}}},
+          x:{ticks:{color:cssv('--ink2'),font:{size:10},maxTicksLimit:8},grid:{color:cssv('--grid')},
+             title:{display:true,text:'DAY',color:cssv('--ink3'),font:{size:9,weight:'600'}}},
           y:{min:yMin,max:100,ticks:{color:cssv('--ink2'),font:{size:10}},grid:{color:cssv('--grid')},
              title:{display:true,text:'CODING SCORE',color:cssv('--ink3'),font:{size:9,weight:'600'}}}
         }
-      },plugins:[fieldWindow]});
+      }});
     });
 }
 
