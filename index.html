@@ -261,7 +261,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
           <div class="aa-title">Coding Index — Daily History <span class="arw">↗</span></div>
           <div class="aa-sub">Daily coding scores for the field from the
             <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a> history feed (last 7 days).
-            Both dotted white curves hold straight at 100 — Quindecillion through 10 Nov, Fable 7 through 11 Nov — then curve down onto the orange reference lines at 96 and 90. Not feed data.</div>
+            The dashed orange lines mark our own records — Quindecillion 96 and Fable 7 90 — for comparison, not feed data.</div>
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <button class="snap-btn" data-snap="codingLine" data-name="coding-history">Snapshot</button>
@@ -1151,25 +1151,8 @@ function makeCodingLine(){
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:s.color,pointBorderWidth:0};
       });
-      /* our two runs stay above the field through the whole wave, both touch 98
-         on 9 Nov, hold high, then bend down onto 96 / 90 at the very end */
-      const oursColor=isLightTheme()?'#141413':'#FFFFFF';
-      const DESC=[
-        {label:'_Quindecillion 100→96',vals:{
-          '2026-11-07':100,'2026-11-08':100,'2026-11-09':100,'2026-11-10':100,
-          '2026-11-11':99.2,'2026-11-12':98.0,'2026-11-13':97.2,'2026-11-14':CWE_MARKS[0].score}},
-        {label:'_Fable 7 100→90',vals:{
-          '2026-11-07':100,'2026-11-08':100,'2026-11-09':100,'2026-11-10':100,
-          '2026-11-11':100,'2026-11-12':97.5,'2026-11-13':93.5,'2026-11-14':CWE_MARKS[1].score}}
-      ];
-      DESC.forEach(function(o){
-        ds.push({label:o.label,
-          data:dates.map(function(d){return (d in o.vals)?o.vals[d]:null;}),
-          borderColor:oursColor,backgroundColor:'transparent',borderWidth:2.2,borderDash:[2,3],
-          cubicInterpolationMode:'monotone',
-          tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
-          pointBackgroundColor:oursColor,pointBorderWidth:0,order:0});
-      });
+      /* (the white OROBOROS runs were removed - the dashed 96 / 90 reference
+         lines below still mark where they landed) */
 
       var all=series.reduce(function(a,s){return a.concat(s.pts.map(function(p){return p.score;}));},[]);
       const lo=all.length?Math.min.apply(null,all):80;

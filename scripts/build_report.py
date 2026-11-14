@@ -147,11 +147,6 @@ def coding_chart():
         by = {p["date"]: p["score"] for p in pts}
         path = catmull([(px(i), py(by[d])) for i, d in enumerate(dates) if d in by])
         out.append(f'<path d="{path}" fill="none" stroke="{COLORS.get(vendor(name), "#888")}" stroke-width="2"/>')
-    for o in OURS:
-        path = catmull([(px(i), py(o["vals"][d])) for i, d in enumerate(dates) if d in o["vals"]])
-        out.append(f'<path d="{path}" fill="none" stroke="#FFFFFF" stroke-width="2.2"/>')
-        last = [(px(i), py(o["vals"][d])) for i, d in enumerate(dates) if d in o["vals"]][-1]
-        out.append(f'<circle cx="{last[0]:.1f}" cy="{last[1]:.1f}" r="4" fill="#FFFFFF"/>')
     out.append("</svg>")
     return "".join(out)
 
