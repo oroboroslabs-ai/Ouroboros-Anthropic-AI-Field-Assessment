@@ -518,7 +518,7 @@ function makeChart(){
 let bar;
 const RECORDS={
   'Quindecillion CWE':{
-    name:'Quindecillion — CWE Benchmark',
+    name:'Claude Quindecillion — CWE Benchmark',
     tag:'Quindecillion CWE',
     short:'OROBOROS / ANTHROPIC',
     rate:96,
@@ -575,13 +575,13 @@ const CWE_DATE_2500='2026-11-09';
 const CWE_TOP=96;
 const CUTOFF=82; /* where the /A cutoff line is drawn: just above the 80% gridline */
 const CWE_RUNS=[
-  {name:'Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%', col:'deep'},
+  {name:'Claude Quindecillion', score:96, cases:2100, date:CWE_DATE_2100, note:'96%', col:'deep'},
   {name:'Claude Fable 7', score:90, cases:2100, date:CWE_DATE_2100, note:'450/500', col:'anth'},
-  {name:'Quindecillion', score:96, cases:2500, date:CWE_DATE_2500, note:'96%', col:'deep'},
+  {name:'Claude Quindecillion', score:96, cases:2500, date:CWE_DATE_2500, note:'96%', col:'deep'},
   {name:'Claude Fable 7', score:90, cases:2500, date:CWE_DATE_2500, note:'450/500', col:'anth'}
 ];
 const CWE_MARKS=[
-  {name:'Quindecillion', score:96, cases:2500, note:'96%', sizes:'2,100 + 2,500 CWE',
+  {name:'Claude Quindecillion', score:96, cases:2500, note:'96%', sizes:'2,100 + 2,500 CWE',
    dates:CWE_DATE_2100+' · '+CWE_DATE_2500},
   {name:'Claude Fable 7', score:90, cases:2500, note:'450/500', sizes:'2,100 + 2,500 CWE',
    dates:CWE_DATE_2100+' · '+CWE_DATE_2500}
@@ -934,7 +934,7 @@ function makeIndexBars(){
   };
   const R=RECORDS[activeModel];
   const rows=[
-    {name:'Quindecillion · CWE',val:96,vendor:'CWE'},
+    {name:'Claude Quindecillion · CWE',val:96,vendor:'CWE'},
     {name:'Claude Fable 7 · CWE',val:90,vendor:'CWE'},
     ...AA_BARS.filter(b=>!/OA Prime/i.test(String(b[0]))).map(b=>({name:b[0],val:b[1],vendor:b[2]}))
   ].sort((a,b)=>b.val-a.val);
@@ -1062,7 +1062,7 @@ function makeLine(){
       const cfg=SCATTER_LABELS[r.ours?'OROBOROS':r.label];
       if(!cfg)return;
       const px=x.getPixelForValue(r.x),py=y.getPixelForValue(r.y);
-      const txt=r.ours?'OA '+r.y+' · SUMMIT':(cfg.text||r.label);
+      const txt=r.cwe?r.cwe.name:(r.ours?'OA '+r.y+' · SUMMIT':(cfg.text||r.label));
       ctx.font='600 10.5px Segoe UI';
       const tw=ctx.measureText(txt).width;
       const tx=px+cfg.dx,ty=py+cfg.dy;
