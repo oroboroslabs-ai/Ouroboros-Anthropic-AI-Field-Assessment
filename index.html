@@ -194,7 +194,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
     </div>
-    <div class="orb-box" style="height:540px"><canvas id="rankBar"></canvas></div>
+    <div class="orb-box" style="height:620px"><canvas id="rankBar"></canvas></div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
       <span>100% benchmarked models · 100.0</span>
@@ -690,8 +690,8 @@ function makeBar(){
         borderWidth:0,
         borderRadius:6,
         borderSkipped:false,
-        categoryPercentage:1.0,
-        barPercentage:1.0
+        categoryPercentage:.98,
+        barPercentage:.86
       }]
     },
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
@@ -727,7 +727,7 @@ function makeBar(){
       },
       scales:{
         x:{min:0,max:105,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2'),callback:v=>v+'%'},
-           title:{display:true,text:'CODING INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
+           title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
         y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:10,weight:'600'},padding:2}}
       }
     },
