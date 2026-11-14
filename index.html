@@ -171,7 +171,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
         <span class="item"><i class="aa-api"></i>No publicly available API</span>
       </div>
       <div class="aa-vendors" id="aaBarVendors"></div>
-      <div class="aa-canvas" style="height:700px"><canvas id="indexBars"></canvas></div>
+      <div class="aa-canvas" style="height:634px"><canvas id="indexBars"></canvas></div>
       <div class="aa-cap">Source: Artificial Analysis · Intelligence Index v4.3.2 · 23 Oct 2026</div>
     </div>
   </div>
@@ -189,12 +189,12 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="suite-grid" id="suiteGrid"></div>
     <div class="bot-head" style="margin-top:20px">
       <div>
-        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>CODING INDEX</b></div>
+        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>INTELLIGENCE INDEX</b></div>
         <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
     </div>
-    <div class="orb-box" style="height:702px"><canvas id="rankBar"></canvas></div>
+    <div class="orb-box" style="height:540px"><canvas id="rankBar"></canvas></div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
       <span>100% benchmarked models · 100.0</span>
@@ -279,44 +279,6 @@ function tipColors(){
 
 /* ============ LIVE DATA — Artificial Analysis feed ============ */
 let liveData=null;
-/* AA coding figures (23 Oct snapshot) - used when the live feed has not loaded yet */
-const AA_CODING={
-  "Claude Fable 5.1 (fb)":81.6,
-  "Claude Fable 5 (fb)":77.1,
-  "Claude Opus 5":77,
-  "GPT-6 Astra (high)":75.9,
-  "GPT-6 Astra (max)":76.9,
-  "GPT-6 Astra (low)":76.2,
-  "GPT-5.6 Sol (high)":69.7,
-  "GPT-5.6 Luna (max)":71.4,
-  "GPT-5.6 (max)":74.9,
-  "Muse Spark 1.3 (max)":75.8,
-  "Muse Spark 1.2 (xhigh)":72.2,
-  "Grok 4.6 (high)":76.8,
-  "Gemini 3.8 Flash (high)":70.1,
-  "Gemini 3.8 Flash (low)":49.3,
-  "Kimi K3 (max)":76.2,
-  "GLM-5.3":71.5,
-  "GLM-5.3 Flash":71.5,
-  "Qwen3.8 2.4T A95B":71.9,
-  "DeepSeek V4 Pro 0813":68.8,
-  "MiniMax-M3":58.6,
-  "Grok 4.6 (xhigh)":75.9
-};
-
-const _normName=function(t){return String(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9.]/g,'');};
-function codingForName(name){
-  const norm=_normName;
-  const lv=(liveData||{})[name];
-  if(lv&&lv.coding_index!=null)return lv.coding_index;
-  if(AA_CODING[name]!=null)return AA_CODING[name];
-  const n=norm(name).replace(/6\.1/g,'6');
-  const key=Object.keys(AA_CODING).find(function(k){return norm(k).replace(/6\.1/g,'6')===n;});
-  if(key)return AA_CODING[key];
-  const near=Object.keys(AA_CODING).find(function(k){var q=norm(k).replace(/6\.1/g,'6');return q.indexOf(n)===0||n.indexOf(q)===0;});
-  return near!=null?AA_CODING[near]:null;
-}
-
 let aaMeta=null;
 let liveStamp='';
 async function loadLiveData(){
@@ -714,8 +676,8 @@ function recordPoint(key){
 function makeBar(){
   if(bar)bar.destroy();
   const ac=cssv('--us')||cssv('--accent');
-  const coded=FIELD.map(function(r){var c=codingForName(r[0]);var x=r.slice();if(c!=null)x[2]=c;return x;});
-  const rows=[...cweBars(),...coded].filter(r=>!/OA Prime|10DUO20QUIN10/i.test(String(r[0]))).sort((a,b)=>b[2]-a[2]);
+  const rows=[...cweBars(),
+    ...FIELD].filter(r=>!/OA Prime|10DUO20QUIN10/i.test(String(r[0]))).sort((a,b)=>b[2]-a[2]);
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
@@ -964,36 +926,22 @@ function makeIndexBars(){
     return cx.createPattern(cv,'repeat');
   };
   const R=RECORDS[activeModel];
-  const codingFor=codingForName;
-  const vendorOf=function(n){
-    var t=String(n);
-    if(/^Claude/.test(t))return 'Anthropic';
-    if(/^(GPT|OpenAI)/.test(t))return 'OpenAI';
-    if(/^Gemini/.test(t))return 'Google';
-    if(/^(Grok|Muse)/.test(t))return 'xAI';
-    if(/^Kimi/.test(t))return 'Kimi';
-    if(/^GLM/.test(t))return 'Z.ai';
-    if(/^Qwen/.test(t))return 'Alibaba';
-    if(/^DeepSeek/.test(t))return 'DeepSeek';
-    if(/^MiniMax/.test(t))return 'MiniMax';
-    if(/^MiMo/.test(t))return 'Xiaomi';
-    if(/^Mistral/.test(t))return 'Mistral';
-    if(/^Step/.test(t))return 'StepFun';
-    if(/^(NVIDIA|Nemotron)/.test(t))return 'NVIDIA';
-    return 'Reflection';
+  const aa=liveData||{};
+  const norm=function(t){return String(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9.]/g,'');};
+  const feed=Object.entries(aa);
+  const codingFor=function(name){
+    const n=norm(name);
+    let hit=feed.find(function(e){return norm(e[0])===n;});
+    if(!hit)hit=feed.find(function(e){var k=norm(e[0]);return k.indexOf(n)===0||n.indexOf(k)===0;});
+    return hit&&hit[1]&&hit[1].coding_index!=null?hit[1].coding_index:null;
   };
-  const feedRows=Object.keys(liveData||{}).map(function(name){
-    var d=liveData[name]||{};
-    var v=(d.coding_index!=null)?d.coding_index:d.index;
-    return {name:name,val:(v!=null?v:0),vendor:vendorOf(name)};
-  });
   const rows=[
     {name:'Claude Quindecillion · CWE',val:96,vendor:'CWE'},
     {name:'Claude Fable 7 · CWE',val:90,vendor:'CWE'},
-    ...(feedRows.length?feedRows:AA_BARS.filter(function(b){return !/OA Prime/i.test(String(b[0]));}).map(function(b){
+    ...AA_BARS.filter(function(b){return !/OA Prime/i.test(String(b[0]));}).map(function(b){
       var c=codingFor(b[0]);
       return {name:b[0],val:(c!=null?c:b[1]),vendor:b[2]};
-    }))
+    })
   ].sort(function(a,b){return b.val-a.val;});
   const white=isDarkTheme()?'#F2F2F0':'#141413';
   const cols=rows.map(b=>{
