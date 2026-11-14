@@ -1165,7 +1165,7 @@ function makeCodingLine(){
       DESC.forEach(function(o){
         ds.push({label:o.label,
           data:dates.map(function(d){return (d in o.vals)?o.vals[d]:null;}),
-          borderColor:oursColor,backgroundColor:'transparent',borderWidth:2.2,
+          borderColor:oursColor,backgroundColor:'transparent',borderWidth:2.2,borderDash:[2,3],
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:oursColor,pointBorderWidth:0,order:0});
       });
