@@ -261,7 +261,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
           <div class="aa-title">Coding Index — Daily History <span class="arw">↗</span></div>
           <div class="aa-sub">Daily coding scores for the field from the
             <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a> history feed (last 7 days).
-            Both white curves leave the same 100 point, dip on 9 Nov, recover to 100, then make their final descent onto the orange reference lines at 96 and 90. Not feed data.</div>
+            Both dotted white curves hold straight at 100 through 11 Nov, then curve down onto the orange reference lines at 96 and 90. Not feed data.</div>
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <button class="snap-btn" data-snap="codingLine" data-name="coding-history">Snapshot</button>
@@ -1156,16 +1156,17 @@ function makeCodingLine(){
       const oursColor=isLightTheme()?'#141413':'#FFFFFF';
       const DESC=[
         {label:'_Quindecillion 100→96',vals:{
-          '2026-11-07':100,'2026-11-08':99.7,'2026-11-09':99.0,'2026-11-10':100,
-          '2026-11-11':100,'2026-11-12':97.0,'2026-11-13':98.6,'2026-11-14':CWE_MARKS[0].score}},
+          '2026-11-07':100,'2026-11-08':100,'2026-11-09':100,'2026-11-10':100,
+          '2026-11-11':100,'2026-11-12':99.0,'2026-11-13':97.3,'2026-11-14':CWE_MARKS[0].score}},
         {label:'_Fable 7 100→90',vals:{
-          '2026-11-07':100,'2026-11-08':99.1,'2026-11-09':98.0,'2026-11-10':99.7,
-          '2026-11-11':99.6,'2026-11-12':98.8,'2026-11-13':93.8,'2026-11-14':CWE_MARKS[1].score}}
+          '2026-11-07':100,'2026-11-08':100,'2026-11-09':100,'2026-11-10':100,
+          '2026-11-11':100,'2026-11-12':97.2,'2026-11-13':93.5,'2026-11-14':CWE_MARKS[1].score}}
       ];
       DESC.forEach(function(o){
         ds.push({label:o.label,
           data:dates.map(function(d){return (d in o.vals)?o.vals[d]:null;}),
           borderColor:oursColor,backgroundColor:'transparent',borderWidth:2.2,borderDash:[2,3],
+          cubicInterpolationMode:'monotone',
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:oursColor,pointBorderWidth:0,order:0});
       });
