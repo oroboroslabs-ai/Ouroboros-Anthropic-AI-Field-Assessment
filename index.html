@@ -368,7 +368,7 @@ function makeChart(){
     return {
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
-      backgroundColor:arr.map(p=>p[7]?(isDarkTheme()?'rgba(242,242,240,.92)':'rgba(20,20,19,.90)'):col+'99'),
+      backgroundColor:arr.map(p=>p[7]?(isDarkTheme()?'rgba(242,242,240,.50)':'rgba(20,20,19,.45)'):col+'99'),
       borderColor:arr.map(p=>p[7]?(isDarkTheme()?'#FFFFFF':'#000000'):col),
       borderWidth:arr.map(p=>p[7]?2.2:1.2),
       hoverBorderWidth:3
