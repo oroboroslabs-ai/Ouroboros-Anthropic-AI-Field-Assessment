@@ -196,7 +196,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
     </div>
-    <div class="orb-box" style="height:620px"><canvas id="rankBar"></canvas></div>
+    <div class="orb-box" style="height:540px"><canvas id="rankBar"></canvas></div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
       <span>100% benchmarked models · 100.0</span>
@@ -368,8 +368,8 @@ function makeChart(){
     return {
       label:vendor,
       data:arr.map(p=>({x:p[1],y:p[2],r:(p[5]==='OROBOROS'&&!p[7])?oursRadius(p[3]):R_FIELD,label:p[0],vendor,cases:p[3],cwe:p[7]||null})),
-      backgroundColor:arr.map(p=>p[7]?((p[4]==='deep'?(isDarkTheme()?'#3F6FE8':'#2B4FD8'):(isDarkTheme()?'#D97757':'#C0714F'))+'99'):col+'99'),
-      borderColor:arr.map(p=>p[7]?(p[4]==='deep'?'#3F6FE8':'#D97757'):col),
+      backgroundColor:arr.map(p=>p[7]?(isDarkTheme()?'rgba(242,242,240,.92)':'rgba(20,20,19,.90)'):col+'99'),
+      borderColor:arr.map(p=>p[7]?(isDarkTheme()?'#FFFFFF':'#000000'):col),
       borderWidth:arr.map(p=>p[7]?2.2:1.2),
       hoverBorderWidth:3
     };
@@ -679,7 +679,7 @@ function makeBar(){
   const rows=[...cweBars(),
     ['★ GPT-5.6 Sol 6U5GO5',2.40,98.2,57,'openai','Oroboros OpenAI'],
     ['★ GPT-Astra 7 7U5GO5',3.20,86.0,57,'openai','Oroboros OpenAI'],
-    ...FIELD].sort((a,b)=>b[2]-a[2]);
+    ...FIELD].filter(r=>!/OA Prime|10DUO20QUIN10/i.test(String(r[0]))).sort((a,b)=>b[2]-a[2]);
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
@@ -687,7 +687,7 @@ function makeBar(){
       labels:rows.map(r=>oaName(r[0])),
       datasets:[{
         data:rows.map(r=>r[2]),
-        backgroundColor:rows.map(r=>displayColor(HEX[r[4]])+'cc'),
+        backgroundColor:rows.map(r=>r[8]?(r[4]==='deep'?'#3F6FE8':'#D97757'):displayColor(HEX[r[4]])+'cc'),
         borderColor:rows.map(r=>displayColor(HEX[r[4]])),
         borderWidth:0,
         borderRadius:6,
@@ -730,7 +730,7 @@ function makeBar(){
       scales:{
         x:{min:0,max:105,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2'),callback:v=>v+'%'},
            title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
-        y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:11.5,weight:'600'}}}
+        y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:10,weight:'600'},padding:2}}
       }
     },
     plugins:[{id:'glowBar',beforeDatasetsDraw(c){
