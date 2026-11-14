@@ -18,7 +18,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Pull the Artificial Analysis feed
+      - name: Pull the Artificial Analysis feed (public page, no key)
+        run: python scripts/sync_aa_public.py
+
+      - name: Pull the keyed feed when a key is present
         env:
           AA_API_KEY: ${{ secrets.AA_API_KEY }}
         run: python scripts/sync_aa.py

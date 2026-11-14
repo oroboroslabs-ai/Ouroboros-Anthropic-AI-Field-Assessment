@@ -189,7 +189,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="suite-grid" id="suiteGrid"></div>
     <div class="bot-head" style="margin-top:20px">
       <div>
-        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>AGENTIC INDEX</b> <a href="https://artificialanalysis.ai/evaluations/reasoning" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LiveBench reasoning ↗</a> <a href="https://llm-stats.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LLM-Stats ↗</a> <a href="https://www.benchleader.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· BenchLeader ↗</a> <a href="cwe-sheet-quindecillion.html" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· our reasoning runs ↗</a></div>
+        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>REASONING INDEX</b> <a href="https://artificialanalysis.ai/evaluations/reasoning" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LiveBench reasoning ↗</a> <a href="https://llm-stats.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· LLM-Stats ↗</a> <a href="https://www.benchleader.com/" target="_blank" rel="noopener" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· BenchLeader ↗</a> <a href="cwe-sheet-quindecillion.html" style="color:var(--ink2);text-decoration:none;letter-spacing:.1em">· our reasoning runs ↗</a></div>
         <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
@@ -777,7 +777,7 @@ function makeBar(){
       },
       scales:{
         x:{min:0,max:105,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2'),callback:v=>v+'%'},
-           title:{display:true,text:'AGENTIC INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
+           title:{display:true,text:'REASONING INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
         y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:10,weight:'600'},padding:2}}
       }
     },
@@ -980,7 +980,7 @@ function modelRows(){
     var k=norm(name); if(!k||seen[k])return; if(/OA Prime/i.test(name))return; if(/^(GPT-6 Luna|GPT-5\.6 Luna|GPT-5\.6 Sol \(high\))/i.test(name))return; if(/Opus|Undecillion/i.test(name))return; seen[k]=1;
     out.push({name:name,index:(index!=null?index:null),reasoning:reasoning,vendor:vendor||vendorOfName(name)});
   };
-  try{ Object.keys(liveData||{}).forEach(function(n){var d=liveData[n]||{};push(n,d.index,vendorOfName(n),(d.agentic_index!=null?d.agentic_index:d.reasoning_index));}); }catch(e){}
+  try{ Object.keys(liveData||{}).forEach(function(n){var d=liveData[n]||{};push(n,d.index,vendorOfName(n),d.reasoning_index);}); }catch(e){}
   try{ AA_BARS.forEach(function(b){push(b[0],b[1],b[2]);}); }catch(e){}          /* snapshot only fills what the feed has not */
   try{ FIELD.forEach(function(r){push(String(r[0]).replace('\u2605 ',''),r[2],r[5]);}); }catch(e){}
   return out;
