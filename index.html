@@ -261,7 +261,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
           <div class="aa-title">Coding Index — Daily History <span class="arw">↗</span></div>
           <div class="aa-sub">Daily coding scores for the field from the
             <a href="https://aistupidlevel.info/" target="_blank" rel="noopener" style="color:var(--ink2)">aistupidlevel.info ↗</a> history feed (last 7 days).
-            The two white curves are our own record: 100 on 10 Nov (Quindecillion) and 11 Nov (Fable 7), curving down to the orange reference lines at 96 and 90 by 14 Nov. Not feed data.</div>
+            Both white curves leave the same 100 point, dip on 9 Nov, recover to 100, then make their final descent onto the orange reference lines at 96 and 90. Not feed data.</div>
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <button class="snap-btn" data-snap="codingLine" data-name="coding-history">Snapshot</button>
@@ -1151,20 +1151,20 @@ function makeCodingLine(){
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:s.color,pointBorderWidth:0};
       });
-      /* two white curves in the same wavy style as the field lines:
-         Quindecillion 100 on 10 Nov -> 96, Fable 7 100 on 11 Nov -> 90 */
+      /* both white curves leave the same 100 point, dip on 9 Nov, come back to
+         100, then make the final descent onto 96 / 90 */
       const oursColor=isLightTheme()?'#141413':'#FFFFFF';
-      const smooth=function(t){return t*t*(3-2*t);};
-      [{label:'_Quindecillion 100→96',score:CWE_MARKS[0].score,from:'2026-11-10'},
-       {label:'_Fable 7 100→90',score:CWE_MARKS[1].score,from:'2026-11-11'}].forEach(function(o){
-        const i0=dates.indexOf(o.from), i1=dates.length-1;
-        const drop=100-o.score, ripple=drop*0.09;
+      const WAVE={'2026-11-07':100,'2026-11-08':99.4,'2026-11-09':98.5,'2026-11-10':100,'2026-11-11':100};
+      const DESC=[
+        {label:'_Quindecillion 100→96',vals:{'2026-11-11':99.4,'2026-11-12':98.5,'2026-11-13':97.2,'2026-11-14':CWE_MARKS[0].score}},
+        {label:'_Fable 7 100→90',vals:{'2026-11-12':97.4,'2026-11-13':93.5,'2026-11-14':CWE_MARKS[1].score}}
+      ];
+      DESC.forEach(function(o){
         ds.push({label:o.label,
-          data:dates.map(function(d,i){
-            if(i0<0||i<i0||i>i1)return null;
-            const t=(i1===i0)?1:(i-i0)/(i1-i0);
-            const v=100-drop*smooth(Math.min(1,Math.max(0,t)))+ripple*Math.sin(Math.PI*2*t);
-            return +v.toFixed(2);
+          data:dates.map(function(d){
+            if(d in o.vals)return o.vals[d];
+            if(d in WAVE)return WAVE[d];
+            return null;
           }),
           borderColor:oursColor,backgroundColor:'transparent',borderWidth:2.6,
           tension:.45,spanGaps:true,pointRadius:2,pointHoverRadius:5,
