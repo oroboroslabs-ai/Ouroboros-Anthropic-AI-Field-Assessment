@@ -189,12 +189,12 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="suite-grid" id="suiteGrid"></div>
     <div class="bot-head" style="margin-top:20px">
       <div>
-        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>INTELLIGENCE INDEX</b></div>
+        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>CODING INDEX</b></div>
         <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
     </div>
-    <div class="orb-box" style="height:540px"><canvas id="rankBar"></canvas></div>
+    <div class="orb-box" style="height:702px"><canvas id="rankBar"></canvas></div>
     <div class="foot">
       <span><b>OROBOROS / ANTHROPIC</b></span>
       <span>100% benchmarked models · 100.0</span>
@@ -676,8 +676,17 @@ function recordPoint(key){
 function makeBar(){
   if(bar)bar.destroy();
   const ac=cssv('--us')||cssv('--accent');
-  const rows=[...cweBars(),
-    ...FIELD].filter(r=>!/OA Prime|10DUO20QUIN10/i.test(String(r[0]))).sort((a,b)=>b[2]-a[2]);
+  const aaD=liveData||{};
+  const normN=function(t){return String(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9.]/g,'');};
+  const feedN=Object.entries(aaD);
+  const codingN=function(name){
+    const n=normN(name);
+    let hit=feedN.find(function(e){return normN(e[0])===n;});
+    if(!hit)hit=feedN.find(function(e){var k=normN(e[0]);return k.indexOf(n)===0||n.indexOf(k)===0;});
+    return hit&&hit[1]&&hit[1].coding_index!=null?hit[1].coding_index:null;
+  };
+  const coded=FIELD.map(function(r){var c=codingN(r[0]);var x=r.slice();if(c!=null)x[2]=c;return x;});
+  const rows=[...cweBars(),...coded].filter(r=>!/OA Prime|10DUO20QUIN10/i.test(String(r[0]))).sort((a,b)=>b[2]-a[2]);
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
     type:'bar',
