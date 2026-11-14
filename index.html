@@ -189,7 +189,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
     <div class="suite-grid" id="suiteGrid"></div>
     <div class="bot-head" style="margin-top:20px">
       <div>
-        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>INTELLIGENCE INDEX</b></div>
+        <div class="kick" style="margin-bottom:6px">MODEL LEADERBOARD — <b>REASONING INDEX</b></div>
         <h2 style="font-size:19px">Every Model, Their Score, Their Color</h2>
       </div>
       <button class="snap-btn" data-snap="rankBar" data-name="model-leaderboard">Snapshot</button>
@@ -702,8 +702,9 @@ function makeBar(){
   if(bar)bar.destroy();
   const ac=cssv('--us')||cssv('--accent');
   const rows=[...cweBars(),
-    ...modelRows().filter(function(m){return m.index!=null;}).map(function(m){
-      return [m.name, 0, m.index, 10, colorKeyFor(m.vendor), m.vendor];
+    ...modelRows().filter(function(m){return (m.reasoning!=null)||(m.index!=null);}).map(function(m){
+      var v=(m.reasoning!=null)?m.reasoning:m.index;
+      return [m.name, 0, v, 10, colorKeyFor(m.vendor), m.vendor];
     })].sort((a,b)=>b[2]-a[2]);
   rows.forEach(r=>{const u=hfLink(String(r[0]).replace('★ ',''));if(u)r[7]=u;});
   bar=new Chart(document.getElementById('rankBar'),{
@@ -754,7 +755,7 @@ function makeBar(){
       },
       scales:{
         x:{min:0,max:105,grid:{color:cssv('--grid')},ticks:{color:cssv('--ink2'),callback:v=>v+'%'},
-           title:{display:true,text:'INTELLIGENCE INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
+           title:{display:true,text:'REASONING INDEX',color:cssv('--ink2'),font:{size:10,weight:'700'}}},
         y:{grid:{display:false},ticks:{autoSkip:false,color:cssv('--ink2'),font:{size:10,weight:'600'},padding:2}}
       }
     },
@@ -948,12 +949,12 @@ function displayColor(c){
 function modelRows(){
   var out=[], seen={};
   var norm=function(t){return String(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9.]/g,'');};
-  var push=function(name,index,vendor){
+  var push=function(name,index,vendor,reasoning){
     var k=norm(name); if(!k||seen[k])return; if(/OA Prime/i.test(name))return; seen[k]=1;
-    out.push({name:name,index:(index!=null?index:null),vendor:vendor||vendorOfName(name)});
+    out.push({name:name,index:(index!=null?index:null),reasoning:reasoning,vendor:vendor||vendorOfName(name)});
   };
   try{ AA_BARS.forEach(function(b){push(b[0],b[1],b[2]);}); }catch(e){}          /* before the snapshot const exists */
-  try{ Object.keys(liveData||{}).forEach(function(n){var d=liveData[n]||{};push(n,d.index,vendorOfName(n));}); }catch(e){}
+  try{ Object.keys(liveData||{}).forEach(function(n){var d=liveData[n]||{};push(n,d.index,vendorOfName(n),d.reasoning_index);}); }catch(e){}
   try{ FIELD.forEach(function(r){push(String(r[0]).replace('\u2605 ',''),r[2],r[5]);}); }catch(e){}
   return out;
 }
