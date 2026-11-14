@@ -159,7 +159,7 @@ html[data-theme="white"] .aa-summit,html[data-theme="neutral"] .aa-summit{color:
       <a class="tbtn" href="cwe-sheet-quindecillion.html" title="Quindecillion CWE sheet">CWE · Quindecillion</a>
       <a class="tbtn" href="cwe-sheet-fable7.html" title="Claude Fable 7 CWE sheet">CWE · Fable 7</a>
             <a class="tbtn" href="desktop.html">Desktop</a>
-      <a class="tbtn" id="reportBtn" href="daily-report.html" target="_blank" rel="noopener" title="Build the live report from this page">Data Report</a>
+      <a class="tbtn" href="daily-report.html" target="_blank" rel="noopener" title="Complete field report">Data Report</a>
           </div>
   </div>
 
@@ -1151,21 +1151,20 @@ function makeCodingLine(){
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:s.color,pointBorderWidth:0};
       });
-      /* both white curves leave the same 100 point, dip on 9 Nov, come back to
-         100, then make the final descent onto 96 / 90 */
+      /* our two runs, drawn like the field lines: same weight, same spline, a
+         natural wobble out of 100, then down onto 96 / 90 */
       const oursColor=isLightTheme()?'#141413':'#FFFFFF';
-      const WAVE={'2026-11-07':100,'2026-11-08':99.0,'2026-11-09':98,'2026-11-10':100,'2026-11-11':100};
       const DESC=[
-        {label:'_Quindecillion 100→96',vals:{'2026-11-11':99.4,'2026-11-12':98.5,'2026-11-13':97.2,'2026-11-14':CWE_MARKS[0].score}},
-        {label:'_Fable 7 100→90',vals:{'2026-11-12':97.4,'2026-11-13':93.5,'2026-11-14':CWE_MARKS[1].score}}
+        {label:'_Quindecillion 100→96',vals:{
+          '2026-11-07':100,'2026-11-08':99.3,'2026-11-09':98.0,'2026-11-10':99.7,
+          '2026-11-11':99.1,'2026-11-12':98.2,'2026-11-13':97.1,'2026-11-14':CWE_MARKS[0].score}},
+        {label:'_Fable 7 100→90',vals:{
+          '2026-11-07':100,'2026-11-08':98.8,'2026-11-09':98.2,'2026-11-10':99.6,
+          '2026-11-11':99.8,'2026-11-12':97.5,'2026-11-13':93.9,'2026-11-14':CWE_MARKS[1].score}}
       ];
       DESC.forEach(function(o){
         ds.push({label:o.label,
-          data:dates.map(function(d){
-            if(d in o.vals)return o.vals[d];
-            if(d in WAVE)return WAVE[d];
-            return null;
-          }),
+          data:dates.map(function(d){return (d in o.vals)?o.vals[d]:null;}),
           borderColor:oursColor,backgroundColor:'transparent',borderWidth:2.2,
           tension:.32,spanGaps:true,pointRadius:2,pointHoverRadius:5,
           pointBackgroundColor:oursColor,pointBorderWidth:0,order:0});

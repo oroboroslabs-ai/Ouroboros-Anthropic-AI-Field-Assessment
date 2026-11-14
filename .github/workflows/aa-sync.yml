@@ -34,10 +34,13 @@ jobs:
           ASL_DATA_KEY: ${{ secrets.AISTUPIDLEVEL_KEY }}
         run: python scripts/sync_coding.py
 
+      - name: Build the complete report page
+        run: python scripts/build_report.py
+
       - name: Commit the refreshed data
         run: |
           git config user.name "oroboros-aa-sync"
           git config user.email "sync@oroboros.ai"
-          git add field_data.json aa_cache.json coding_history.json
+          git add field_data.json aa_cache.json coding_history.json daily-report.html
           git diff --staged --quiet || git commit -m "data: refresh field feed"
           git push
